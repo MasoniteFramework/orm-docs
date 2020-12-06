@@ -15,6 +15,14 @@ from masoniteorm.query import QueryBuilder
 builder = QueryBuilder().table("users")
 ```
 
+You can also switch or specify connection on the fly using the `on` method:
+
+```python
+from masoniteorm.query import QueryBuilder
+
+builder = QueryBuilder().on('staging').table("users")
+```
+
 You can then start making any number of database calls.
 
 # Fetching Records
