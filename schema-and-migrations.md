@@ -1,7 +1,5 @@
 # Schema & Migrations
 
-## Schema and Migrations
-
 Migrations are used to build and modify your database tables. This is done through use of migration files and the `Schema` class. Migration files are really just wrappers around the `Schema` class as well as a way for Masonite to manage which migrations have run and which ones have not.
 
 ## Creating Migrations
