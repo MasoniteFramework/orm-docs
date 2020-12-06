@@ -1,4 +1,3 @@
-# Query Builder
 
 # Preface
 
