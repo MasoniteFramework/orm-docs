@@ -302,49 +302,20 @@ You can delete many records as well. For example, deleting all records where act
 builder.where('active', 0).delete()
 ```
 
-# Available Methods
+## Available Methods
 
-* where
-* where\_has
-* first
-* update
-* create
-* set\_scope
-* set\_global\_scope
-* select
-* select\_raw
-* create
-* delete
-* where
-* where\_raw
-* or\_where\[str, int, callable\]\)
-* where\_exists"QueryBuilder"\]\):
-* having
-* where\_null
-* where\_not\_null
-* between
-* not\_between
-* where\_in
-* where\_not\_in
-* join
-* left\_join
-* right\_join
-* where\_column
-* limit
-* offset
-* update
-* increment
-* decrement
-* sum
-* count
-* max
-* order\_by
-* group\_by
-* aggregate
-* first
-* all
-* get
-* get\_grammar
-* to\_sql
-* to\_qmark
+|  |  |  |
+| :--- | :--- | :--- |
+| aggregate | all | between |
+| count | create | decrement |
+| delete | first | get |
+| group\_by | having | increment |
+| join | left\_join | limit |
+| max | not\_between | offset |
+| order\_by | right\_join | select |
+| select\_raw | sum | to\_qmark |
+| to\_sql | update | where |
+| where\_column | where\_exists | where\_has |
+| where\_in | where\_not\_in | where\_not\_null |
+| where\_null | where\_raw |  |
 
