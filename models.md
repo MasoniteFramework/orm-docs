@@ -1,7 +1,5 @@
 # Models
 
-## Models
-
 Models are the easiest way to interact with your tables. A model is a way for you to interact with a Python class in a simple and elegant way and have all the hard overhead stuff handled for you under the hood. A model can be used to query the data in the table or even create new records, fetch related records between tables and many other features.
 
 ## Creating A Model
