@@ -479,13 +479,13 @@ Schema.table('users') as blueprint:
     blueprint.string('name')
 ```
 
-it is a proxy call to 
+it is a proxy call to
 
 ```python
 table.add_column('name', column_type='string')
 ```
 
-The blueprint class then builds up the table class. 
+The blueprint class then builds up the table class.
 
 ### Blueprint -&gt; Platform
 

@@ -1,4 +1,4 @@
-# Schema and Migrations
+# Schema & Migrations
 
 ## Schema and Migrations
 
@@ -78,7 +78,7 @@ class MigrationForUsersTable(Migration):
 | `table.text()` | TEXT equivalent column. |
 | `table.unsigned_integer()` | UNSIGNED INT equivalent column. |
 | `table.unsigned()` | Alias for `unsigned_integer` |
-| `table.soft_deletes()` | A nullable DATETIME column named `deleted_at`. This is used by the [SoftDeletes](models.md/#soft-deleting) scope. |
+| `table.soft_deletes()` | A nullable DATETIME column named `deleted_at`. This is used by the [SoftDeletes](models.md#soft-deleting) scope. |
 
 ## Modifiers
 
@@ -161,9 +161,9 @@ $ masonite-orm migrate:status
 
 ## Seeing SQL Dumps
 
-If you would like to see just the SQL that would run instead of running the actual migrations, you can specify the `-s` flag (short for `--show`). This works on the migrate and migrate:rollback commands.
+If you would like to see just the SQL that would run instead of running the actual migrations, you can specify the `-s` flag \(short for `--show`\). This works on the migrate and migrate:rollback commands.
 
-```
+```text
 python craft migrate -s
 ```
 
@@ -192,3 +192,4 @@ class MigrationForUsersTable(Migration):
         """
         pass
 ```
+

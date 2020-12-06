@@ -69,7 +69,7 @@ After this you have successfully setup Masonite ORM in your project!
 
 ## Logging
 
-If you would like, you can log any queries Masonite ORM generates to any supported Python logging handler. 
+If you would like, you can log any queries Masonite ORM generates to any supported Python logging handler.
 
 Inside your `config/database.py` file you can put on the bottom here. The StreamHandler will output the queries to the terminal.
 
@@ -94,3 +94,4 @@ file_handler = logging.FileHandler('queries.log')
 logger.addHandler(handler)
 logger.addHandler(file_handler)
 ```
+

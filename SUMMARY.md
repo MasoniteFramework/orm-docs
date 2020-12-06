@@ -1,5 +1,6 @@
 # Table of contents
 
+* [Introduction](README.md)
 * [Introduction](introduction.md)
 * [Installation](installation.md)
 * [Orator To Masonite ORM](orator-to-masonite-orm.md)
@@ -9,3 +10,4 @@
 * [Collections](collections.md)
 * [Schema & Migrations](schema-and-migrations.md)
 * [Seeding](seeding.md)
+

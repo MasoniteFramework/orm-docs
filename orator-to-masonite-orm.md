@@ -1,27 +1,28 @@
-# Orator To Masonite ORM Guide
+# Orator To Masonite ORM
+
+## Orator To Masonite ORM Guide
 
 This guide will explain how to move from Orator to Masonite ORM. Masonite ORM was made to be pretty much a straight port of Orator but allow the Masonite organization complete creative control of the ORM.
 
 Orator has since been abandoned and Masonite needed a good ORM to keep fresh features and security up to date with the ORM.
 
-Before moving your project over to Masonite ORM please keep in mind some features are not _\(_at least currently_\)_ ported over from Orator. These are features that may be ported over in the future. 
+Before moving your project over to Masonite ORM please keep in mind some features are not _\(\_at least currently_\)\_ ported over from Orator. These are features that may be ported over in the future.
 
 This list is a continuously evolving list of features and anything we develop will be removed from the list. These features are planned but not yet finished.
 
 Currently these features are:
 
-* through relationships (HasOneThrough, HasManyThrough, etc)
+* through relationships \(HasOneThrough, HasManyThrough, etc\)
 
 **If you are using Masonite 2 then you will not be able to upgrade to Masonite ORM because of version conflicts between Masonite and Masonite 2 ORM.**
 
-# Config
+## Config
 
 The configuration dictionary between Orator and Masonite ORM is identical. The only difference is that Masonite ORM requires a `config/database.py` file whereas Orator was optional and needed to be explicitly specified in several places like commands.
 
 If you are coming from Masonite already then don't worry, this file is already there. If not you will need to create this `config/database.py` file.
 
 This is an example of a Masonite ORM config dictionary:
-
 
 ```python
 import os
@@ -95,7 +96,7 @@ DATABASES = {
 db = ConnectionResolver().set_connection_details(DATABASES)
 ```
 
-# Models
+## Models
 
 Models are identical but the imports are different. Orator requires you to set the model resolver from the configuration file and then you import that model.
 
@@ -109,7 +110,7 @@ class User(Model):
     pass
 ```
 
-# Scopes
+## Scopes
 
 Scopes are also identical but the import changes:
 
@@ -135,11 +136,11 @@ class User(Model):
         return query.where('votes', '>', 100)
 ```
 
-# Relationships
+## Relationships
 
-Relationships are also slightly different. In Orator there is a `has_one` relationship and a `belongs_to` relationship. In Masonite ORM this is only a belongs_to relationship. The logic behind has_one and belongs_to is generally identical so there was no reason to port over has_one other than for semantical purposes.
+Relationships are also slightly different. In Orator there is a `has_one` relationship and a `belongs_to` relationship. In Masonite ORM this is only a belongs\_to relationship. The logic behind has\_one and belongs\_to is generally identical so there was no reason to port over has\_one other than for semantical purposes.
 
-## BelongsTo and HasOne
+### BelongsTo and HasOne
 
 So if you have something like this in your Orator codebase:
 
@@ -169,11 +170,11 @@ class User(Model):
       return Phone
 ```
 
-## Relationship Keys
+### Relationship Keys
 
-In Orator, some relationships require a specific order of keys. For example a belongs to relationship is `belongs_to('local_key', 'other_key')`but a has one is `has_one('other_key', 'local_key')`. This is very confusing to remember so in Masonite ORM the keys are always `local_key, other_key`. 
+In Orator, some relationships require a specific order of keys. For example a belongs to relationship is `belongs_to('local_key', 'other_key')`but a has one is `has_one('other_key', 'local_key')`. This is very confusing to remember so in Masonite ORM the keys are always `local_key, other_key`.
 
-# Fetching builder relations
+## Fetching builder relations
 
 In Orator you could do this:
 
@@ -182,7 +183,7 @@ user = User.find(1)
 user.phone().where('active', 1).get()
 ```
 
-This would delay the relationship call and would instead append the builder before returning the result. 
+This would delay the relationship call and would instead append the builder before returning the result.
 
 The above call in Masonite ORM becomes:
 
