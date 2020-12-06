@@ -6,7 +6,7 @@ The query builder is a class which is used to build up a query for execution lat
 
 Using the query builder class directly allows you to make database calls without needing to use a model.
 
-## Getting the QueryBuilder class.
+## Getting the QueryBuilder class
 
 To get the query builder class you can simply import the query builder. Once imported you will need to pass the `connection_details` dictionary you store in your `config.database` file:
 
