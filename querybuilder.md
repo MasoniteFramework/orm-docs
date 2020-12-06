@@ -169,7 +169,7 @@ You may also specify the same query but where the sum of the salary is greater t
 builder.table('users').sum('salary').group_by('salary').having('salary', 50000).get()
 ```
 
-### Inner Joining
+## Inner Joining
 
 Joining is a way to take data from related tables and return it in 1 result set as well as filter anything out that doesn't have a relationship on the joining tables.
 
@@ -181,7 +181,7 @@ This join will create an inner join.
 
 You can also choose a left join:
 
-### Left Join
+## Left Join
 
 ```python
 builder.table('users').left_join('table1', 'table2.id', '=', 'table1.table_id')
@@ -189,13 +189,13 @@ builder.table('users').left_join('table1', 'table2.id', '=', 'table1.table_id')
 
 and a right join:
 
-### Right Join
+## Right Join
 
 ```python
 builder.table('users').right_join('table1', 'table2.id', '=', 'table1.table_id')
 ```
 
-### Increment
+## Increment
 
 There are times where you really just need to increment a column and don't need to pull any additional information. A lot of the incrementing logic is hidden away:
 
@@ -205,41 +205,41 @@ builder.table('users').increment('status')
 
 Decrementing is also similiar:
 
-### Decrement
+## Decrement
 
 ```python
 builder.table('users').decrement('status')
 ```
 
-## Aggregates
+# Aggregates
 
 There are several aggregating methods you can use to aggregate columns:
 
-### Sum
+## Sum
 
 ```python
 builder.table('users').sum('salary').get()
 ```
 
-### Average
+## Average
 
 ```python
 builder.table('users').avg('salary').get()
 ```
 
-### Count
+## Count
 
 ```python
 builder.table('users').count('salary').get()
 ```
 
-### Max
+## Max
 
 ```python
 builder.table('users').max('salary').get()
 ```
 
-### Min
+## Min
 
 ```python
 builder.table('users').min('salary').get()
@@ -283,9 +283,9 @@ for users in builder.table('users').chunk(100):
         user #== <User object>
 ```
 
-## Updates
+# Updates
 
-### Updating Records
+## Updating Records
 
 You can update many records.
 
@@ -298,9 +298,9 @@ builder.where('active', 0).update({
 
 You may update records as well.
 
-## Deletes
+# Deletes
 
-### Deleting Records
+## Deleting Records
 
 You can delete many records as well. For example, deleting all records where active is set to 0.
 
