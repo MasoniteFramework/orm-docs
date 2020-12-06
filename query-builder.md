@@ -302,7 +302,7 @@ You can delete many records as well. For example, deleting all records where act
 builder.where('active', 0).delete()
 ```
 
-## Available Methods
+# Available Methods
 
 |  |  |  |
 | :--- | :--- | :--- |
