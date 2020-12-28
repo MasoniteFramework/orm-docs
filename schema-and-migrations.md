@@ -190,3 +190,34 @@ class MigrationForUsersTable(Migration):
         """
         pass
 ```
+
+## Truncating 
+
+You can truncate a table:
+
+```python
+schema.truncate("users")
+```
+
+You can also temporarily disable foreign key checks and truncate a table:
+
+```python
+schema.truncate("users", foreign_keys=False)
+```
+
+## Dropping a Table
+
+You can drop a table:
+
+```python
+schema.drop_table("users")
+```
+
+## Dropping a Table If It Exists
+
+You can drop a table if it exists:
+
+```python
+schema.drop_table_if_exists("users")
+```
+
