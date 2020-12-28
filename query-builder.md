@@ -117,6 +117,39 @@ builder.table('users').where_in('age', [18,21,25]).get()
 
 This will fetch all records where the age is either `18`, `21` or `25`.
 
+### Where Like
+
+You can do a WHERE LIKE or WHERE NOT LIKE query:
+
+```python
+builder.table('users').where_like('name', "Jo%").get()
+builder.table('users').where_not_like('name', "Jo%").get()
+```
+
+### Conditional Queries
+
+Sometimes you need to specify conditional statements and run queries based on the conditional values.
+
+For example you may have code that looks like this:
+
+```python
+def show(self, request: Request):
+    age = request.input('age')
+    article = Article.where('active', 1)
+    if age >= 21:
+        article.where('age_restricted', 1)
+```
+
+Instead of writing the code above you can use the `when` method. This method accepts a conditional as the first parameter and a callable as the second parameter. The code above would look like this:
+
+```python
+def show(self, request: Request):
+    age = request.input('age')
+    article = Article.where('active', 1).when(age >= 21, lambda q: q.where('age_restricted', 1))
+```
+
+If the conditional passed in the first parameter is not truthy then the second parameter will be ignored.
+
 ### Limits / Offsets
 
 It's also very simple to use both limit and/or offset a query.
