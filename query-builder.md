@@ -126,6 +126,15 @@ builder.table('users').where_like('name', "Jo%").get()
 builder.table('users').where_not_like('name', "Jo%").get()
 ```
 
+### Subqueries
+
+You can make subqueries easily by passing a callable into the where method:
+
+```python
+builder.table("users").where(lambda q: q.where("active", 1).where_null("activated_at")).get()
+# SELECT * FROM "users" WHERE ("users"."active" = '1' AND "users"."activated_at" IS NULL)
+```
+
 ### Conditional Queries
 
 Sometimes you need to specify conditional statements and run queries based on the conditional values.
