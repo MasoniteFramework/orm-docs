@@ -92,7 +92,7 @@ In addition to building up the migration, you should also build onto the `down` 
 | `table.drop_foreign()` | Drops the foreign key. Must specify the index name. `table.drop_foreign('users_article_id_foreign')` |
 | `table.drop_primary()` | Drops the primary key constraint. Must pass in the constraint name `table.drop_foreign('users_id_primary')` |
 
-### Getting Migration Status
+## Getting Migration Status
 
 At any time you can get the migrations that have run or need to be ran:
 
@@ -100,7 +100,7 @@ At any time you can get the migrations that have run or need to be ran:
 $ masonite-orm migrate:status
 ```
 
-### Seeing Migration SQL Dumps
+## Seeing Migration SQL Dumps
 
 If you would like to see just the SQL that would run instead of running the actual migrations, you can specify the `-s` flag \(short for `--show`\). This works on the migrate and migrate:rollback commands.
 
@@ -108,7 +108,7 @@ If you would like to see just the SQL that would run instead of running the actu
 python craft migrate -s
 ```
 
-### Refreshing
+## Refreshing Migrations
 
 Refreshing a database is simply rolling back all migrations and then migrating again. This "refreshes" your database.
 
