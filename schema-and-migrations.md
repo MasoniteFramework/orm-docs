@@ -43,7 +43,7 @@ class MigrationForUsersTable(Migration):
             table.string('username')
             table.string('email').unique()
             table.string('password')
-            table.bool('is_admin')
+            table.boolean('is_admin')
             table.integer('age')
 
             table.timestamps()
