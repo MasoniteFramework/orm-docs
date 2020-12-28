@@ -297,7 +297,7 @@ builder.table('users').select_raw("COUNT(`username`) as username").where_raw("`u
 
 ## Chunking
 
-If you need to loop over a lot of results then consider chunking. A chunk will only pull in the specified number of records:
+If you need to loop over a lot of results then consider chunking. A chunk will only pull in the specified number of records into a generator:
 
 ```python
 for users in builder.table('users').chunk(100):
