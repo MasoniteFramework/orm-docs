@@ -85,6 +85,15 @@ class Clients:
   __timestamps__ = False
 ```
 
+### Timezones
+
+Models use `UTC` as the default timezone. You can change the timezones on your models using the `__timezone__` attribute:
+
+```python
+class User(Model):
+    __timezone__ = "Europe/Paris"
+```
+
 ## Querying
 
 Almost all of a models querying methods are passed off to the query builder. If you would like to see all the methods available for the query builder, see the [QueryBuilder](models.md) documentation here.
@@ -420,7 +429,7 @@ with self.schema.create("users") as table:
 
 Masonite ORM also comes with another global scope to enable using UUID as primary keys for your models.
 
-Simply inherit the `UUIDPrimaryKey` scope:
+Simply inherit the `UUIDPrimaryKeyMixin` scope:
 
 ```python
 from masoniteorm.scopes import UUIDPrimaryKeyMixin
@@ -429,7 +438,7 @@ class User(Model, UUIDPrimaryKeyMixin):
   # ..
 ```
 
-You should also define a UUID column with primary constraint in a migration
+You can also define a UUID column with the correct primary constraint in a migration file
 
 ```python
 with self.schema.create("users") as table:
@@ -437,7 +446,7 @@ with self.schema.create("users") as table:
     table.primary('id')
 ```
 
-Your model is now set to use UUID4 as primary key. It will be automatically generated at creation.
+Your model is now set to use UUID4 as a primary key. It will be automatically generated at creation.
 
 You can change UUID version standard you want to use:
 
@@ -468,6 +477,34 @@ Other valid values are:
 * `int`
 * `bool`
 * `json`
+
+## Dates
+
+Masonite uses `pendulum` for dates. Whenever dates are used it will return an instance of pendulum. 
+
+If you would like to change this behavior you can override 2 methods: `get_new_date()` and `get_new_datetime_string()`:
+
+The `get_new_date()` method accepts 1 parameter which is an instance of `datetime.datetime`. You can use this to parse and return whichever dates you would like.
+
+```python
+class User(Model):
+
+    def get_new_date(self, datetime=None):
+        # return new instance from datetime instance.
+```
+
+If the datetime parameter is None then you should return the current date.
+
+The `get_new_datetime_string()` method takes the same datetime parameter but this time should return a string to be used in a table.
+
+```python
+class User(Model):
+
+    def get_new_datetime_string(self, datetime=None):
+        return self.get_new_date(datetime).to_datetime_string()
+```
+
+
 
 ## Events
 
