@@ -425,6 +425,20 @@ with self.schema.create("users") as table:
   table.soft_deletes()
 ```
 
+## Updating
+
+You can also update or create records as well:
+
+```python
+User.update_or_create({"username": "Joe"}, {
+    'active': 1
+})
+```
+
+If there is a record with the username or "Joe" it will update that record and else it will create the record. 
+
+Note that when the record is created, the two dictionaries will be merged together. So if this code was to create a record it would create a record with both the username of `Joe` and active of `1`.
+
 ## Changing Primary Key to use UUID
 
 Masonite ORM also comes with another global scope to enable using UUID as primary keys for your models.

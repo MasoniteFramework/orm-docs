@@ -101,6 +101,12 @@ The simplest one is a "where equals" statement. This is a query to get where `us
 builder.table('users').where('username', 'Joe').where('age', 18).get()
 ```
 
+You can also use a dictionary to build the where method:
+
+```python
+builder.table('users').where({"username": "Joe", "age": 18}).get()
+```
+
 You can also specify comparison operators:
 
 ```python
@@ -359,8 +365,6 @@ builder.where('active', 0).update({
 })
 # UPDATE `users` SET `users`.`active` = 1 where `users`.`active` = 0
 ```
-
-You may update records as well.
 
 ## Deletes
 
