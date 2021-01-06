@@ -412,8 +412,26 @@ You can disable this behavior as well:
 User.with_trashed().all() #== SELECT * FROM `users`
 ```
 
+You can also get only the deleted records:
+
+```python
+User.only_trashed().all() #== SELECT * FROM `users` WHERE `deleted_at` IS NOT NULL
+```
+
+You can also restore records:
+
+```python
+User.where('admin', 1).restore() #== UPDATE `users` SET `deleted_at` = NULL WHERE `admin` = '1'
+```
+
+Lastly, you can override this behavior and force the delete query:
+
+```python
+User.where('admin', 1).force_delete() #== DELETE FROM `users` WHERE `admin` = '1'
+```
+
 {% hint style="warning" %}
-**You still need to add the `deleted_at` datetime field to your User table for this feature to work.**
+**You still need to add the `deleted_at` datetime field to your database table for this feature to work.**
 {% endhint %}
 
 Hopefully there is a `soft_deletes()` helper that you can use in migrations to add this field quickly.
