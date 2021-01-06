@@ -2,7 +2,7 @@
 
 ## Outline ORM White Paper
 
-> **This project is not currently in Masonite but is in development. This article is designed to be a learning document to aid in those who wish to contribute to the project. This article will be updated when concepts are added to the ORM project or when concepts change. You can contribute to the project at the** [**Masonite ORM Repo**](https://github.com/MasoniteFramework/orm)
+> **You can contribute to the project at the** [**Masonite ORM Repository**](https://github.com/MasoniteFramework/orm)
 
 ## The Flow
 
