@@ -434,7 +434,7 @@ User.where('admin', 1).force_delete() #== DELETE FROM `users` WHERE `admin` = '1
 **You still need to add the `deleted_at` datetime field to your database table for this feature to work.**
 {% endhint %}
 
-Hopefully there is a `soft_deletes()` helper that you can use in migrations to add this field quickly.
+There is also a `soft_deletes()` helper that you can use in migrations to add this field quickly.
 
 ```python
 # user migrations
