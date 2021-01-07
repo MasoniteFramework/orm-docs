@@ -1,6 +1,4 @@
-# Schema and Migrations
-
-## Schema and Migrations
+# Schema & Migrations
 
 Migrations are used to build and modify your database tables. This is done through use of migration files and the `Schema` class. Migration files are really just wrappers around the `Schema` class as well as a way for Masonite to manage which migrations have run and which ones have not.
 
@@ -45,7 +43,7 @@ class MigrationForUsersTable(Migration):
             table.string('username')
             table.string('email').unique()
             table.string('password')
-            table.bool('is_admin')
+            table.boolean('is_admin')
             table.integer('age')
 
             table.timestamps()
@@ -78,7 +76,47 @@ class MigrationForUsersTable(Migration):
 | `table.text()` | TEXT equivalent column. |
 | `table.unsigned_integer()` | UNSIGNED INT equivalent column. |
 | `table.unsigned()` | Alias for `unsigned_integer` |
-| `table.soft_deletes()` | A nullable DATETIME column named `deleted_at`. This is used by the [SoftDeletes](models.md/#soft-deleting) scope. |
+| `table.soft_deletes()` | A nullable DATETIME column named `deleted_at`. This is used by the [SoftDeletes](models.md#soft-deleting) scope. |
+
+## Rolling Back Migrations
+
+In addition to building up the migration, you should also build onto the `down` method which should reverse whatever was done in the `up` method. If you create a table in the up method, you should drop the table in the down method.
+
+| Command | Description |
+| :--- | :--- |
+| `table.drop_table()` | DROP TABLE equivalent statement. |
+| `table.drop_table_if_exists()` | DROP TABLE IF EXISTS equivalent statement. |
+| `table.drop_column()` | DROP COLUMN equivalent statement. |
+| `table.drop_index()` | Drops the constraint. Must pass in the name of the constraint. `drop_index('email_index')` |
+| `table.drop_unique()` | Drops the uniqueness constraint. Must pass in the name of the constraint. `table.drop_unique('users_email_unique')` |
+| `table.drop_foreign()` | Drops the foreign key. Must specify the index name. `table.drop_foreign('users_article_id_foreign')` |
+| `table.drop_primary()` | Drops the primary key constraint. Must pass in the constraint name `table.drop_foreign('users_id_primary')` |
+
+## Getting Migration Status
+
+At any time you can get the migrations that have run or need to be ran:
+
+```text
+$ masonite-orm migrate:status
+```
+
+## Seeing Migration SQL Dumps
+
+If you would like to see just the SQL that would run instead of running the actual migrations, you can specify the `-s` flag \(short for `--show`\). This works on the migrate and migrate:rollback commands.
+
+```text
+python craft migrate -s
+```
+
+## Refreshing Migrations
+
+Refreshing a database is simply rolling back all migrations and then migrating again. This "refreshes" your database.
+
+You can refresh by running the command:
+
+```text
+$ masonite-orm migrate:refresh
+```
 
 ## Modifiers
 
@@ -127,46 +165,6 @@ You can use these options:
 | .on\_delete\('set null'\) | Sets the ON DELETE SET NULL property on the constraint. |
 | .on\_delete\('cascade'\) | Sets the ON DELETE CASCADE property on the constraint. |
 
-## Rolling Back
-
-In addition to building up the migration, you should also build onto the `down` method which should reverse whatever was done in the `up` method. If you create a table in the up method, you should drop the table in the down method.
-
-| Command | Description |
-| :--- | :--- |
-| `table.drop_table()` | DROP TABLE equivalent statement. |
-| `table.drop_table_if_exists()` | DROP TABLE IF EXISTS equivalent statement. |
-| `table.drop_column()` | DROP COLUMN equivalent statement. |
-| `table.drop_index()` | Drops the constraint. Must pass in the name of the constraint. `drop_index('email_index')` |
-| `table.drop_unique()` | Drops the uniqueness constraint. Must pass in the name of the constraint. `table.drop_unique('users_email_unique')` |
-| `table.drop_foreign()` | Drops the foreign key. Must specify the index name. `table.drop_foreign('users_article_id_foreign')` |
-| `table.drop_primary()` | Drops the primary key constraint. Must pass in the constraint name `table.drop_foreign('users_id_primary')` |
-
-## Refreshing
-
-Refreshing a database is simply rolling back all migrations and then migrating again. This "refreshes" your database.
-
-You can refresh by running the command:
-
-```text
-$ masonite-orm migrate:refresh
-```
-
-## Getting Migration Status
-
-At any time you can get the migrations that have run or need to be ran:
-
-```text
-$ masonite-orm migrate:status
-```
-
-## Seeing SQL Dumps
-
-If you would like to see just the SQL that would run instead of running the actual migrations, you can specify the `-s` flag (short for `--show`). This works on the migrate and migrate:rollback commands.
-
-```
-python craft migrate -s
-```
-
 ## Changing Columns
 
 If you would like to change a column you should simply specify the new column and then specify a `.change()` method on it.
@@ -192,3 +190,34 @@ class MigrationForUsersTable(Migration):
         """
         pass
 ```
+
+## Truncating
+
+You can truncate a table:
+
+```python
+schema.truncate("users")
+```
+
+You can also temporarily disable foreign key checks and truncate a table:
+
+```python
+schema.truncate("users", foreign_keys=False)
+```
+
+## Dropping a Table
+
+You can drop a table:
+
+```python
+schema.drop_table("users")
+```
+
+## Dropping a Table If It Exists
+
+You can drop a table if it exists:
+
+```python
+schema.drop_table_if_exists("users")
+```
+
