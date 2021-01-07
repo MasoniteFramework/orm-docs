@@ -94,7 +94,7 @@ class User(Model):
     __timezone__ = "Europe/Paris"
 ```
 
-## Querying
+# Querying
 
 Almost all of a models querying methods are passed off to the query builder. If you would like to see all the methods available for the query builder, see the [QueryBuilder](models.md) documentation here.
 
@@ -185,7 +185,7 @@ users = User.where(lambda q: q.where('active', 1).where_null('deleted_at'))
 # == SELECT * FROM `users` WHERE (`active` = '1' AND `deleted_at` IS NULL)
 ```
 
-## Relationships
+# Relationships
 
 Another great feature when using models is to be able to relate several models together \(like how tables can relate to eachother\).
 
@@ -248,7 +248,7 @@ for post in user.posts:
     post.title
 ```
 
-## Eager Loading
+# Eager Loading
 
 You can eager load any related records. Eager loading is when you preload model results instead of calling the database each time.
 
@@ -288,7 +288,7 @@ SELECT * FROM phones where user_id IN (1, 2, 3, 4)
 
 This resulted in only 2 queries. Any subsquent calls will pull in the result from the eager loaded result set.
 
-## Nested Eager Loading
+# Nested Eager Loading
 
 You may also eager load multiple relationships. Let's take another more advanced example:
 
@@ -337,7 +337,7 @@ SELECT * from contacts where phone_id IN (30, 31, 32, 33)
 
 You can see how this would result in 3 queries no matter how many users you had.
 
-## Scopes
+# Scopes
 
 Scopes are a way to take common queries you may be doing and be able to condense them into a method where you can then chain onto them. Let's say you are doing a query like getting the active user a lot:
 
@@ -380,11 +380,11 @@ user = User.active(1).get()
 user = User.active(0).get()
 ```
 
-## Soft Deleting
+# Soft Deleting
 
 Masonite ORM also comes with a global scope to enable soft deleting for your models.
 
-Simply inherit the `SoftDeletes` scope:
+Simply inherit the `SoftDeletesMixin` scope class:
 
 ```python
 from masoniteorm.scopes import SoftDeletesMixin
@@ -443,7 +443,7 @@ with self.schema.create("users") as table:
   table.soft_deletes()
 ```
 
-## Updating
+# Updating
 
 You can also update or create records as well:
 
@@ -457,7 +457,7 @@ If there is a record with the username or "Joe" it will update that record and e
 
 Note that when the record is created, the two dictionaries will be merged together. So if this code was to create a record it would create a record with both the username of `Joe` and active of `1`.
 
-## Changing Primary Key to use UUID
+# Changing Primary Key to use UUID
 
 Masonite ORM also comes with another global scope to enable using UUID as primary keys for your models.
 
@@ -493,7 +493,7 @@ class User(Model, UUIDPrimaryKeyMixin):
   __uuid_name__ = "domain.com
 ```
 
-## Casting
+# Casting
 
 Not all data may be in the format you need it it. If you find yourself casting attributes to different values, like casting active to an `int` then you can set it right on the model:
 
@@ -538,7 +538,7 @@ class User(Model):
 
 
 
-## Events
+# Events
 
 Models emit various events in different stages of its life cycle. Available events are:
 
@@ -555,7 +555,7 @@ Models emit various events in different stages of its life cycle. Available even
 * updating
 * updated
 
-## Observers
+# Observers
 
 You can listen to various events through observers. Observers are simple classes that contain methods equal to the event you would like to listen to.
 
@@ -598,7 +598,7 @@ class ModelProvider(Provider):
         #..
 ```
 
-## Related Records
+# Related Records
 
 There's many times you need to take several related records and assign them all the same attribute based on another record.
 
