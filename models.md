@@ -2,7 +2,7 @@
 
 Models are the easiest way to interact with your tables. A model is a way for you to interact with a Python class in a simple and elegant way and have all the hard overhead stuff handled for you under the hood. A model can be used to query the data in the table or even create new records, fetch related records between tables and many other features.
 
-## Creating A Model
+# Creating A Model
 
 The first step in using models is actually creating them. You can scaffold out a model by using the command:
 
@@ -32,13 +32,13 @@ active_users = User.where('active', 1).first()
 
 We'll talk more about setting up your model below
 
-## Conventions And Configuration
+# Conventions And Configuration
 
 Masonite ORM makes a few assumptions in order to have the easiest interface for your models.
 
 The first is table names. Table names are assumed to be the plural of your model name. If you have a User model then the `users` table is assumed and if you have a model like `Company` then the `companies` table is assumed. You can realize that Masonite ORM is smart enough to know that the plural of `Company` is not `Companys` so don't worry about Masonite not being able to pick up your table name.
 
-### Table Name
+## Table Name
 
 If your table name is something other than the plural of your models you can change it using the `__table__` attribute:
 
@@ -47,7 +47,7 @@ class Clients:
   __table__ = "users"
 ```
 
-### Primary Keys
+## Primary Keys
 
 The next thing Masonite assumes is the primary key. Masonite ORM assumes that the primary key name is `id`. You can change the primary key name easily:
 
@@ -56,7 +56,7 @@ class Clients:
   __primary_key__ = "user_id"
 ```
 
-### Connections
+## Connections
 
 The next thing Masonite assumes is that you are using the `default` connection you setup in your configuration settings. You can also change thing on the model:
 
@@ -65,7 +65,7 @@ class Clients:
   __connection__ = "staging"
 ```
 
-### Mass Assignment
+## Mass Assignment
 
 By default, Masonite ORM protects against mass assignment to help prevent users from changing values on your tables you didn't want.
 
@@ -76,7 +76,7 @@ class Clients:
   __fillable__ = ['email', "active", "password"]
 ```
 
-### Timestamps
+## Timestamps
 
 Masonite also assumed you have `created_at` and `updated_at` columns on your table. You can easily disable this behavior:
 
@@ -85,7 +85,7 @@ class Clients:
   __timestamps__ = False
 ```
 
-### Timezones
+## Timezones
 
 Models use `UTC` as the default timezone. You can change the timezones on your models using the `__timezone__` attribute:
 
@@ -100,7 +100,7 @@ Almost all of a models querying methods are passed off to the query builder. If 
 
 * sub queries
 
-### Single results
+## Single results
 
 A query result will either have 1 or more records. If your model result has a single record then the result will be the model instance. You can then access attributes on that model instance. Here's an example:
 
@@ -122,7 +122,7 @@ user.name #== 'Joe'
 user.email #== 'joe@masoniteproject.com'
 ```
 
-### Collections
+## Collections
 
 If your model result returns several results then it will be wrapped in a collection instance which you can use to iterate over:
 
@@ -154,7 +154,7 @@ user_emails = User.where('active', 1).get().pluck('email') #== Collection of ema
 
 If you would like to see more methods available like `pluck` be sure to read the [Collections](models.md) documentation.
 
-### Deleting
+## Deleting
 
 You may also quickly delete records:
 
@@ -174,7 +174,7 @@ from app.models import User
 users = User.where('active', 0).delete()
 ```
 
-### Sub Queries
+## Sub Queries
 
 You may also use subqueries to do more advanced queries using lambda expressions:
 
@@ -189,7 +189,7 @@ users = User.where(lambda q: q.where('active', 1).where_null('deleted_at'))
 
 Another great feature when using models is to be able to relate several models together \(like how tables can relate to eachother\).
 
-### Belongs To
+## Belongs To
 
 A belongs to relationship is a one-to-one relationship between 2 table records.
 
@@ -219,7 +219,7 @@ class User:
 
 The first argument is always the column name on the current models table and the second argument is the related field on the other table.
 
-### Has Many
+## Has Many
 
 Another relationship is a one-to-many relationship where a record relates to many records in another table:
 
@@ -288,7 +288,7 @@ SELECT * FROM phones where user_id IN (1, 2, 3, 4)
 
 This resulted in only 2 queries. Any subsquent calls will pull in the result from the eager loaded result set.
 
-### Nested Eager Loading
+## Nested Eager Loading
 
 You may also eager load multiple relationships. Let's take another more advanced example:
 
@@ -536,6 +536,8 @@ class User(Model):
         return self.get_new_date(datetime).to_datetime_string()
 ```
 
+
+
 ## Events
 
 Models emit various events in different stages of its life cycle. Available events are:
@@ -553,7 +555,7 @@ Models emit various events in different stages of its life cycle. Available even
 * updating
 * updated
 
-### Observers
+## Observers
 
 You can listen to various events through observers. Observers are simple classes that contain methods equal to the event you would like to listen to.
 
