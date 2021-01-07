@@ -453,7 +453,7 @@ User.update_or_create({"username": "Joe"}, {
 })
 ```
 
-If there is a record with the username or "Joe" it will update that record and else it will create the record.
+If there is a record with the username or "Joe" it will update that record and else it will create the record. 
 
 Note that when the record is created, the two dictionaries will be merged together. So if this code was to create a record it would create a record with both the username of `Joe` and active of `1`.
 
@@ -512,7 +512,7 @@ Other valid values are:
 
 ## Dates
 
-Masonite uses `pendulum` for dates. Whenever dates are used it will return an instance of pendulum.
+Masonite uses `pendulum` for dates. Whenever dates are used it will return an instance of pendulum. 
 
 If you would like to change this behavior you can override 2 methods: `get_new_date()` and `get_new_datetime_string()`:
 
@@ -622,3 +622,39 @@ phone = Phone.find(30)
 user.associate('phone', phone)
 ```
 
+# Attributes
+
+There are a few attributes that are used for handling model data.
+
+## Dirty Attributes
+
+When you set an attribute on a model, the model becomes "dirty". Meaning the model now has attributes changed on it. You can check if the model is dirty easily:
+
+```python
+user = User.find(1)
+user.is_dirty() #== False
+user.name = "Joe"
+user.is_dirty() #== True
+```
+
+You specifically get a dirty attribute:
+
+```python
+user = User.find(1)
+user.name #== Bill
+user.name = "Joe"
+user.get_dirty("name") #== Joe
+```
+
+This will get the value of the dirty attribute and not the attribute that was set on the model.
+
+## Original
+
+This keeps track of the original data that was first set on the model. This data does not change throughout the life of the model:
+
+```python
+user = User.find(1)
+user.name #== Bill
+user.name = "Joe"
+user.get_original("name") #== Bill
+```
