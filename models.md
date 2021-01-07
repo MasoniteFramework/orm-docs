@@ -624,3 +624,39 @@ phone = Phone.find(30)
 user.associate('phone', phone)
 ```
 
+# Attributes
+
+There are a few attributes that are used for handling model data.
+
+## Dirty Attributes
+
+When you set an attribute on a model, the model becomes "dirty". Meaning the model now has attributes changed on it. You can check if the model is dirty easily:
+
+```python
+user = User.find(1)
+user.is_dirty() #== False
+user.name = "Joe"
+user.is_dirty() #== True
+```
+
+You specifically get a dirty attribute:
+
+```python
+user = User.find(1)
+user.name #== Bill
+user.name = "Joe"
+user.get_dirty("name") #== Joe
+```
+
+This will get the value of the dirty attribute and not the attribute that was set on the model.
+
+## Original
+
+This keeps track of the original data that was first set on the model. This data does not change throughout the life of the model:
+
+```python
+user = User.find(1)
+user.name #== Bill
+user.name = "Joe"
+user.get_original("name") #== Bill
+```
