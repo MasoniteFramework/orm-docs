@@ -28,7 +28,7 @@ You can then start making any number of database calls.
 
 ## Models
 
-If you would like to use models you should reference the [Models](models.md) documentation. This is an example of using models directly with the query builder. 
+If you would like to use models you should reference the [Models](models.md) documentation. This is an example of using models directly with the query builder.
 
 By default, the query builder will return dictionaries or lists depending on the result set. Here is an example of a result using only the query builder:
 
@@ -45,7 +45,6 @@ class User(Model):
 
 user = QueryBuilder(model=User).table("users").first()
 # == <app.models.User>
-
 ```
 
 ## Fetching Records

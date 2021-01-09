@@ -158,6 +158,36 @@ from models import User
 users = Factory(User, 50).create(name="admin_users") #== <masonite.orm.collections.Collection object>
 ```
 
+### After Creating
+
+You can also specify a second factory method that will run after a model is created. This would look like:
+
+```python
+# config/factories.py
+from masonite.orm import Factory
+from models import User
+
+def user_factory(self, faker):
+    return {
+        'name': faker.name(),
+        'email': faker.email(),
+        'password': 'secret'
+    }
+
+def after_users(self, model, faker):
+    model.verified = True
+
+Factory.register(User, user_factory)
+Factory.after_creating(User, after_users)
+```
+
+Now when you create a user it will be passed to this `after_creating` method:
+
+```python
+user = factory(User).create()
+user.verified #== True
+```
+
 ### Modifying Factory Values
 
 If you want to modify any values you previously set in the factory you created, you can pass a dictionary into the `create` or `make` method:

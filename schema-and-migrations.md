@@ -191,7 +191,7 @@ class MigrationForUsersTable(Migration):
         pass
 ```
 
-## Truncating 
+## Truncating
 
 You can truncate a table:
 
