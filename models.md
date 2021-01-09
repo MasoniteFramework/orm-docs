@@ -479,9 +479,42 @@ User.update_or_create({"username": "Joe"}, {
 })
 ```
 
-If there is a record with the username or "Joe" it will update that record and else it will create the record. 
+If there is a record with the username or "Joe" it will update that record and else it will create the record.
 
 Note that when the record is created, the two dictionaries will be merged together. So if this code was to create a record it would create a record with both the username of `Joe` and active of `1`.
+
+## Serializing
+
+You can serialize a model very quickly:
+```python
+User.serialize()
+# returns {'id': 1, 'account_id': 1, 'first_name': 'John', 'last_name': 'Doe', 'email': 'johndoe@example.com', 'password': '$2b$12$pToeQW/1qs26CCozNiAfNugRRBNjhPvtIw86dvfJ0FDNcTDUNt3TW', 'created_at': '2021-01-03T11:35:48+00:00', 'updated_at': '2021-01-08T22:06:48+00:00' }
+```
+This will return a dict of all the model fields. Some important things to note:
+- Date fields will be serialized with ISO format
+- Relationships will be serialized
+- Attributes defined in `__appends__` will be added
+
+If you want to hide model fields you can use `__hidden__` attribute on your model:
+```python
+# User.py
+class User(Model):
+  # ...
+  __hidden__ = ["password", "created_at"]
+```
+In the same way you can use `__visible__` attribute on your model to explicitly tell which fields should be included in serialization:
+```python
+# User.py
+class User(Model):
+  # ...
+  __visible__ = ["id", "name", "email"]
+```
+{% hint style="warning" %}
+You cannot use both `__hidden__` and `__visible__` on the model.
+{% endhint %}
+
+If you need more advanced serialization or building a complex API you should use [masonite-api](https://docs.masoniteproject.com/official-packages/masonite-api) package.
+
 
 # Changing Primary Key to use UUID
 
@@ -538,7 +571,7 @@ Other valid values are:
 
 ## Dates
 
-Masonite uses `pendulum` for dates. Whenever dates are used it will return an instance of pendulum. 
+Masonite uses `pendulum` for dates. Whenever dates are used it will return an instance of pendulum.
 
 If you would like to change this behavior you can override 2 methods: `get_new_date()` and `get_new_datetime_string()`:
 
@@ -650,6 +683,7 @@ phone = Phone.find(30)
 user.associate('phone', phone)
 ```
 
+
 # Attributes
 
 There are a few attributes that are used for handling model data.
@@ -686,3 +720,4 @@ user.name #== Bill
 user.name = "Joe"
 user.get_original("name") #== Bill
 ```
+
