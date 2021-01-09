@@ -189,7 +189,7 @@ users = User.where(lambda q: q.where('active', 1).where_null('deleted_at'))
 
 Another great feature when using models is to be able to relate several models together \(like how tables can relate to eachother\).
 
-## Belongs To
+## Belongs To (One to One)
 
 A belongs to relationship is a one-to-one relationship between 2 table records.
 
@@ -219,7 +219,33 @@ class User:
 
 The first argument is always the column name on the current models table and the second argument is the related field on the other table.
 
-## Has Many
+## Has One (One to One)
+
+In addition to belongs to, you can define the inverse of a belongs to:
+
+```python
+from masoniteorm.relationships import belongs_to
+class User:
+
+  @belongs_to
+  def company(self):
+    from app.models import Company
+    return Company
+```
+
+> Note the keys here are flipped. This is the only relationship that has the keys reversed
+
+```python
+from masoniteorm.relationships import has_one
+class User:
+
+  @has_one('other_key', 'local_key')
+  def company(self):
+    from app.models import Company
+    return Company
+```
+
+## Has Many (One to Many)
 
 Another relationship is a one-to-many relationship where a record relates to many records in another table:
 
