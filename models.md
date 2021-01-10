@@ -314,7 +314,7 @@ SELECT * FROM phones where user_id IN (1, 2, 3, 4)
 
 This resulted in only 2 queries. Any subsquent calls will pull in the result from the eager loaded result set.
 
-# Nested Eager Loading
+## Nested Eager Loading
 
 You may also eager load multiple relationships. Let's take another more advanced example:
 
@@ -362,6 +362,36 @@ SELECT * from contacts where phone_id IN (30, 31, 32, 33)
 ```
 
 You can see how this would result in 3 queries no matter how many users you had.
+
+# Joining
+
+If you have relationships on your models you can easily join them:
+
+If you have a model like this:
+
+```python
+from masoniteorm.relationships import has_many
+class User:
+
+  @has_many('company_id', 'id')
+  def posts(self):
+    from app.models import Post
+    return Post
+```
+
+You can use the `joins` method:
+
+```python
+User.joins('posts')
+```
+
+This will build out the `join` method.
+
+You can also specify the clause of the join (inner, left, right). The default is an inner join
+
+```python
+User.joins('posts', clause="right")
+```
 
 # Scopes
 
