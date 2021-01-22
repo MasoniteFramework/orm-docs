@@ -29,7 +29,7 @@ DATABASES = {
     "database": "masonite",
     "user": "root",
     "password": "",
-    "port": 3306
+    "port": 3306,
     "prefix": "",
     "options": {
       #  
@@ -40,7 +40,7 @@ DATABASES = {
     "database": "masonite",
     "user": "root",
     "password": "",
-    "port": 5432
+    "port": 5432,
     "prefix": "",
     "options": {
       #  
