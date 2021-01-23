@@ -162,6 +162,13 @@ builder.table("users").where(lambda q: q.where("active", 1).where_null("activate
 # SELECT * FROM "users" WHERE ("users"."active" = '1' AND "users"."activated_at" IS NULL)
 ```
 
+You can also so a subquery for a `where_in` statement:
+
+```python
+builder.table("users").where_in("id", lambda q: q.select("profile_id").table("profiles")).get()
+# SELECT * FROM "users" WHERE "id" IN (SELECT "profiles"."profile_id" FROM "profiles")
+```
+
 ### Conditional Queries
 
 Sometimes you need to specify conditional statements and run queries based on the conditional values.
