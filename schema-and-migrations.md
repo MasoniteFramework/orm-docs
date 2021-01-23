@@ -66,6 +66,7 @@ class MigrationForUsersTable(Migration):
 | `table.binary()` | BINARY equivalent column. Sometimes is text field on unsupported databases. |
 | `table.boolean()` | BOOLEAN equivalent column. |
 | `table.char()` | CHAR equivalent column. |
+| `table.json()` | JSON equivalent column. |
 | `table.date()` | DATE equivalent column. |
 | `table.datetime()` | DATETIME equivalent column. |
 | `table.timestamp()` | TIMESTAMP equivalent column. |
@@ -92,7 +93,7 @@ In addition to building up the migration, you should also build onto the `down` 
 | :--- | :--- |
 | `table.drop_table()` | DROP TABLE equivalent statement. |
 | `table.drop_table_if_exists()` | DROP TABLE IF EXISTS equivalent statement. |
-| `table.drop_column()` | DROP COLUMN equivalent statement. |
+| `table.drop_column()` | DROP COLUMN equivalent statement. Can take one or multiple column names. `drop_column('column1', 'column2')` |
 | `table.drop_index()` | Drops the constraint. Must pass in the name of the constraint. `drop_index('email_index')` |
 | `table.drop_unique()` | Drops the uniqueness constraint. Must pass in the name of the constraint. `table.drop_unique('users_email_unique')` |
 | `table.drop_foreign()` | Drops the foreign key. Must specify the index name. `table.drop_foreign('users_article_id_foreign')` |
