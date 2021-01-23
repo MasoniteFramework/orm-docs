@@ -69,12 +69,18 @@ class MigrationForUsersTable(Migration):
 | `table.date()` | DATE equivalent column. |
 | `table.datetime()` | DATETIME equivalent column. |
 | `table.timestamp()` | TIMESTAMP equivalent column. |
+| `table.time()` | TIME equivalent column. |
 | `table.timestamps()` | Creates `created_at` and `updated_at` columns on the table with the `timestamp` column and defaults to the current time. |
 | `table.decimal()` | DECIMAL equivalent column. Can also specify the length and decimal position. `table.decimal('salary', 17, 6)` |
 | `table.double()` | DOUBLE equivalent column. Can also specify a float length `table.double('salary', 17,6)` |
 | `table.enum()` | ENUM equivalent column. You can also specify available options as a list. `table.enum('flavor', ['chocolate', 'vanilla'])`. Sometimes defaults to a TEXT field with a constraint on unsupported databases. |
 | `table.text()` | TEXT equivalent column. |
 | `table.unsigned_integer()` | UNSIGNED INT equivalent column. |
+| `table.tiny_integer()` | TINY INT equivalent column. |
+| `table.small_integer()` | SMALL INT equivalent column. |
+| `table.medium_integer()` | MEDIUM INT equivalent column. |
+| `table.big_integer()` | BIG INT equivalent column. |
+| `table.tiny_increments()` | TINY auto incrementing equivalent column. |
 | `table.unsigned()` | Alias for `unsigned_integer` |
 | `table.soft_deletes()` | A nullable DATETIME column named `deleted_at`. This is used by the [SoftDeletes](models.md#soft-deleting) scope. |
 
