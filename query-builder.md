@@ -287,6 +287,13 @@ Decrementing is also similiar:
 builder.table('users').decrement('status')
 ```
 
+You also pass a second parameter for the number to increment the column by.
+
+```python
+builder.table('users').increment('status', 10)
+builder.table('users').decrement('status', 10)
+```
+
 ## Aggregates
 
 There are several aggregating methods you can use to aggregate columns:
