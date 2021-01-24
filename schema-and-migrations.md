@@ -136,6 +136,8 @@ In addition to the available columns you can use, you can also specify some modi
 | .after\(\) | Adds the column after another column in the table. Can be used like `table.string('is_admin').after('email')`. |
 | .unsigned\(\) | Makes the column unsigned. Used with the `table.integer('age').unsigned()` column. |
 | .use\_current\(\) | Makes the column use the `CURRENT_TIMESTAMP` modifer. |
+| .default\(value\) | Specify a default value for the column. Can be used like table.boolean("is_admin").default(False) |
+
 
 ## Indexes
 
