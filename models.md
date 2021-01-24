@@ -261,6 +261,126 @@ class User:
 
 The first argument is always the column name on the current models table and the second argument is the related field on the other table.
 
+## Has Many (Many To Many)
+
+When working with many to many relationships, there is a pivot table in between that we must account for. Masonite ORM will handle this pivot table for you entirely under the hood.
+
+In a real world situation you may have a scenario where you have products and stores.
+
+Stores can have many products and also products can be in many stores. For example, a store can sell a red shirt and a red shirt can be sold in many different stores.
+
+In the database this may look something like this:
+
+```
+stores
+-------
+id
+name
+
+product_store
+--------------
+id
+store_id
+product_id
+
+product
+--------
+id
+name
+```
+
+Notice that there is a pivot table called `product_store` that is in between stores and products. 
+
+We can use the `belongs_to_many` relationship to get all the products of a store easily. Let's start with the `Store` model:
+
+```python
+from masoniteorm.models import Model
+from masoniteorm.relationships import belongs_to_many
+class Store(Model):
+
+  @belongs_to_many
+  def products(self):
+    from app.models import Product
+    return Product
+```
+
+We can change the signature of the decorator to specify our foreign keys. In our example this would look like this:
+
+```python
+from masoniteorm.models import Model
+from masoniteorm.relationships import belongs_to_many
+class Store(Model):
+
+  @belongs_to_many("store_id", "product_id", "id", "id")
+  def products(self):
+    from app.models import Product
+    return Product
+```
+
+The first 2 keys are the foreign keys relating from stores to products through the pivot table and the last 2 keys are the foreign keys on the stores and products table.
+
+Once we create this relationship we can start querying from `stores` directly to `products`:
+
+```python
+store = Store.find(1)
+for product in store.products:
+    product.name #== Red Shirt
+```
+
+On each fetched record you can also get the pivot table and perform queries on it. This pivot record is the joining record inside the pivot table (`product_store`) where the store id and the product ID match. By default this attribute is `pivot`.
+
+```python
+store = Store.find(1)
+for product in store.products:
+    product.pivot.updated_at #== 2021-01-01
+    product.pivot.update({"updated_at": "2021-01-02"})
+```
+
+### Changing Options
+
+There are quite a few defaults that are made but there are ways to override them.
+
+The first default is that the pivot table has a primary key called `id`. This is used to hydrate the record so you can update the pivot records. If you do not have a pivot primary key you can turn this feature off:
+
+```python
+@belongs_to_many(pivot_id=None)
+```
+
+You can also change the ID to something other than `id`:
+
+```python
+@belongs_to_many(pivot_id="other_column")
+```
+
+The next default is the name of the pivot table. The name of the pivot table is the singular form of both table names in alphabetical order. For example, if you are pivoting a `persons` table and a `houses` table then the table name is assumed to be `house_person`. You can change this naming:
+
+```python
+@belongs_to_many(pivot_table="home_ownership")
+```
+
+The next default is that there are no timestamps (`updated_at` and `created_at`) on your pivot table. If you would like for Masonite to manage timestamps you can:
+
+```python
+@belongs_to_many(with_timestamps=True)
+```
+
+The next default is that the pivot attribute on your model will be called `pivot`. You can change this:
+
+```python
+@belongs_to_many(attribute="ownerships")
+```
+
+Now when you need to get the pivot relationship you can do this through:
+
+```python
+store = Store.find(1)
+for product in store.products:
+    product.ownerships.updated_at #== 2021-01-01
+    product.ownerships.update({"updated_at": "2021-01-02"})
+```
+
+**If you have timestamps on your pivot table, they must be called `created_at` and `updated_at`.**
+
 ## Using Relationships
 
 You can easily use relationships to get those related records. Here is an example on how to get the company record:

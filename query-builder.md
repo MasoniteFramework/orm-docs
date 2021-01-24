@@ -53,7 +53,28 @@ user = QueryBuilder(model=User).table("users").first()
 
 ```python
 builder.table('users').select('username').get()
-# SELECT `username` from `users`
+# SELECT `users`.`username` FROM `users`
+```
+
+You can also select a table and column:
+
+```python
+builder.table('users').select('profiles.name').get()
+# SELECT `profiles`.`name` FROM `users`
+```
+
+You can also select a table and an asterisk (`*`). This is useful when doing joins:
+
+```python
+builder.table('users').select('profiles.*').get()
+# SELECT `profiles`.* FROM `users`
+```
+
+Lastly you can also provide the column with an alias by adding `as` to the column select:
+
+```python
+builder.table('users').select('profiles.username as name').get()
+# SELECT `profiles`.`username` AS name FROM `users`
 ```
 
 ### First
@@ -62,7 +83,7 @@ You can easily get the first record:
 
 ```python
 builder.table('users').first()
-# SELECT `username` from `users` LIMIT 1
+# SELECT * from `users` LIMIT 1
 ```
 
 ### All Records
