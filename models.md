@@ -317,7 +317,7 @@ class Store(Model):
     return Product
 ```
 
-The first 2 are the foreign keys relating from stores to products through the pivot table and the last 2 are the foreign keys on the stores and products table.
+The first 2 keys are the foreign keys relating from stores to products through the pivot table and the last 2 keys are the foreign keys on the stores and products table.
 
 Once we create this relationship we can start querying from `stores` directly to `products`:
 
