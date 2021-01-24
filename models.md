@@ -227,7 +227,7 @@ In addition to belongs to, you can define the inverse of a belongs to:
 from masoniteorm.relationships import belongs_to
 class User:
 
-  @belongs_to
+  @has_one
   def company(self):
     from app.models import Company
     return Company
