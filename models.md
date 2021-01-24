@@ -346,7 +346,13 @@ The first default is that the pivot table has a primary key called `id`. This is
 @belongs_to_many(pivot_id=None)
 ```
 
-The next default is the name of the pivot table. The name of the pivot table is the singular form of both model names in alphabetical order. For example, if you are pivoting a `Person` model and a `House` model then the table name is assumed to be `house_person`. You can change this naming:
+You can also change the ID to something other than `id`:
+
+```python
+@belongs_to_many(pivot_id="other_column")
+```
+
+The next default is the name of the pivot table. The name of the pivot table is the singular form of both table names in alphabetical order. For example, if you are pivoting a `persons` table and a `houses` table then the table name is assumed to be `house_person`. You can change this naming:
 
 ```python
 @belongs_to_many(pivot_table="home_ownership")
