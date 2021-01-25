@@ -43,8 +43,9 @@ user = User.all().random() #== returns a random User instance
 An integer count can be given to `random` method to specify how many items you would like to randomly retrieve from the collection. A collection will always be returned when the items count is specified
 
 ```python
-users = User.all().random(3) #== returns a collection of 3 Users
+users = User.all().random(3) #== returns a Collection of 3 users
 users.count() #== 3
+users.all() #== returns a list of 3 users
 ```
 
 If the collection length is smaller than specified count a `ValueError` will be raised.
