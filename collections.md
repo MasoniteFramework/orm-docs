@@ -26,9 +26,25 @@ for user in users:
 | last | map\_into | map |
 | max | merge | pluck |
 | pop | prepend | pull |
-| push | put | reduce |
-| reject | reverse | serialize |
-| shift | sort | sum |
-| take | to\_json | transform |
-| unique | where | zip |
+| push | put | [random](/#random) |
+| reduce | reject | reverse |
+| serialize | shift | sort |
+| sum | take | to\_json |
+| transform | unique | where |
+| zip |
 
+
+## random
+The `random` method returns a random item from the collection
+```python
+user = User.all().random() #== return a random User instance
+```
+
+An integer count can be given to `random` method to specify how many items you would like to randomly retrieve from the collection. A collection will always be returned when the items count is specified
+
+```python
+users = User.all().random(3) #== return a collection of 3 Users
+users.count() #== 3
+```
+
+If the collection length is smaller than specified count a `ValueError` will be raised.
