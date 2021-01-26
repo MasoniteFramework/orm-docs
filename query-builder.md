@@ -357,6 +357,18 @@ If some queries would be easier written raw you can easily do so for both select
 builder.table('users').select_raw("COUNT(`username`) as username").where_raw("`username` = 'Joe'").get()
 ```
 
+You can also specify a fully raw query using the `statement` method. This will simply execute a query directly and return the result rather than building up a query:
+
+```python
+builder.statement("select count(*) from users where active = 1")
+```
+
+You can also pass query bindings as well:
+
+```python
+builder.statement("select count(*) from users where active = ?", [1])
+```
+
 ## Chunking
 
 If you need to loop over a lot of results then consider chunking. A chunk will only pull in the specified number of records into a generator:
