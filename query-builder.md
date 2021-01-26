@@ -349,6 +349,26 @@ builder.table('users').max('salary').get()
 builder.table('users').min('salary').get()
 ```
 
+## Creating Records
+
+You can create records by passing a dictionary to the `create` method. This will perform an INSERT query:
+
+```python
+builder.create({"name": "Joe", "active": 1})
+```
+
+## Bulk Creating
+
+You can also bulk create records by passing a list of dictionaries:
+
+```python
+builder.create([
+    {"name": "Joe", "active": 1},
+    {"name": "John", "active": 0},
+    {"name": "Bill", "active": 1},
+])
+```
+
 ## Raw Queries
 
 If some queries would be easier written raw you can easily do so for both selects and wheres:
