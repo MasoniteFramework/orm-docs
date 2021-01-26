@@ -475,7 +475,7 @@ Let's say you would like to get a users phone as well as the contacts. The code 
 ```python
 users = User.all()
 for user in users:
-    for contacts in user.phone:
+    for contact in user.phone:
         contact.name
 ```
 
@@ -501,7 +501,7 @@ We can use nested eager loading to solve this by specifying the chain of relatio
 ```python
 users = User.with_('phone.contacts').all()
 for user in users:
-    for contacts in user.phone:
+    for contact in user.phone:
         contact.name
 ```
 
