@@ -244,48 +244,7 @@ You may need to get all records where column values are between 2 values:
 builder.table('users').where_between('age', 18, 21).get()
 ```
 
-### Order By
 
-You can easily order by:
-
-```python
-builder.order_by("column")
-```
-
-The default is ascending order but you can change directions:
-
-```python
-builder.order_by("column", "desc")
-```
-
-You can also specify a comma separated list of columns to order by all 3 columns:
-
-```python
-builder.order_by("name, email, active")
-```
-
-You may also specify the sort direction on each one individually:
-
-```python
-builder.order_by("name, email desc, active")
-```
-
-This will sort `name` and `active` in ascending order because it is the default but will sort email in descending order.
-
-These 2 peices of code are the same:
-
-```python
-builder.order_by("name, active").order_by("name", "desc")
-builder.order_by("name, email desc, active")
-```
-
-### Order By Raw
-
-You can also order by raw. This will pass your raw query directly to the query:
-
-```python
-builder.order_by_raw("name asc")
-```
 
 ### Group By
 
@@ -390,6 +349,49 @@ builder.table('users').max('salary').get()
 
 ```python
 builder.table('users').min('salary').get()
+```
+
+## Order By
+
+You can easily order by:
+
+```python
+builder.order_by("column")
+```
+
+The default is ascending order but you can change directions:
+
+```python
+builder.order_by("column", "desc")
+```
+
+You can also specify a comma separated list of columns to order by all 3 columns:
+
+```python
+builder.order_by("name, email, active")
+```
+
+You may also specify the sort direction on each one individually:
+
+```python
+builder.order_by("name, email desc, active")
+```
+
+This will sort `name` and `active` in ascending order because it is the default but will sort email in descending order.
+
+These 2 peices of code are the same:
+
+```python
+builder.order_by("name, active").order_by("name", "desc")
+builder.order_by("name, email desc, active")
+```
+
+## Order By Raw
+
+You can also order by raw. This will pass your raw query directly to the query:
+
+```python
+builder.order_by_raw("name asc")
 ```
 
 ## Creating Records
