@@ -185,6 +185,38 @@ users = User.where(lambda q: q.where('active', 1).where_null('deleted_at'))
 # == SELECT * FROM `users` WHERE (`active` = '1' AND `deleted_at` IS NULL)
 ```
 
+# Selecting
+
+By default, Masonite ORM performs `SELECT *` queries. You can change this behavior in a few ways.
+
+The first way is to specify a `__selects__` attribute with a list of column names. You may use the `as` keyword to alias your columns directly from this list:
+
+```python
+class Store(Model):
+    __selects__ = ["username", "administrator as is_admin"]
+```
+
+Now when you query your model, these selects will automatically be included:
+
+```python
+store.all() 
+#== SELECT `username`, `administrator` as is_admin FROM `users`
+```
+
+Another way is directly on the `all()` method:
+
+```python
+store.all(["username", "administrator as is_admin"]) 
+#== SELECT `username`, `administrator` as is_admin FROM `users`
+```
+
+This will also work on the `get` method as well:
+
+```python
+store.where("active", 1).get(["username", "administrator as is_admin"]) 
+#== SELECT `username`, `administrator` as is_admin FROM `users` WHERE `active` = 1
+```
+
 # Relationships
 
 Another great feature when using models is to be able to relate several models together \(like how tables can relate to eachother\).
