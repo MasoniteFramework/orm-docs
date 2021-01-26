@@ -113,3 +113,10 @@ from config.database import DB
 result = DB.statement("select * from users where users.active = ?", [1])
 ```
 
+This will use the default connection but you may also optionally pass a connection to use:
+
+```python
+from config.database import DB
+
+result = DB.statement("select * from users where users.active = ?", [1], connection="production")
+```
