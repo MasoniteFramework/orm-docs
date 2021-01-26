@@ -52,7 +52,7 @@ DATABASES = {
 }
 ```
 
-Lastly you will need to import the `ConnectionResolver` class and and register the connection details:
+Lastly you will need to import the `ConnectionResolver` class and and register the connection details. Normal convention is to set this to a variable called `DB`:
 
 ```python
 # config/database.py
@@ -62,7 +62,7 @@ DATABASES = {
   # ...
 }
 
-ConnectionResolver().set_connection_details(DATABASES)
+DB = ConnectionResolver().set_connection_details(DATABASES)
 ```
 
 After this you have successfully setup Masonite ORM in your project!
@@ -93,5 +93,23 @@ file_handler = logging.FileHandler('queries.log')
 
 logger.addHandler(handler)
 logger.addHandler(file_handler)
+```
+
+## Raw Queries
+
+You can query the database directly using the connection resolver class. If you set the connection resolver to the variable `DB` you can import it like:
+
+```python
+from config.database import DB
+
+result = DB.statement("select * from users where users.active = 1")
+```
+
+You may also pass query bindings as well to protect against SQL injection by passing a list of bindings:
+
+```python
+from config.database import DB
+
+result = DB.statement("select * from users where users.active = ?", [1])
 ```
 
