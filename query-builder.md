@@ -407,7 +407,7 @@ builder.create({"name": "Joe", "active": 1})
 You can also bulk create records by passing a list of dictionaries:
 
 ```python
-builder.create([
+builder.bulk_create([
     {"name": "Joe", "active": 1},
     {"name": "John", "active": 0},
     {"name": "Bill", "active": 1},
