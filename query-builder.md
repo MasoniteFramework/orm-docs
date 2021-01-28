@@ -244,14 +244,18 @@ You may need to get all records where column values are between 2 values:
 builder.table('users').where_between('age', 18, 21).get()
 ```
 
-
-
 ### Group By
 
 You may want to group by a specific column:
 
 ```python
 builder.table('users').group_by('active').get()
+```
+
+You can also specify a multiple column group by:
+
+```python
+builder.table('users').group_by('active, name, is_admin').get()
 ```
 
 ### Having
