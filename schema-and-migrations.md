@@ -68,6 +68,7 @@ class MigrationForUsersTable(Migration):
 | `table.char()` | CHAR equivalent column. |
 | `table.json()` | JSON equivalent column. |
 | `table.date()` | DATE equivalent column. |
+| `table.year()` | YEAR equivalent column. |
 | `table.datetime()` | DATETIME equivalent column. |
 | `table.timestamp()` | TIMESTAMP equivalent column. |
 | `table.time()` | TIME equivalent column. |
