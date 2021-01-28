@@ -257,6 +257,13 @@ You can also specify a multiple column group by:
 ```python
 builder.table('users').group_by('active, name, is_admin').get()
 ```
+### Group By Raw
+
+You can also group by raw:
+
+```python
+builder.table('users').group_by_raw('COUNT(*)').get()
+```
 
 ### Having
 
@@ -353,6 +360,15 @@ builder.table('users').max('salary').get()
 
 ```python
 builder.table('users').min('salary').get()
+```
+
+### Aliases
+
+You may also specify an alias for your aggregate expressions. You can do this by adding "as {alias}" to your aggregate expression:
+
+```python
+builder.table('users').sum('salary as payments').get()
+#== SELECT SUM(`users`.`salary`) as payments FROM `users`
 ```
 
 ## Order By
