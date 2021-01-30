@@ -24,6 +24,8 @@ from masoniteorm.query import QueryBuilder
 builder = QueryBuilder().on('staging').table("users")
 ```
 
+> `from_("users")` is also a valid alias for the `table("users")` method. Feel free to use whatever you feel is more expressive.
+
 You can then start making any number of database calls.
 
 ## Models
