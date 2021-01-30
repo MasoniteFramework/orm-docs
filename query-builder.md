@@ -190,6 +190,26 @@ builder.table("users").where_in("id", lambda q: q.select("profile_id").table("pr
 # SELECT * FROM "users" WHERE "id" IN (SELECT "profiles"."profile_id" FROM "profiles")
 ```
 
+### Select Subqueries
+
+You can make a subquery in the select clause. This takes 2 parameters. The first is the alias for the subquery and the second is a callable that takes a query builder.
+
+```python
+builder.table("stores").add_select("sales", lambda query: (
+    query.count("*").from_("sales").where_column("sales.store_id", stores.id"")
+)).order_by("sales", "desc")
+```
+
+This will add a subquery in the select part of the query. You can then order by or perform wheres on this alias.
+
+Here is an example of all stores that make more than 1000 in sales:
+
+```python
+builder.table("stores").add_select("sales", lambda query: (
+    query.count("*").from_("sales").where_column("sales.store_id", stores.id"")
+)).where("sales", ">", "1000")
+```
+
 ### Conditional Queries
 
 Sometimes you need to specify conditional statements and run queries based on the conditional values.
@@ -480,7 +500,7 @@ builder.table('users').count('salary').to_sql()
 Qmark is essentially just a normal SQL statement except the query is replaced with question marks. The values that should have been in the position of the question marks are stored in a tuple and sent along with the qmark query to help in sql injection. The qmark query is the actual query sent using the connection class.
 
 ```python
-builder.table('users').count('salary').where('age', 18).to_sql()
+builder.table('users').count('salary').where('age', 18).to_qmark()
 #== SELECT COUNT(`users`.`salary`) FROM `users` WHERE `users`.`age` = '?'
 ```
 
