@@ -198,7 +198,7 @@ You can make a subquery in the select clause. This takes 2 parameters. The first
 
 ```python
 builder.table("stores").add_select("sales", lambda query: (
-    query.count("*").from_("sales").where_column("sales.store_id", stores.id"")
+    query.count("*").from_("sales").where_column("sales.store_id", "stores.id")
 )).order_by("sales", "desc")
 ```
 
@@ -208,7 +208,7 @@ Here is an example of all stores that make more than 1000 in sales:
 
 ```python
 builder.table("stores").add_select("sales", lambda query: (
-    query.count("*").from_("sales").where_column("sales.store_id", stores.id"")
+    query.count("*").from_("sales").where_column("sales.store_id", "stores.id")
 )).where("sales", ">", "1000")
 ```
 
