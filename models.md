@@ -665,6 +665,52 @@ If there is a record with the username or "Joe" it will update that record and e
 
 Note that when the record is created, the two dictionaries will be merged together. So if this code was to create a record it would create a record with both the username of `Joe` and active of `1`.
 
+# Creating
+
+You can easily create records by passing in a dictionary:
+
+```python
+User.create({"username": "Joe"})
+```
+
+This will insert the record into the table, and create and return new model instance.
+
+> Note that this will only create a new model instance but will not contain any additional fields on the table. It will only have whichever fields you pass to it. 
+
+You can "refresh" the model. This will call the table again to get the full record:
+
+```python
+user = User.create({"username": "Joe"}).fresh()
+
+user.email #== None
+```
+
+# Bulk Creating
+
+You can also bulk create using the query builder's bulk_create method:
+
+```python
+User.bulk_create([
+  {"username": "Joe"},
+  {"username": "John"},
+  {"username": "Bill"},
+  {"username": "Nick"},
+])
+```
+
+This will return a collection of users that have been created.
+
+Since hydrating all the models involved in a bulk create, this could be much slower when working with a lot of records. If you are working with a lot of records then using the query builder directly without model hydrating will be faster. You can do this by getting a "new" query builder and call any required methods off that:
+
+```python
+User.builder.new().bulk_create([
+  {"username": "Joe"},
+  {"username": "John"},
+  {"username": "Bill"},
+  {"username": "Nick"},
+])
+```
+
 ## Serializing
 
 You can serialize a model very quickly:
