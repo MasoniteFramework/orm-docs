@@ -777,7 +777,36 @@ class User(Model):
         return self.get_new_date(datetime).to_datetime_string()
 ```
 
+# Accessors and Mutators (Getter and Setter)
 
+Accessors and mutators are a great way to fine tune what happens when you get and set attributes on your models.
+
+To create an accessor we just need to create a method in the `get_{name}_attribute` method name:
+
+```python
+class User:
+
+    def get_name_attribute(self):
+        return self.first_name + ' ' + self.last_name
+
+user = User.find(1)
+user.first_name #== "Joe"
+user.last_name #== "Mancuso"
+user.name #== "Joe Mancuso"
+```
+
+The same thing is true for mutating, or setting, the attribute:
+
+```python
+class User:
+
+    def set_name_attribute(self, attribute):
+        return str(attribute).upper()
+
+user = User.find(1)
+user.name = "joe mancuso"
+user.name #== "JOE MANCUSO"
+```
 
 # Events
 
