@@ -677,7 +677,7 @@ This will insert the record into the table, and create and return new model inst
 
 > Note that this will only create a new model instance but will not contain any additional fields on the table. It will only have whichever fields you pass to it. 
 
-You can "refresh" the model. This will call the table again to get the full record:
+You can "refresh" the model after creating to get the rest of the record. This will use the `find` method to get the full record:
 
 ```python
 user = User.create({"username": "Joe"}).fresh()
