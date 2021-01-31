@@ -476,6 +476,17 @@ You can also pass query bindings as well:
 builder.statement("select count(*) from users where active = ?", [1])
 ```
 
+You can also use the `Raw` expression class to specify a raw expression. This can be used with the update query:
+
+```python
+from masoniteorm.expressions import Raw
+
+builder.update({
+    "name": Raw('"alias"')
+})
+# == UPDATE "users" SET "name" = "alias"
+```
+
 ## Chunking
 
 If you need to loop over a lot of results then consider chunking. A chunk will only pull in the specified number of records into a generator:
