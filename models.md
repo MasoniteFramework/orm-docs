@@ -243,7 +243,7 @@ It will be assumed here that the primary key of the relationship here between us
 from masoniteorm.relationships import belongs_to
 class User:
 
-  @belongs_to('company_id', 'id')
+  @belongs_to('primary_key_id', 'user_id')
   def company(self):
     from app.models import Company
     return Company
