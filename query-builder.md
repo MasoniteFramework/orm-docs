@@ -357,31 +357,41 @@ There are several aggregating methods you can use to aggregate columns:
 ### Sum
 
 ```python
-builder.table('users').sum('salary').get()
+salary = builder.table('users').sum('salary').first().salary
 ```
+
+Notice the alias for the aggregate is the name of the column.
 
 ### Average
 
 ```python
-builder.table('users').avg('salary').get()
+salary = builder.table('users').avg('salary').first().salary
 ```
+
+Notice the alias for the aggregate is the name of the column.
 
 ### Count
 
 ```python
-builder.table('users').count('salary').get()
+salary = builder.table('users').count('salary').first().salary
+```
+
+You can also count all:
+
+```python
+salary = builder.table('users').count('salary').first().salary
 ```
 
 ### Max
 
 ```python
-builder.table('users').max('salary').get()
+salary = builder.table('users').max('salary').first().salary
 ```
 
 ### Min
 
 ```python
-builder.table('users').min('salary').get()
+salary = builder.table('users').min('salary').first().salary
 ```
 
 ### Aliases
