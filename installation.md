@@ -93,6 +93,16 @@ DB.commit("staging")
 DB.rollback("staging")
 ```
 
+You can aslo use the transaction method which is a context manager:
+
+```python
+with db.transaction():
+    User.create({..})
+    Post.create({..})
+```
+
+**Any exception thrown within a transaction block will cause the transaction to be rolled back automatically.**
+
 ## Logging
 
 If you would like, you can log any queries Masonite ORM generates to any supported Python logging handler.
