@@ -96,7 +96,7 @@ DB.rollback("staging")
 You can aslo use the transaction method which is a context manager:
 
 ```python
-with db.transaction():
+with DB.transaction():
     User.create({..})
     Post.create({..})
 ```
