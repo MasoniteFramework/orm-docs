@@ -483,7 +483,7 @@ builder.statement("select count(*) from users where active = 1")
 You can also pass query bindings as well:
 
 ```python
-builder.statement("select count(*) from users where active = ?", [1])
+builder.statement("select count(*) from users where active = '?'", [1])
 ```
 
 You can also use the `Raw` expression class to specify a raw expression. This can be used with the update query:
