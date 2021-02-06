@@ -67,6 +67,32 @@ DB = ConnectionResolver().set_connection_details(DATABASES)
 
 After this you have successfully setup Masonite ORM in your project!
 
+## Transactions
+
+You can use global level database transactions easily by importing the connection resolver class:
+
+```python
+from config.database import DB
+
+DB.begin_transaction()
+User.create({..})
+```
+
+You can then either rollback or commit the transactions:
+
+```python
+DB.commit()
+DB.rollback()
+```
+
+You may also optionally pass the connection you'd like to use:
+
+```python
+DB.begin_transaction("staging")
+DB.commit("staging")
+DB.rollback("staging")
+```
+
 ## Logging
 
 If you would like, you can log any queries Masonite ORM generates to any supported Python logging handler.
