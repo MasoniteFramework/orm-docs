@@ -350,6 +350,22 @@ builder.table('users').increment('status', 10)
 builder.table('users').decrement('status', 10)
 ```
 
+## Pagination
+
+Sometimes you'll want to paginate through a result set. There are 2 ways to pagainate records.
+
+The first is a "length aware" pagination. This means that there will be additional results on the pagination like the total records. This will do 2 queries. The initial query to get the records and a COUNT query to get the total. For large or complex result sets this may not be the best choice as 2 queries will need to be made.
+
+```python
+builder.table("users").where("active", 1).paginate(number_of_results, page)
+```
+
+You may also do "simple pagination". This will not give you back a query total and will not make the second COUNT query.
+
+```python
+builder.table("users").where("active", 1).simple_paginate(number_of_results, page)
+```
+
 ## Aggregates
 
 There are several aggregating methods you can use to aggregate columns:
