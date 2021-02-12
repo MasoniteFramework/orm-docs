@@ -651,6 +651,15 @@ with self.schema.create("users") as table:
   table.soft_deletes()
 ```
 
+If the column name is not called `deleted_at` you can change the column to a different name:
+
+```python
+from masoniteorm.scopes import SoftDeletesMixin
+
+class User(Model, SoftDeletesMixin):
+  __deleted_at__ = "when_deleted"
+```
+
 # Updating
 
 You can also update or create records as well:
