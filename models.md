@@ -7,8 +7,9 @@ Models are the easiest way to interact with your tables. A model is a way for yo
 The first step in using models is actually creating them. You can scaffold out a model by using the command:
 
 ```text
-$ python masonit-orm model Post
+$ python masonite-orm model Post
 ```
+
 _You can use the `--directory` flag to specify the location of these models_
 
 This will create a post model like so:
@@ -687,12 +688,14 @@ This will insert the record into the table, create and return the new model inst
 
 > Note that this will only create a new model instance but will not contain any additional fields on the table. It will only have whichever fields you pass to it. 
 
-You can "refresh" the model after creating to get the rest of the record. This will use the `find` method to get the full record:
+You can "refetch" the model after creating to get the rest of the record. This will use the `find` method to get the full record. Let's say you have a scenario in which the `active` flag defaults to 1 from the database level. If we create the record, the `active` attribute will not fetched since Masonite ORM doesn't know about this attribute.
+
+In this case we can refetch the record using `.fresh()` after create:
 
 ```python
-user = User.create({"username": "Joe"}).refresh()
+user = User.create({"username": "Joe"}).fresh()
 
-user.email #== None
+user.active #== 1
 ```
 
 # Bulk Creating
