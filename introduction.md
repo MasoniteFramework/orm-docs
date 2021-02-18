@@ -19,7 +19,7 @@ $ masonite-orm model User
 With Masonite:
 
 ```
-$ craft model User
+$ python craft model User
 ```
 
 Either one of these commands will work with Masonite but to standardize the commands you should use `craft`.
