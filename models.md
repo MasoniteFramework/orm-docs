@@ -893,7 +893,7 @@ For example, if you want to listen to when users are created you will create a `
 You can scaffold an obsever by running:
 
 ```text
-python masonite-orm observer User --model User
+masonite-orm observer User --model User
 ```
 
 > If you do not specify a model option, it will be assumed the model name is the same as the observer name
