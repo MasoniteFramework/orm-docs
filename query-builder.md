@@ -579,7 +579,6 @@ builder.where('active', 0).delete()
 | order\_by | right\_join | select |
 | select\_raw | sum | to\_qmark |
 | to\_sql | update | where |
-| where\_column | where\_exists | where\_has |
-| where\_in | where\_not\_in | where\_not\_null |
-| where\_null | where\_raw |  |
+| where_between |  where\_column | where\_exists | where\_has | where\_in | where\_not\_in  | where\_not\_null |
+| where\_null | where\_raw | 
 
