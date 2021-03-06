@@ -525,23 +525,23 @@ for users in builder.table('users').chunk(100):
 
 ## Getting SQL
 
-If you want to find out the SQL that will run when the command is executed. You can use `to_sql()`. This method returns the full query and is not the query that gets sent to the database. The query sent to the database is a "qmark query". This `to_sql()` method is mainly for debugging purposes.
-
-See the section below for more information on qmark queries.
+If you want to find out the SQL that will run when the command is executed. You can use `to_sql()`. This method returns the full query without bindings. The actual query sent to the database is a "qmark query" (see below). This `to_sql()` method is mainly for debugging purposes and should not be sent directly to a database as the result with have no query bindings and will be subject to SQL injection attacks. **Use this method for debugging purposes only.**
 
 ```python
-builder.table('users').count('salary').to_sql()
-#== SELECT COUNT(`users`.`salary`) FROM `users`
+builder.table('users').count('salary').where('age', 18).to_sql()
+#== SELECT COUNT(`users`.`salary`) AS salary FROM `users` WHERE `users`.`age` = '18'
 ```
 
 ## Getting Qmark
 
-Qmark is essentially just a normal SQL statement except the query is replaced with question marks. The values that should have been in the position of the question marks are stored in a tuple and sent along with the qmark query to help in sql injection. The qmark query is the actual query sent using the connection class.
+Qmark is essentially just a normal SQL statement except that the query is replaced with quoted question marks (`'?'`). The values that should have been in the position of the question marks are stored in a tuple and sent along with the qmark query to help in sql injection. The qmark query is the actual query sent using the connection class.
 
 ```python
 builder.table('users').count('salary').where('age', 18).to_qmark()
-#== SELECT COUNT(`users`.`salary`) FROM `users` WHERE `users`.`age` = '?'
+#== SELECT COUNT(`users`.`salary`) AS salary FROM `users` WHERE `users`.`age` = '?'
 ```
+
+> Note: qmark queries will reset the query builder and remove things like aggregates and wheres from the builder class. Because of this, writing `get()` after `to_qmark` will result in incorrect queries (because things like wheres and aggregates will be missing from the final query). If you need to debug a query, please use the `to_sql()` method which does not have this kind of resetting behavior.
 
 ## Updates
 
