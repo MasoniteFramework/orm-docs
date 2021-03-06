@@ -810,7 +810,7 @@ Other valid values are:
 * `bool`
 * `json`
 
-## Dates
+# Dates
 
 Masonite uses `pendulum` for dates. Whenever dates are used it will return an instance of pendulum.
 
@@ -819,10 +819,10 @@ You can specify which fields are dates on your model. This will be used for seri
 ```python
 class User(Model):
 
-    __dates__ = ['verified_at]
+    __dates__ = ["verified_at"]
 ```
 
-### Overriding Dates
+## Overriding Dates
 
 If you would like to change this behavior you can override 2 methods: `get_new_date()` and `get_new_datetime_string()`:
 
