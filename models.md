@@ -547,6 +547,14 @@ You can also specify the clause of the join (inner, left, right). The default is
 User.joins('posts', clause="right")
 ```
 
+Additionally if you want to specify additional where clauses you can use the `join_on` method:
+
+```python
+User.join_on('posts', lambda q: (
+  q.where('active', 1)
+))
+```
+
 # Scopes
 
 Scopes are a way to take common queries you may be doing and condense them into a method where you can then chain onto them. Let's say you are doing a query like getting the active user frequently:
