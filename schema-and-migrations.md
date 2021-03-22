@@ -68,6 +68,7 @@ class MigrationForUsersTable(Migration):
 | `table.char()` | CHAR equivalent column. |
 | `table.json()` | JSON equivalent column. |
 | `table.date()` | DATE equivalent column. |
+| `table.year()` | YEAR equivalent column. |
 | `table.datetime()` | DATETIME equivalent column. |
 | `table.timestamp()` | TIMESTAMP equivalent column. |
 | `table.time()` | TIME equivalent column. |
@@ -85,7 +86,7 @@ class MigrationForUsersTable(Migration):
 | `table.unsigned()` | Alias for `unsigned_integer` |
 | `table.soft_deletes()` | A nullable DATETIME column named `deleted_at`. This is used by the [SoftDeletes](models.md#soft-deleting) scope. |
 
-## Rolling Back Migrations
+## Changes & Rolling Back Migrations
 
 In addition to building up the migration, you should also build onto the `down` method which should reverse whatever was done in the `up` method. If you create a table in the up method, you should drop the table in the down method.
 
@@ -97,7 +98,8 @@ In addition to building up the migration, you should also build onto the `down` 
 | `table.drop_index()` | Drops the constraint. Must pass in the name of the constraint. `drop_index('email_index')` |
 | `table.drop_unique()` | Drops the uniqueness constraint. Must pass in the name of the constraint. `table.drop_unique('users_email_unique')` |
 | `table.drop_foreign()` | Drops the foreign key. Must specify the index name. `table.drop_foreign('users_article_id_foreign')` |
-| `table.drop_primary()` | Drops the primary key constraint. Must pass in the constraint name `table.drop_foreign('users_id_primary')` |
+| `table.rename()` | Renames a column to a new column. Must take the old column name, new column and data type. `table.rename("user_id", "profile_id", "unsigned_integer")`|
+| `table.drop_primary()` | Drops the primary key constraint. Must pass in the constraint name `table.drop_primary('users_id_primary')` |
 
 ## Getting Migration Status
 
@@ -148,6 +150,7 @@ In addition to columns, you can also create indexes. Below are the available ind
 | `table.primary()` | Make the column use the PRIMARY KEY modifer. |
 | `table.unique()` | Makes a unique index. Can pass in a column `table.unique('email')` or list of columns `table.unique(['email', 'phone_number'])`. |
 | `table.index()` | Creates an index on the column. `table.index('email')` |
+| `table.fulltext()` | Creates an fulltext index on the column or columns. `table.fulltext('email')`. Note this only works for MySQL databases and will be ignored on other databases. |
 
 The default primary key is often set to an auto-incrementing integer, but you can [use UUID instead](models.md#changing-primary-key-to-use-uuid).
 

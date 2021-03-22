@@ -12,7 +12,7 @@ This list is a continuously evolving list of features and anything we develop wi
 
 Currently these features are:
 
-* through relationships \(HasOneThrough, HasManyThrough, etc\)
+* has one through relationship
 
 **If you are using Masonite 2 then you will not be able to upgrade to Masonite ORM because of version conflicts between Masonite and Masonite 2 ORM.**
 
@@ -93,7 +93,7 @@ DATABASES = {
   # ...
 }
 
-db = ConnectionResolver().set_connection_details(DATABASES)
+DB = ConnectionResolver().set_connection_details(DATABASES)
 ```
 
 ## Models

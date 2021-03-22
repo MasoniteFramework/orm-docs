@@ -24,6 +24,8 @@ from masoniteorm.query import QueryBuilder
 builder = QueryBuilder().on('staging').table("users")
 ```
 
+> `from_("users")` is also a valid alias for the `table("users")` method. Feel free to use whatever you feel is more expressive.
+
 You can then start making any number of database calls.
 
 ## Models
@@ -190,6 +192,26 @@ builder.table("users").where_in("id", lambda q: q.select("profile_id").table("pr
 # SELECT * FROM "users" WHERE "id" IN (SELECT "profiles"."profile_id" FROM "profiles")
 ```
 
+### Select Subqueries
+
+You can make a subquery in the select clause. This takes 2 parameters. The first is the alias for the subquery and the second is a callable that takes a query builder.
+
+```python
+builder.table("stores").add_select("sales", lambda query: (
+    query.count("*").from_("sales").where_column("sales.store_id", "stores.id")
+)).order_by("sales", "desc")
+```
+
+This will add a subquery in the select part of the query. You can then order by or perform wheres on this alias.
+
+Here is an example of all stores that make more than 1000 in sales:
+
+```python
+builder.table("stores").add_select("sales", lambda query: (
+    query.count("*").from_("sales").where_column("sales.store_id", "stores.id")
+)).where("sales", ">", "1000")
+```
+
 ### Conditional Queries
 
 Sometimes you need to specify conditional statements and run queries based on the conditional values.
@@ -250,6 +272,19 @@ You may want to group by a specific column:
 
 ```python
 builder.table('users').group_by('active').get()
+```
+
+You can also specify a multiple column group by:
+
+```python
+builder.table('users').group_by('active, name, is_admin').get()
+```
+### Group By Raw
+
+You can also group by raw:
+
+```python
+builder.table('users').group_by_raw('COUNT(*)').get()
 ```
 
 ### Having
@@ -315,6 +350,22 @@ builder.table('users').increment('status', 10)
 builder.table('users').decrement('status', 10)
 ```
 
+## Pagination
+
+Sometimes you'll want to paginate through a result set. There are 2 ways to pagainate records.
+
+The first is a "length aware" pagination. This means that there will be additional results on the pagination like the total records. This will do 2 queries. The initial query to get the records and a COUNT query to get the total. For large or complex result sets this may not be the best choice as 2 queries will need to be made.
+
+```python
+builder.table("users").where("active", 1).paginate(number_of_results, page)
+```
+
+You may also do "simple pagination". This will not give you back a query total and will not make the second COUNT query.
+
+```python
+builder.table("users").where("active", 1).simple_paginate(number_of_results, page)
+```
+
 ## Aggregates
 
 There are several aggregating methods you can use to aggregate columns:
@@ -322,31 +373,113 @@ There are several aggregating methods you can use to aggregate columns:
 ### Sum
 
 ```python
-builder.table('users').sum('salary').get()
+salary = builder.table('users').sum('salary').first().salary
 ```
+
+Notice the alias for the aggregate is the name of the column.
 
 ### Average
 
 ```python
-builder.table('users').avg('salary').get()
+salary = builder.table('users').avg('salary').first().salary
 ```
+
+Notice the alias for the aggregate is the name of the column.
 
 ### Count
 
 ```python
-builder.table('users').count('salary').get()
+salary = builder.table('users').count('salary').first().salary
+```
+
+You can also count all:
+
+```python
+salary = builder.table('users').count('salary').first().salary
 ```
 
 ### Max
 
 ```python
-builder.table('users').max('salary').get()
+salary = builder.table('users').max('salary').first().salary
 ```
 
 ### Min
 
 ```python
-builder.table('users').min('salary').get()
+salary = builder.table('users').min('salary').first().salary
+```
+
+### Aliases
+
+You may also specify an alias for your aggregate expressions. You can do this by adding "as {alias}" to your aggregate expression:
+
+```python
+builder.table('users').sum('salary as payments').get()
+#== SELECT SUM(`users`.`salary`) as payments FROM `users`
+```
+
+## Order By
+
+You can easily order by:
+
+```python
+builder.order_by("column")
+```
+
+The default is ascending order but you can change directions:
+
+```python
+builder.order_by("column", "desc")
+```
+
+You can also specify a comma separated list of columns to order by all 3 columns:
+
+```python
+builder.order_by("name, email, active")
+```
+
+You may also specify the sort direction on each one individually:
+
+```python
+builder.order_by("name, email desc, active")
+```
+
+This will sort `name` and `active` in ascending order because it is the default but will sort email in descending order.
+
+These 2 peices of code are the same:
+
+```python
+builder.order_by("name, active").order_by("name", "desc")
+builder.order_by("name, email desc, active")
+```
+
+## Order By Raw
+
+You can also order by raw. This will pass your raw query directly to the query:
+
+```python
+builder.order_by_raw("name asc")
+```
+
+## Creating Records
+
+You can create records by passing a dictionary to the `create` method. This will perform an INSERT query:
+
+```python
+builder.create({"name": "Joe", "active": 1})
+```
+
+## Bulk Creating
+
+You can also bulk create records by passing a list of dictionaries:
+
+```python
+builder.bulk_create([
+    {"name": "Joe", "active": 1},
+    {"name": "John", "active": 0},
+    {"name": "Bill", "active": 1},
+])
 ```
 
 ## Raw Queries
@@ -355,6 +488,29 @@ If some queries would be easier written raw you can easily do so for both select
 
 ```python
 builder.table('users').select_raw("COUNT(`username`) as username").where_raw("`username` = 'Joe'").get()
+```
+
+You can also specify a fully raw query using the `statement` method. This will simply execute a query directly and return the result rather than building up a query:
+
+```python
+builder.statement("select count(*) from users where active = 1")
+```
+
+You can also pass query bindings as well:
+
+```python
+builder.statement("select count(*) from users where active = '?'", [1])
+```
+
+You can also use the `Raw` expression class to specify a raw expression. This can be used with the update query:
+
+```python
+from masoniteorm.expressions import Raw
+
+builder.update({
+    "name": Raw('"alias"')
+})
+# == UPDATE "users" SET "name" = "alias"
 ```
 
 ## Chunking
@@ -369,23 +525,23 @@ for users in builder.table('users').chunk(100):
 
 ## Getting SQL
 
-If you want to find out the SQL that will run when the command is executed. You can use `to_sql()`. This method returns the full query and is not the query that gets sent to the database. The query sent to the database is a "qmark query". This `to_sql()` method is mainly for debugging purposes.
-
-See the section below for more information on qmark queries.
+If you want to find out the SQL that will run when the command is executed. You can use `to_sql()`. This method returns the full query without bindings. The actual query sent to the database is a "qmark query" (see below). This `to_sql()` method is mainly for debugging purposes and should not be sent directly to a database as the result with have no query bindings and will be subject to SQL injection attacks. **Use this method for debugging purposes only.**
 
 ```python
-builder.table('users').count('salary').to_sql()
-#== SELECT COUNT(`users`.`salary`) FROM `users`
+builder.table('users').count('salary').where('age', 18).to_sql()
+#== SELECT COUNT(`users`.`salary`) AS salary FROM `users` WHERE `users`.`age` = '18'
 ```
 
 ## Getting Qmark
 
-Qmark is essentially just a normal SQL statement except the query is replaced with question marks. The values that should have been in the position of the question marks are stored in a tuple and sent along with the qmark query to help in sql injection. The qmark query is the actual query sent using the connection class.
+Qmark is essentially just a normal SQL statement except that the query is replaced with quoted question marks (`'?'`). The values that should have been in the position of the question marks are stored in a tuple and sent along with the qmark query to help in sql injection. The qmark query is the actual query sent using the connection class.
 
 ```python
-builder.table('users').count('salary').where('age', 18).to_sql()
-#== SELECT COUNT(`users`.`salary`) FROM `users` WHERE `users`.`age` = '?'
+builder.table('users').count('salary').where('age', 18).to_qmark()
+#== SELECT COUNT(`users`.`salary`) AS salary FROM `users` WHERE `users`.`age` = '?'
 ```
+
+> Note: qmark queries will reset the query builder and remove things like aggregates and wheres from the builder class. Because of this, writing `get()` after `to_qmark` will result in incorrect queries (because things like wheres and aggregates will be missing from the final query). If you need to debug a query, please use the `to_sql()` method which does not have this kind of resetting behavior.
 
 ## Updates
 
@@ -423,7 +579,6 @@ builder.where('active', 0).delete()
 | order\_by | right\_join | select |
 | select\_raw | sum | to\_qmark |
 | to\_sql | update | where |
-| where\_column | where\_exists | where\_has |
-| where\_in | where\_not\_in | where\_not\_null |
-| where\_null | where\_raw |  |
+| where_between |  where\_column | where\_exists | where\_has | where\_in | where\_not\_in  | where\_not\_null |
+| where\_null | where\_raw | 
 
