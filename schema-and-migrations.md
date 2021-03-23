@@ -60,13 +60,23 @@ class MigrationForUsersTable(Migration):
 | Command | Description |
 | :--- | :--- |
 | `table.string()` | The varchar version of the table. Can optional pass in a length `table.string('name', length=181)` |
+| `table.char()` | CHAR equivalent column. |
+| `table.text()` | TEXT equivalent column. |
+| `table.longtext()` | LONGTEXT equivalent column. |
 | `table.integer()` | The INT version of the database. Can also specify a length `table.integer('age', length=5)` |
+| `table.unsigned_integer()` | UNSIGNED INT equivalent column. |
+| `table.unsigned()` | Alias for `unsigned_integer` |
+| `table.tiny_integer()` | TINY INT equivalent column. |
+| `table.small_integer()` | SMALL INT equivalent column. |
+| `table.medium_integer()` | MEDIUM INT equivalent column. |
+| `table.big_integer()` | BIG INT equivalent column. |
 | `table.increments()` | The auto incrementing version of the table. An unsigned non nullable auto incrementing integer. |
+| `table.tiny_increments()` | TINY auto incrementing equivalent column. |
 | `table.big_increments()` | An unsigned non nullable auto incrementing big integer. Use this if you expect the rows in a table to be very large |
 | `table.binary()` | BINARY equivalent column. Sometimes is text field on unsupported databases. |
 | `table.boolean()` | BOOLEAN equivalent column. |
-| `table.char()` | CHAR equivalent column. |
 | `table.json()` | JSON equivalent column. |
+| `table.jsonb()` | LONGBLOB equivalent column. JSONB equivalent column for Postgres. |
 | `table.date()` | DATE equivalent column. |
 | `table.year()` | YEAR equivalent column. |
 | `table.datetime()` | DATETIME equivalent column. |
@@ -75,31 +85,28 @@ class MigrationForUsersTable(Migration):
 | `table.timestamps()` | Creates `created_at` and `updated_at` columns on the table with the `timestamp` column and defaults to the current time. |
 | `table.decimal()` | DECIMAL equivalent column. Can also specify the length and decimal position. `table.decimal('salary', 17, 6)` |
 | `table.double()` | DOUBLE equivalent column. Can also specify a float length `table.double('salary', 17,6)` |
+| `table.float()` | FLOAT equivalent column. |
 | `table.enum()` | ENUM equivalent column. You can also specify available options as a list. `table.enum('flavor', ['chocolate', 'vanilla'])`. Sometimes defaults to a TEXT field with a constraint on unsupported databases. |
-| `table.text()` | TEXT equivalent column. |
-| `table.unsigned_integer()` | UNSIGNED INT equivalent column. |
-| `table.tiny_integer()` | TINY INT equivalent column. |
-| `table.small_integer()` | SMALL INT equivalent column. |
-| `table.medium_integer()` | MEDIUM INT equivalent column. |
-| `table.big_integer()` | BIG INT equivalent column. |
-| `table.tiny_increments()` | TINY auto incrementing equivalent column. |
-| `table.unsigned()` | Alias for `unsigned_integer` |
+| `table.geometry()` | GEOMETRY equivalent column. |
+| `table.point()` | POINT equivalent column. |
+| `table.uuid()` | A CHAR column used to store UUIDs `table.uuid('id')`. Default length is 36. |
 | `table.soft_deletes()` | A nullable DATETIME column named `deleted_at`. This is used by the [SoftDeletes](models.md#soft-deleting) scope. |
+
 
 ## Changes & Rolling Back Migrations
 
 In addition to building up the migration, you should also build onto the `down` method which should reverse whatever was done in the `up` method. If you create a table in the up method, you should drop the table in the down method.
 
-| Command | Description |
-| :--- | :--- |
-| `table.drop_table()` | DROP TABLE equivalent statement. |
-| `table.drop_table_if_exists()` | DROP TABLE IF EXISTS equivalent statement. |
-| `table.drop_column()` | DROP COLUMN equivalent statement. Can take one or multiple column names. `drop_column('column1', 'column2')` |
-| `table.drop_index()` | Drops the constraint. Must pass in the name of the constraint. `drop_index('email_index')` |
-| `table.drop_unique()` | Drops the uniqueness constraint. Must pass in the name of the constraint. `table.drop_unique('users_email_unique')` |
-| `table.drop_foreign()` | Drops the foreign key. Must specify the index name. `table.drop_foreign('users_article_id_foreign')` |
-| `table.rename()` | Renames a column to a new column. Must take the old column name, new column and data type. `table.rename("user_id", "profile_id", "unsigned_integer")`|
-| `table.drop_primary()` | Drops the primary key constraint. Must pass in the constraint name `table.drop_primary('users_id_primary')` |
+| Command                        | Description                                                                                                                                            |
+| :----------------------------- | :----------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `table.drop_table()`           | DROP TABLE equivalent statement.                                                                                                                       |
+| `table.drop_table_if_exists()` | DROP TABLE IF EXISTS equivalent statement.                                                                                                             |
+| `table.drop_column()`          | DROP COLUMN equivalent statement. Can take one or multiple column names. `drop_column('column1', 'column2')`                                           |
+| `table.drop_index()`           | Drops the constraint. Must pass in the name of the constraint. `drop_index('email_index')`                                                             |
+| `table.drop_unique()`          | Drops the uniqueness constraint. Must pass in the name of the constraint. `table.drop_unique('users_email_unique')`                                    |
+| `table.drop_foreign()`         | Drops the foreign key. Must specify the index name. `table.drop_foreign('users_article_id_foreign')`                                                   |
+| `table.rename()`               | Renames a column to a new column. Must take the old column name, new column and data type. `table.rename("user_id", "profile_id", "unsigned_integer")` |
+| `table.drop_primary()`         | Drops the primary key constraint. Must pass in the constraint name `table.drop_primary('users_id_primary')`                                            |
 
 ## Getting Migration Status
 
@@ -131,25 +138,24 @@ $ masonite-orm migrate:refresh
 
 In addition to the available columns you can use, you can also specify some modifers which will change the behavior of the column:
 
-| Command | Description |
-| :--- | :--- |
-| .nullable\(\) | Allows NULL values to be inserted into the column. |
-| .unique\(\) | Forces all values in the column to be unique. |
-| .after\(\) | Adds the column after another column in the table. Can be used like `table.string('is_admin').after('email')`. |
-| .unsigned\(\) | Makes the column unsigned. Used with the `table.integer('age').unsigned()` column. |
-| .use\_current\(\) | Makes the column use the `CURRENT_TIMESTAMP` modifer. |
-| .default\(value\) | Specify a default value for the column. Can be used like table.boolean("is_admin").default(False) |
-
+| Command           | Description                                                                                                    |
+| :---------------- | :------------------------------------------------------------------------------------------------------------- |
+| .nullable\(\)     | Allows NULL values to be inserted into the column.                                                             |
+| .unique\(\)       | Forces all values in the column to be unique.                                                                  |
+| .after\(\)        | Adds the column after another column in the table. Can be used like `table.string('is_admin').after('email')`. |
+| .unsigned\(\)     | Makes the column unsigned. Used with the `table.integer('age').unsigned()` column.                             |
+| .use_current\(\)  | Makes the column use the `CURRENT_TIMESTAMP` modifer.                                                          |
+| .default\(value\) | Specify a default value for the column. Can be used like table.boolean("is_admin").default(False)              |
 
 ## Indexes
 
 In addition to columns, you can also create indexes. Below are the available indexes you can create:
 
-| Command | Description |
-| :--- | :--- |
-| `table.primary()` | Make the column use the PRIMARY KEY modifer. |
-| `table.unique()` | Makes a unique index. Can pass in a column `table.unique('email')` or list of columns `table.unique(['email', 'phone_number'])`. |
-| `table.index()` | Creates an index on the column. `table.index('email')` |
+| Command            | Description                                                                                                                                                     |
+| :----------------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `table.primary()`  | Make the column use the PRIMARY KEY modifer.                                                                                                                    |
+| `table.unique()`   | Makes a unique index. Can pass in a column `table.unique('email')` or list of columns `table.unique(['email', 'phone_number'])`.                                |
+| `table.index()`    | Creates an index on the column. `table.index('email')`                                                                                                          |
 | `table.fulltext()` | Creates an fulltext index on the column or columns. `table.fulltext('email')`. Note this only works for MySQL databases and will be ignored on other databases. |
 
 The default primary key is often set to an auto-incrementing integer, but you can [use UUID instead](models.md#changing-primary-key-to-use-uuid).
@@ -170,12 +176,12 @@ table.foreign('local_column').references('other_column').on('other_table').on_up
 
 You can use these options:
 
-| Command | Description |
-| :--- | :--- |
-| .on\_update\('set null'\) | Sets the ON UPDATE SET NULL property on the constraint. |
-| .on\_update\('cascade'\) | Sets the ON UPDATE CASCADE property on the constraint. |
-| .on\_delete\('set null'\) | Sets the ON DELETE SET NULL property on the constraint. |
-| .on\_delete\('cascade'\) | Sets the ON DELETE CASCADE property on the constraint. |
+| Command                  | Description                                             |
+| :----------------------- | :------------------------------------------------------ |
+| .on_update\('set null'\) | Sets the ON UPDATE SET NULL property on the constraint. |
+| .on_update\('cascade'\)  | Sets the ON UPDATE CASCADE property on the constraint.  |
+| .on_delete\('set null'\) | Sets the ON DELETE SET NULL property on the constraint. |
+| .on_delete\('cascade'\)  | Sets the ON DELETE CASCADE property on the constraint.  |
 
 ## Changing Columns
 
@@ -232,4 +238,3 @@ You can drop a table if it exists:
 ```python
 schema.drop_table_if_exists("users")
 ```
-
