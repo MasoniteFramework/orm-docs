@@ -148,9 +148,9 @@ In addition to columns, you can also create indexes. Below are the available ind
 | Command | Description |
 | :--- | :--- |
 | `table.primary()` | Make the column use the PRIMARY KEY modifer. |
-| `table.unique()` | Makes a unique index. Can pass in a column `table.unique('email')` or list of columns `table.unique(['email', 'phone_number'])`. |
-| `table.index()` | Creates an index on the column. `table.index('email')` |
-| `table.fulltext()` | Creates an fulltext index on the column or columns. `table.fulltext('email')`. Note this only works for MySQL databases and will be ignored on other databases. |
+| `table.unique()` | Makes a unique index. Can pass in a column `table.unique('email')` or list of columns `table.unique(['email', 'phone_number'])`. Also supports a `name` parameter to change the name of the index. |
+| `table.index()` | Creates an index on the column. `table.index('email')`. Also supports a `name` parameter to change the name of the index. |
+| `table.fulltext()` | Creates an fulltext index on the column or columns. `table.fulltext('email')`. Note this only works for MySQL databases and will be ignored on other databases. Also supports a `name` parameter to change the name of the index. |
 
 The default primary key is often set to an auto-incrementing integer, but you can [use UUID instead](models.md#changing-primary-key-to-use-uuid).
 
@@ -176,6 +176,13 @@ You can use these options:
 | .on\_update\('cascade'\) | Sets the ON UPDATE CASCADE property on the constraint. |
 | .on\_delete\('set null'\) | Sets the ON DELETE SET NULL property on the constraint. |
 | .on\_delete\('cascade'\) | Sets the ON DELETE CASCADE property on the constraint. |
+
+
+You can also pass a `name` parameter to change the name of the constraint:
+
+```python
+table.foreign('local_column', name="foreign_constraint").references('other_column').on('other_table')
+```
 
 ## Changing Columns
 
