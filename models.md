@@ -100,7 +100,7 @@ class User(Model):
 
 Almost all of a model's querying methods are passed off to the query builder. If you would like to see all the methods available for the query builder, see the [QueryBuilder](models.md) documentation here.
 
-* sub queries
+- sub queries
 
 ## Single results
 
@@ -323,7 +323,7 @@ id
 name
 ```
 
-Notice that there is a pivot table called `product_store` that is in between stores and products. 
+Notice that there is a pivot table called `product_store` that is in between stores and products.
 
 We can use the `belongs_to_many` relationship to get all the products of a store easily. Let's start with the `Store` model:
 
@@ -684,6 +684,12 @@ If there is a record with the username of "Joe" it will update that record or, i
 
 Note that when the record is created, the two dictionaries will be merged together. So if this code was to create a record it would create a record with both the username of `Joe` and active of `1`.
 
+When updating records the `updated_at` column will be automatically updated. You can control this behaviour by using `activate_timestamps` method:
+
+```python
+User.activate_timestamps(False).update({"username": "Sam"})  # updated_at won't be modified during this update
+```
+
 # Creating
 
 You can easily create records by passing in a dictionary:
@@ -735,35 +741,41 @@ User.builder.new().bulk_create([
 ## Serializing
 
 You can serialize a model very quickly:
+
 ```python
 User.serialize()
 # returns {'id': 1, 'account_id': 1, 'first_name': 'John', 'last_name': 'Doe', 'email': 'johndoe@example.com', 'password': '$2b$12$pToeQW/1qs26CCozNiAfNugRRBNjhPvtIw86dvfJ0FDNcTDUNt3TW', 'created_at': '2021-01-03T11:35:48+00:00', 'updated_at': '2021-01-08T22:06:48+00:00' }
 ```
+
 This will return a dict of all the model fields. Some important things to note:
+
 - Date fields will be serialized with ISO format
 - Relationships will be serialized
 - Attributes defined in `__appends__` will be added
 
 If you want to hide model fields you can use `__hidden__` attribute on your model:
+
 ```python
 # User.py
 class User(Model):
   # ...
   __hidden__ = ["password", "created_at"]
 ```
+
 In the same way you can use `__visible__` attribute on your model to explicitly tell which fields should be included in serialization:
+
 ```python
 # User.py
 class User(Model):
   # ...
   __visible__ = ["id", "name", "email"]
 ```
+
 {% hint style="warning" %}
 You cannot use both `__hidden__` and `__visible__` on the model.
 {% endhint %}
 
 If you need more advanced serialization or building a complex API you should use [masonite-api](https://docs.masoniteproject.com/official-packages/masonite-api) package.
-
 
 # Changing Primary Key to use UUID
 
@@ -814,9 +826,9 @@ Now whenever you get the active attribute on the model it will be an `int`.
 
 Other valid values are:
 
-* `int`
-* `bool`
-* `json`
+- `int`
+- `bool`
+- `json`
 
 # Dates
 
@@ -889,18 +901,18 @@ user.name #== "JOE MANCUSO"
 
 Models emit various events in different stages of its life cycle. Available events are:
 
-* booting
-* booted
-* creating
-* created
-* deleting
-* deleted
-* hydrating
-* hydrated
-* saving
-* saved
-* updating
-* updated
+- booting
+- booted
+- creating
+- created
+- deleting
+- deleted
+- hydrating
+- hydrated
+- saving
+- saved
+- updating
+- updated
 
 # Observers
 
@@ -960,7 +972,7 @@ articles = Articles.where('user_id', 2).get()
 user.save_many('articles', articles)
 ```
 
-This will take all articles where user\_id is 2 and assign them the related record between users and article \(user\_id\).
+This will take all articles where user_id is 2 and assign them the related record between users and article \(user_id\).
 
 You may do the same for a one-to-one relationship:
 
@@ -970,7 +982,6 @@ phone = Phone.find(30)
 
 user.associate('phone', phone)
 ```
-
 
 # Attributes
 
@@ -1008,4 +1019,3 @@ user.name #== Bill
 user.name = "Joe"
 user.get_original("name") #== Bill
 ```
-

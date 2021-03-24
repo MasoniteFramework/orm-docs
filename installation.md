@@ -31,6 +31,7 @@ DATABASES = {
     "password": "",
     "port": 3306,
     "prefix": "",
+    "logging_queries": False,
     "options": {
       #  
     }
@@ -42,6 +43,7 @@ DATABASES = {
     "password": "",
     "port": 5432,
     "prefix": "",
+    "logging_queries": False,
     "options": {
       #  
     }
@@ -104,7 +106,8 @@ If there are any exceptions in inside the context then the transaction will be r
 
 ## Logging
 
-If you would like, you can log any queries Masonite ORM generates to any supported Python logging handler.
+If you would like, you can log any queries Masonite ORM generates to any supported Python logging handler. First you need to enable logging
+in `config/database.py` file through the `logging_queries` boolean parameter.
 
 Inside your `config/database.py` file you can put on the bottom here. The StreamHandler will output the queries to the terminal.
 
