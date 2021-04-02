@@ -142,10 +142,11 @@ In addition to the available columns you can use, you can also specify some modi
 | :---------------- | :------------------------------------------------------------------------------------------------------------- |
 | .nullable\(\)     | Allows NULL values to be inserted into the column.                                                             |
 | .unique\(\)       | Forces all values in the column to be unique.                                                                  |
-| .after\(\)        | Adds the column after another column in the table. Can be used like `table.string('is_admin').after('email')`. |
+| .after\(other_column\)        | Adds the column after another column in the table. Can be used like `table.string('is_admin').after('email')`. |
 | .unsigned\(\)     | Makes the column unsigned. Used with the `table.integer('age').unsigned()` column.                             |
 | .use_current\(\)  | Makes the column use the `CURRENT_TIMESTAMP` modifer.                                                          |
 | .default\(value\) | Specify a default value for the column. Can be used like table.boolean("is_admin").default(False)              |
+| .primary\() | Specify that the column should be used for the primary key constraint. Used like `table.string('role_id').primary()`              |
 
 ## Indexes
 
@@ -153,12 +154,12 @@ In addition to columns, you can also create indexes. Below are the available ind
 
 | Command | Description |
 | :--- | :--- |
-| `table.primary()` | Make the column use the PRIMARY KEY modifer. |
-| `table.unique()` | Makes a unique index. Can pass in a column `table.unique('email')` or list of columns `table.unique(['email', 'phone_number'])`. Also supports a `name` parameter to change the name of the index. |
-| `table.index()` | Creates an index on the column. `table.index('email')`. Also supports a `name` parameter to change the name of the index. |
-| `table.fulltext()` | Creates an fulltext index on the column or columns. `table.fulltext('email')`. Note this only works for MySQL databases and will be ignored on other databases. Also supports a `name` parameter to change the name of the index. |
+| `table.primary(column)` | Creates a primary table constraint. Can pass multiple columns to create a composite key like `table.primary(['id', 'email'])`. Also supports a `name` parameter to specify the name of the index. |
+| `table.unique(column)` | Makes a unique index. Can also pass multiple columns `table.unique(['email', 'phone_number'])`. Also supports a `name` parameter to specify the name of the index. |
+| `table.index(column)` | Creates an index on the column. `table.index('email')`. Also supports a `name` parameter to specify the name of the index. |
+| `table.fulltext(column)` | Creates an fulltext index on the column or columns. `table.fulltext('email')`. Note this only works for MySQL databases and will be ignored on other databases. Also supports a `name` parameter to specify the name of the index. |
 
-The default primary key is often set to an auto-incrementing integer, but you can [use UUID instead](models.md#changing-primary-key-to-use-uuid).
+> The default primary key is often set to an auto-incrementing integer, but you can [use a UUID instead](models.md#changing-primary-key-to-use-uuid).
 
 ## Foreign Keys
 
@@ -188,6 +189,12 @@ You can also pass a `name` parameter to change the name of the constraint:
 
 ```python
 table.foreign('local_column', name="foreign_constraint").references('other_column').on('other_table')
+```
+
+You may also use a shorthand method:
+
+```python
+table.add_foreign('local_column.other_column.other_table', name="foreign_constraint")
 ```
 
 ## Changing Columns

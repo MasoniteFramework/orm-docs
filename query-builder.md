@@ -566,6 +566,20 @@ You can delete many records as well. For example, deleting all records where act
 builder.where('active', 0).delete()
 ```
 
+## Truncating
+
+You can also truncate directly from the query builder:
+
+```python
+builder.truncate('users')
+```
+
+You may also temporarily disable and re-enable foreign keys to avoid foreign key checks.
+
+```python
+builder.truncate('users', foreign_keys=True)
+```
+
 ## Available Methods
 
 |  |  |  |
@@ -578,7 +592,8 @@ builder.where('active', 0).delete()
 | max | not\_between | offset |
 | order\_by | right\_join | select |
 | select\_raw | sum | to\_qmark |
-| to\_sql | update | where |
-| where_between |  where\_column | where\_exists | where\_has | where\_in | where\_not\_in  | where\_not\_null |
-| where\_null | where\_raw | 
+| to\_sql | truncate | update | 
+where | where_between |  where\_column | where\_exists 
+| where\_has | where\_in | where\_not\_in  
+| where\_not\_null | where\_null | where\_raw 
 
