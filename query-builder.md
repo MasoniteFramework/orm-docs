@@ -580,20 +580,102 @@ You may also temporarily disable and re-enable foreign keys to avoid foreign key
 builder.truncate('users', foreign_keys=True)
 ```
 
-## Available Methods
+# Available Methods
 
-|  |  |  |
-| :--- | :--- | :--- |
-| aggregate | all | between |
-| count | create | decrement |
-| delete | first | get |
-| group\_by | having | increment |
-| join | left\_join | limit |
-| max | not\_between | offset |
-| order\_by | right\_join | select |
-| select\_raw | sum | to\_qmark |
-| to\_sql | truncate | update | 
-where | where_between |  where\_column | where\_exists 
-| where\_has | where\_in | where\_not\_in  
-| where\_not\_null | where\_null | where\_raw 
+## Aggregates
+
+| Method | Description |
+| :---------------- | :------------------------------------------------------------------------------------------------------------- |
+| .avg\('column') | Gets the average of a column. Can also use an `as` modifier to alias the `.avg('column as alias')`. |
+| .sum\('column') | Gets the sum of a column. Can also use an `as` modifier to alias the `.sum('column as alias')`. |
+| .count\('column') | Gets the count of a column. Can also use an `as` modifier to alias the `.count('column as alias')`. |
+| .max\('column') | Gets the max value of a column. Can also use an `as` modifier to alias the `.max('column as alias')`. |
+| .min\('column') | Gets the min value of a column. Can also use an `as` modifier to alias the `.min('column as alias')`. |
+
+## Joins
+
+| Method | Description |
+| :---------------- | :------------------------------------------------------------------------------------------------------------- |
+| .join('table1', 'table2.id', '=', 'table1.table_id') | Joins 2 tables together. This will do an INNER join. Can control which join is performed using the `clause` parmeter. Can choose `inner`, `left` or `right`. |
+| .left_join('table1', 'table2.id', '=', 'table1.table_id') | Joins 2 tables together. This will do an LEFT join. |
+| .right_join\('table1', 'table2.id', '=', 'table1.table_id') | Joins 2 tables together. This will do an RIGHT join. |
+
+## Where Clauses
+
+| Method | Description |
+| :---------------- | :------------------------------------------------------------------------------------------------------------- |
+| .between('column', 'value') | Peforms a BETWEEN clause. |
+| .not_between('column', 'value') | Peforms a NOT BETWEEN clause. |
+| .where('column', 'value') | Peforms a WHERE clause. Can optionally choose a logical operator to use `.where('column', '=', 'value')`. Logical operators available include: `<`, `>`, `>=`, `<=`, `!=`, `=`, `like`, `not like` |
+| .or_where('column', 'value') | Peforms a OR WHERE clause. Can optionally choose a logical operator to use `.where('column', '=', 'value')`. Logical operators available include: `<`, `>`, `>=`, `<=`, `!=`, `=`, `like`, `not like` |
+| .where_like('column', 'value') | Peforms a WHERE LIKE clause. |
+| .where_not_like('column', 'value') | Peforms a WHERE NOT LIKE clause. |
+| .where_exists('column', lambda q: q.where(..)) | Peforms an EXISTS clause. Takes a lambda expression as the second parameter to indicate which subquery should generate. |
+| .where_column('column1', 'column2') | Peforms a comparison between 2 columns. Logical operators available include: `<`, `>`, `>=`, `<=`, `!=`, `=` |
+| .where_in('column1', [1,2,3]) | Peforms a WHERE IN clause. Second parameter needs to be a list or collection of values. |
+| .where_not_in('column1', [1,2,3]) | Peforms a WHERE NOT IN clause. Second parameter needs to be a list or collection of values. |
+| .where_null('column1') | Peforms a WHERE NULL clause.  |
+| .where_not_null('column1') | Peforms a WHERE NOT NULL clause. |
+
+## Raw Queries
+
+| Method | Description  |
+| :---------------- | :------------------------------------------------------------------------------------------------------------- |
+| .select_raw('SUM("column")') | specifies a raw string where the select expression would go. |
+| .where_raw('SUM("column")') | specifies a raw string where the WHERE expression would go. |
+| .order_by_raw('column1, column2') | specifies a raw string where the ORDER BY expression would go. |
+| .group_by_raw('column1, column2') | specifies a raw string where the GROUP BY expression would go. |
+
+## Modifiers
+
+| Method | Description  |
+| :---------------- | :------------------------------------------------------------------------------------------------------------- |
+| .limit('10') | Limits the results to 10 rows |
+| .offset(10) | Offsets the results by 10 rows |
+| .take(10) | Alias for the `limit` method |
+| .skip(10) | Alias for the `offset` method |
+| .group_by('column') | Adds a GROUP BY clause. |
+| .having('column') | Adds a HAVING clause. |
+| .increment('column') | Increments the column by 1. Can pass in a second parameter for the number to increment by. `.increment('column', 100)`. |
+| .decrement('column') | Decrements the column by 1. Can pass in a second parameter for the number to increment by. `.decrement('column', 100)`. |
+
+
+## DML
+
+| Method | Description |
+| :---------------- | :------------------------------------------------------------------------------------------------------------- |
+| .add_select("alias", lambda q: q.where(..)) | Performs a SELECT subquery expession.  |
+| .all() | Gets all records. |
+| .chunk(100) | Chunks a result set. Uses a generator to keep each chunk small. Useful for chunking large data sets where pulling too many results in memory will overload the application  |
+| .create({}) | Limits the results to 10 rows. Must take a dictionary of values. |
+| .delete() | Performs a DELETE query based on the current clauses already chained onto the query builder. |
+| .first() | Gets the first record |
+| .from_('users') | Sets the table. |
+| .get() | Gets all records. Used in combination with other builder methods to finally execute the query. |
+| .last() | Gets the last record |
+| .paginate(limit, page) | Paginates a result set. Pass in different pages to get different results. This a length aware pagination. This will perform a COUNT query in addition to the original query. Could be slower on larger data sets. |
+| .select('') | Offsets the results by 10 rows. Can use the `as` keyword to alias the column. `.select('column as alias')` |
+| .simple_paginate(limit, page) | Paginates a result set. Pass in different pages to get different results. This not a length aware pagination. The result will not contain the total result counts  |
+| .statement("select * from users") | Performs a raw query.  |
+| .table('users') | Alias for the `from_` method. |
+| .truncate('table') | Truncates a table. Can pass a second parameter to disable and enable foreign key constraints. `truncate('table', foreign_keys=True)` |
+| .update({}) | dictionary values to update the record with.  |
+
+## Testing
+
+| Method | Description |
+| :---------------- | :------------------------------------------------------------------------------------------------------------- |
+| .to_sql() | Returns a string of the fully compiled SQL to be generated. |
+| .to_qmark('') | Returns a string of the  SQL to generated but with `?` values where the sql bindings are placed. |
+
+## Low Level Methods
+
+These are lower level methods that may be useful:
+
+| Method | Description |
+| :---------------- | :------------------------------------------------------------------------------------------------------------- |
+| .new() | Creates a new clean builder instance. This instance does not have any clauses, selects, limits, etc from the original builder instance. Great for performing subqueries |
+| .where_from_builder() | Creates a WHERE clause from a builder instance. |
+| .get_table_name() | Gets the tables name. |
+
 
