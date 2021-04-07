@@ -654,7 +654,7 @@ builder.truncate('users', foreign_keys=True)
 | .get() | Gets all records. Used in combination with other builder methods to finally execute the query. |
 | .last() | Gets the last record |
 | .paginate(limit, page) | Paginates a result set. Pass in different pages to get different results. This a length aware pagination. This will perform a COUNT query in addition to the original query. Could be slower on larger data sets. |
-| .select('') | Offsets the results by 10 rows. Can use the `as` keyword to alias the column. `.select('column as alias')` |
+| .select('column') | Offsets the results by 10 rows. Can use the `as` keyword to alias the column. `.select('column as alias')` |
 | .simple_paginate(limit, page) | Paginates a result set. Pass in different pages to get different results. This not a length aware pagination. The result will not contain the total result counts  |
 | .statement("select * from users") | Performs a raw query.  |
 | .table('users') | Alias for the `from_` method. |
