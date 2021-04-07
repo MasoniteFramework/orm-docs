@@ -963,7 +963,7 @@ There are many times you need to take several related records and assign them al
 
 For example, you may have articles you want to switch the authors of.
 
-For this you can use the `associate` and `save_many` methods. Let's say you had a `User` model that had a `articles` method that related to the `Articles` model.
+For this you can use the `attach` and `save_many` methods. Let's say you had a `User` model that had a `articles` method that related to the `Articles` model.
 
 ```python
 user = User.find(1)
@@ -980,7 +980,7 @@ You may do the same for a one-to-one relationship:
 user = User.find(1)
 phone = Phone.find(30)
 
-user.associate('phone', phone)
+user.attach('phone', phone)
 ```
 
 # Attributes
