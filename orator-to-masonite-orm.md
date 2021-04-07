@@ -136,43 +136,6 @@ class User(Model):
         return query.where('votes', '>', 100)
 ```
 
-## Relationships
-
-Relationships are also slightly different. In Orator there is a `has_one` relationship and a `belongs_to` relationship. In Masonite ORM this is only a belongs\_to relationship. The logic behind has\_one and belongs\_to is generally identical so there was no reason to port over has\_one other than for semantical purposes.
-
-### BelongsTo and HasOne
-
-So if you have something like this in your Orator codebase:
-
-```python
-# Orator
-from orator.relationships import has_one
-
-class User(Model):
-
-  @has_one('other_key', 'local_key')
-  def phone(self):
-      from app.models import Phone
-      return Phone
-```
-
-It will now become:
-
-```python
-# Orator
-from masoniteorm.relationships import belongs_to
-
-class User(Model):
-
-  @belongs_to('local_key', 'other_key') # notice the keys also switched places
-  def phone(self):
-      from app.models import Phone
-      return Phone
-```
-
-### Relationship Keys
-
-In Orator, some relationships require a specific order of keys. For example a belongs to relationship is `belongs_to('local_key', 'other_key')`but a has one is `has_one('other_key', 'local_key')`. This is very confusing to remember so in Masonite ORM the keys are always `local_key, other_key`.
 
 ## Fetching builder relations
 
