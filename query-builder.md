@@ -596,9 +596,9 @@ builder.truncate('users', foreign_keys=True)
 
 | Method | Description |
 | :---------------- | :------------------------------------------------------------------------------------------------------------- |
-| .join('table1', 'table2.id', '=', 'table1.table_id') | Joins 2 tables together. This will do an INNER join. Can control which join is performed using the `clause` parmeter. Can choose `inner`, `left` or `right`. |
-| .left_join('table1', 'table2.id', '=', 'table1.table_id') | Joins 2 tables together. This will do an LEFT join. |
-| .right_join\('table1', 'table2.id', '=', 'table1.table_id') | Joins 2 tables together. This will do an RIGHT join. |
+| `.join('table1', 'table2.id', '=', 'table1.table_id')` | Joins 2 tables together. This will do an INNER join. Can control which join is performed using the `clause` parmeter. Can choose `inner`, `left` or `right`. |
+| `.left_join('table1', 'table2.id', '=', 'table1.table_id')` | Joins 2 tables together. This will do an LEFT join. |
+| `.right_join\('table1', 'table2.id', '=', 'table1.table_id')` | Joins 2 tables together. This will do an RIGHT join. |
 
 ## Where Clauses
 
