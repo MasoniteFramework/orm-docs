@@ -672,7 +672,7 @@ class User(Model, SoftDeletesMixin):
 
 # Truncating
 
-You can [truncate the table](/query-builder.md#truncating) the table used by the model directly on the model:
+You can [truncate the table](/query-builder.md#truncating) used by the model directly on the model:
 
 ```python
 User.truncate()
