@@ -33,7 +33,7 @@ for user in users:
 | [transform](/#transform) | [unique](/#unique)     | [where](/#where)       |
 | [zip](/#zip)             |
 
-### all
+## all
 
 Returns the underlying list or dict represented by the collection:
 
@@ -43,7 +43,7 @@ users = User.get().all() #== [<app.User.User>, <app.User.User>]
 Collection([1, 2, 3]).all() #== [1, 2, 3]
 ```
 
-### avg
+## avg
 
 Returns the average of all items in the collection:
 
@@ -57,7 +57,7 @@ If the collection contains nested objects or dictionaries (e.g. for a collection
 average_price = Product.get().avg('price')
 ```
 
-### chunk
+## chunk
 
 Chunks a collection into multiple, smaller collections of a given size. Uses a generator to keep each chunk small. Useful for chunking large data sets where pulling too many results in memory will overload the application.
 
@@ -66,7 +66,7 @@ collection = Collection([1, 2, 3, 4, 5, 6, 7])
 chunks = collection.chunk(2).serialize() #== [[1, 2], [3, 4], [5, 6], [7]]
 ```
 
-### collapse
+## collapse
 
 Collapses a collection of lists into a flat collection:
 
@@ -75,7 +75,7 @@ collection = Collection([[1, 2, 3], [4, 5, 6])
 collection.collapse().serialize() #== [1, 2, 3, 4, 5, 6]
 ```
 
-### contains
+## contains
 
 Determines whether the collection contains a given item:
 
@@ -93,11 +93,11 @@ collection = Collection([1, 2, 3, 4, 5])
 collection.contains(lambda item: item > 5) #== False
 ```
 
-### count
+## count
 
 Returns the total number of items in the collection. `len()` standard python method can also be used.
 
-### diff
+## diff
 
 Returns the difference as a collection against another collection
 
@@ -107,7 +107,7 @@ diff = collection.diff([2, 4, 6, 8])
 diff.all() #== [1, 3, 5]
 ```
 
-### each
+## each
 
 Iterates over the items in the collection and passes each item to a given callback:
 
@@ -115,7 +115,7 @@ Iterates over the items in the collection and passes each item to a given callba
 posts.each(lambda post: post.author().save(author))
 ```
 
-### every
+## every
 
 Creates a new collection by applying a given callback on every element:
 
@@ -124,7 +124,7 @@ collection = Collection([1, 2, 3])
 collection.every(lambda x: x*2 ).all() #== [2, 4, 6]
 ```
 
-### filter
+## filter
 
 Filters the collection by a given callback, keeping only those items that pass a given truth test:
 
@@ -134,7 +134,7 @@ filtered = collection.filter(lambda item: item > 2)
 filtered.all() #== [3, 4]
 ```
 
-### first
+## first
 
 Returns the first item of the collection, if no arguments are given.
 
@@ -145,7 +145,7 @@ collection = Collection([1, 2, 3, 4])
 collection.first(lambda item: item > 2)
 ```
 
-### flatten
+## flatten
 
 Flattens a multi-dimensional collection into a single dimension:
 
@@ -154,7 +154,7 @@ collection = Collection([1, 2, [3, 4, 5, {'foo': 'bar'}]])
 flattened = collection.flatten().all() #== [1, 2, 3, 4, 5, 'bar']
 ```
 
-### forget
+## forget
 
 Removes an item from the collection by its key:
 
@@ -166,7 +166,7 @@ collection.forget(0,2).all() #== [3,5]
 
 Unlike most other collection methods, `forget` does not return a new modified collection; it modifies the collection it is called on.
 
-### for_page
+## for_page
 
 Paginates the collection by returning a new collection containing the items that would be present on a given page number:
 
@@ -177,7 +177,7 @@ chunk = collection.for_page(2, 4).all() #== 4, 5, 6, 7
 
 `for_page(page, count)` takes the page number and the number of items to show per page.
 
-### get
+## get
 
 Returns the item at a given key or index. If the key does not exist, None is returned. An optional default value can be passed as the second argument:
 
@@ -191,7 +191,7 @@ collection = Collection({"apples": 1, "cherries": 2})
 collection.get("apples") #== 1
 ```
 
-### group_by
+## group_by
 
 Returns a collection where items are grouped by the given key:
 
@@ -206,7 +206,7 @@ collection.implode("type").all()
 #    'b': [{'id': 2, 'type': 'b'}]}
 ```
 
-### implode
+## implode
 
 Joins the items in a collection with `,` or the given _glue_ string.
 
@@ -227,7 +227,7 @@ collection.implode(key='product') #== Desk,Chair
 collection.implode(" - ", key='product') #== Desk - Chair
 ```
 
-### is_empty
+## is_empty
 
 Returns `True` if the collection is empty; otherwise, `False` is returned:
 
@@ -235,7 +235,7 @@ Returns `True` if the collection is empty; otherwise, `False` is returned:
 Collection([]).is_empty() #== True
 ```
 
-### last
+## last
 
 Returns the last element in the collection if no arguments are given.
 
@@ -246,7 +246,7 @@ collection = Collection([1, 2, 3, 4])
 last = collection.last(lambda item: item < 3) #== 2
 ```
 
-### map
+## map
 
 Iterates through the collection and passes each value to the given callback. The callback is free to modify the item and return it, thus forming a **new** collection of modified items:
 
@@ -257,7 +257,7 @@ multiplied = collection.map(lambda item: item * 2).all() #== [2, 4, 6, 8]
 
 If you want to transform the original collection, use the [transform](/#transform) method.
 
-### map_into
+## map_into
 
 Iterates through the collection and cast each value into the given class:
 
@@ -281,7 +281,7 @@ collection.map_into(Point, "as_dict") #== [{'X': 1, 'Y': 2}, {'X': 3, 'Y': 4}]
 collection.map_into(Point, "as_dict", one_dim=True) #== [{'X': 1}, {'X': 3}]
 ```
 
-### max
+## max
 
 Retrieves max value of the collection:
 
@@ -301,7 +301,7 @@ collection = Collection([
 collection.max("product_id") #== 3
 ```
 
-### merge
+## merge
 
 Merges the given list into the collection:
 
@@ -313,7 +313,7 @@ collection.all() #== ['Desk', 'Chair', 'Bookcase', 'Door']
 
 Unlike most other collection methods, `merge` does not return a new modified collection; it modifies the collection it is called on.
 
-### pluck
+## pluck
 
 Retrieves all of the collection values for a given key:
 
@@ -339,7 +339,7 @@ You can pass `keep_nulls=False` to remove `None` value in the collection.
 collection.pluck("product", keep_nulls=False) #== ['Desk', 'Chair']
 ```
 
-### pop
+## pop
 
 Removes and returns the last item from the collection:
 
@@ -349,7 +349,7 @@ collection.pop() #== 5
 collection.all() #== [1, 2, 3, 4]
 ```
 
-### prepend
+## prepend
 
 Adds an item to the beginning of the collection:
 
@@ -359,7 +359,7 @@ collection.prepend(0)
 collection.all() #== [0, 1, 2, 3, 4]
 ```
 
-### pull
+## pull
 
 Removes and returns an item from the collection by its key:
 
@@ -373,7 +373,7 @@ collection.pull('cherry') #== 3
 collection.all() #== {'apple': 1, 'lemon': 2}
 ```
 
-### push
+## push
 
 Appends an item to the end of the collection:
 
@@ -383,7 +383,7 @@ collection.push(5)
 collection.all() #== [1, 2, 3, 4, 5]
 ```
 
-### put
+## put
 
 Sets the given key and value in the collection:
 
@@ -397,7 +397,7 @@ collection.put('cherry', 0)
 collection.all() #== {'apple': 1, 'cherry': 0, 'lemon': 2}
 ```
 
-### random
+## random
 
 Returns a random item from the collection
 
@@ -415,7 +415,7 @@ users.all() #== returns a list of 3 users
 
 If the collection length is smaller than specified count a `ValueError` will be raised.
 
-### reduce
+## reduce
 
 Reduces the collection to a single value, passing the result of each iteration into the subsequent iteration.
 
@@ -430,7 +430,7 @@ Initial value is `0` by default but can be overridden:
 collection.reduce(lambda result, item: (result or 0) + item, 4) #== 10
 ```
 
-### reject
+## reject
 
 It's the inverse of [filter](/#filter) method. It filters the collection using the given callback. The callback should return `True` for any items to remove from the resulting collection:
 
@@ -442,7 +442,7 @@ filtered.all() #== [1, 2]
 
 Unlike most other collection methods, `reject` does not return a new modified collection; it modifies the collection it is called on.
 
-### reverse
+## reverse
 
 Reverses the order of the items in the collection:
 
@@ -453,7 +453,7 @@ collection.reverse().all() #== [3, 2, 1]
 
 Unlike most other collection methods, `reverse` does not return a new modified collection; it modifies the collection it is called on.
 
-### serialize
+## serialize
 
 Converts the collection into a list. If the collection’s values are [ORM models](/models.md), the models will also be converted to dictionaries:
 
@@ -467,7 +467,7 @@ collection.serialize() #== [{'id': 1, 'name': 'John', 'email': 'john.doe@masonit
 
 Be careful, `serialize` also converts all of its nested objects. If you want to get the underlying items as is, use the [all](/#all) method instead.
 
-### shift
+## shift
 
 Removes and returns the first item from the collection:
 
@@ -477,7 +477,7 @@ collection.shift() #== 1
 collection.all() #== [2, 3, 4, 5]
 ```
 
-### sort
+## sort
 
 Sorts the collection:
 
@@ -487,7 +487,7 @@ sorted = collection.sort()
 sorted.all() #== [1, 2, 3, 4, 5]
 ```
 
-### sum
+## sum
 
 Returns the sum of all items in the collection:
 
@@ -505,7 +505,7 @@ collection = Collection([
 collection.sum('pages') #== 1272
 ```
 
-### take
+## take
 
 Returns a new collection with the specified number of items:
 
@@ -522,7 +522,7 @@ chunk = collection.chunk(-2)
 chunk.all() #== [4, 5]
 ```
 
-### to_json
+## to_json
 
 Converts the collection into JSON:
 
@@ -531,7 +531,7 @@ collection = Collection([{'name': 'Desk', 'price': 200}])
 collection.to_json() #== '[{"name": "Desk", "price": 200}]'
 ```
 
-### transform
+## transform
 
 Iterates over the collection and calls the given callback with each item in the collection. The items in the collection will be replaced by the values returned by the callback:
 
@@ -543,7 +543,7 @@ collection.all() #== [2, 4, 6, 8, 10]
 
 If you wish to create a new collection instead, use the [map](/#map) method.
 
-### unique
+## unique
 
 Returns all of the unique items in the collection:
 
@@ -569,7 +569,7 @@ unique.all()
 # ]
 ```
 
-### where
+## where
 
 Filters the collection by a given key / value pair:
 
@@ -589,7 +589,7 @@ filtered.all()
 
 ```
 
-### zip
+## zip
 
 Merges together the values of the given list with the values of the collection at the corresponding index:
 
