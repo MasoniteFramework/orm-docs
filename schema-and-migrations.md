@@ -125,6 +125,22 @@ You can refresh by running the command:
 $ masonite-orm migrate:refresh
 ```
 
+You can also seed your database after refreshing your migrations. Which will rebuild you database to some desire state.
+
+You can run all seeders located in `Database Seeder` class by:
+
+```text
+$ masonite-orm migrate:refresh --seed
+```
+
+Or simply run a specific seeder:
+
+```text
+$ masonite-orm migrate:refresh --seed CustomTable
+```
+
+> **CustomTable** is the name of the seeder without "Seeder" suffix. Internally we will run the desired CustomTableSeeder.
+
 ## Modifiers
 
 In addition to the available columns you can use, you can also specify some modifers which will change the behavior of the column:
