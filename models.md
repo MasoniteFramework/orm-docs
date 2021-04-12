@@ -675,13 +675,14 @@ class User(Model, SoftDeletesMixin):
 You can update records:
 
 ```python
-User.update({"username": "Joe"}, {'active': 1})
+User.find(1).update({"username": "Joe"}, {'active': 1})
 ```
 
 When updating a record, only attributes which have changes are applied.
 If there are no changes, update won't be triggered.
 
-You can force this behaviour in different ways:
+You can override this behaviour in different ways:
+
 - you can pass `force=True` to `update()` method
 ```python
 User.find(1).update({"username": "Joe"}, force=True)
