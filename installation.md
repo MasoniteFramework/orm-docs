@@ -26,6 +26,7 @@ DATABASES = {
   "default": "mysql",
   "mysql": {
     "host": "127.0.0.1",
+    "driver": "mysql",
     "database": "masonite",
     "user": "root",
     "password": "",
@@ -38,6 +39,7 @@ DATABASES = {
   },  
   "postgres": {
     "host": "127.0.0.1",
+    "driver": "postgres",
     "database": "masonite",
     "user": "root",
     "password": "",
@@ -49,6 +51,7 @@ DATABASES = {
     }
   },
   "sqlite": {
+    "driver": "sqlite",
     "database": "masonite.sqlite3",
   }
 }
