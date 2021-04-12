@@ -670,6 +670,14 @@ class User(Model, SoftDeletesMixin):
   __deleted_at__ = "when_deleted"
 ```
 
+# Truncating
+
+You can [truncate the table](/query-builder.md#truncating) used by the model directly on the model:
+
+```python
+User.truncate()
+```
+
 # Updating
 
 You can also update or create records as well:
