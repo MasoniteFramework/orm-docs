@@ -701,17 +701,22 @@ If there are no changes, update won't be triggered.
 You can override this behaviour in different ways:
 
 - you can pass `force=True` to `update()` method
+
 ```python
 User.find(1).update({"username": "Joe"}, force=True)
 ```
+
 - you can define `__force_update__` attribute on the model class
+
 ```python
 class User(Model):
     __force_update__ = True
 
 User.find(1).update({"username": "Joe"})
 ```
+
 - you can use `force_update()` method on model:
+
 ```python
 User.find(1).force_update({"username": "Joe"})
 ```
