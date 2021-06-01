@@ -398,7 +398,7 @@ You can also change the ID to something other than `id`:
 The next default is the name of the pivot table. The name of the pivot table is the singular form of both table names in alphabetical order. For example, if you are pivoting a `persons` table and a `houses` table then the table name is assumed to be `house_person`. You can change this naming:
 
 ```python
-@belongs_to_many(pivot_table="home_ownership")
+@belongs_to_many(table="home_ownership")
 ```
 
 The next default is that there are no timestamps \(`updated_at` and `created_at`\) on your pivot table. If you would like Masonite to manage timestamps you can:
