@@ -799,7 +799,7 @@ User.serialize()
 This will return a dict of all the model fields. Some important things to note:
 
 * Date fields will be serialized with ISO format
-* Relationships will be serialized
+* Eager loaded relationships will be serialized
 * Attributes defined in `__appends__` will be added
 
 If you want to hide model fields you can use `__hidden__` attribute on your model:
