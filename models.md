@@ -1,8 +1,10 @@
 # Models
 
+## Models
+
 Models are the easiest way to interact with your tables. A model is a way for you to interact with a Python class in a simple and elegant way and have all the hard overhead stuff handled for you under the hood. A model can be used to query the data in the table or even create new records, fetch related records between tables and many other features.
 
-# Creating A Model
+## Creating A Model
 
 The first step in using models is actually creating them. You can scaffold out a model by using the command:
 
@@ -34,13 +36,13 @@ active_users = User.where('active', 1).first()
 
 We'll talk more about setting up your model below
 
-# Conventions And Configuration
+## Conventions And Configuration
 
 Masonite ORM makes a few assumptions in order to have the easiest interface for your models.
 
 The first is table names. Table names are assumed to be the plural of your model name. If you have a User model then the `users` table is assumed and if you have a model like `Company` then the `companies` table is assumed. You can realize that Masonite ORM is smart enough to know that the plural of `Company` is not `Companys` so don't worry about Masonite not being able to pick up your table name.
 
-## Table Name
+### Table Name
 
 If your table name is something other than the plural of your models you can change it using the `__table__` attribute:
 
@@ -49,7 +51,7 @@ class Clients:
   __table__ = "users"
 ```
 
-## Primary Keys
+### Primary Keys
 
 The next thing Masonite assumes is the primary key. Masonite ORM assumes that the primary key name is `id`. You can change the primary key name easily:
 
@@ -58,7 +60,7 @@ class Clients:
   __primary_key__ = "user_id"
 ```
 
-## Connections
+### Connections
 
 The next thing Masonite assumes is that you are using the `default` connection you setup in your configuration settings. You can also change this on the model:
 
@@ -67,7 +69,7 @@ class Clients:
   __connection__ = "staging"
 ```
 
-## Mass Assignment
+### Mass Assignment
 
 By default, Masonite ORM protects against mass assignment to help prevent users from changing values on your tables you didn't want.
 
@@ -75,10 +77,17 @@ This is used in the create and update methods. You can set the columns you want 
 
 ```python
 class Clients:
-  __fillable__ = ['email', "active", "password"]
+  __fillable__ = ["email", "active", "password"]
 ```
 
-## Timestamps
+Guarded attributes can be used to specify those columns which are not mass assignable. You can prevent some of the fields from being mass-assigned:
+
+```python
+class Clients:
+  __guarded__ = ["password"]
+```
+
+### Timestamps
 
 Masonite also assumes you have `created_at` and `updated_at` columns on your table. You can easily disable this behavior:
 
@@ -87,7 +96,7 @@ class Clients:
   __timestamps__ = False
 ```
 
-## Timezones
+### Timezones
 
 Models use `UTC` as the default timezone. You can change the timezones on your models using the `__timezone__` attribute:
 
@@ -96,7 +105,7 @@ class User(Model):
     __timezone__ = "Europe/Paris"
 ```
 
-# Querying
+## Querying
 
 Almost all of a model's querying methods are passed off to the query builder. If you would like to see all the methods available for the query builder, see the [QueryBuilder](models.md) documentation here.
 
@@ -122,7 +131,7 @@ user.name #== 'Joe'
 user.email #== 'joe@masoniteproject.com'
 ```
 
-## Collections
+### Collections
 
 If your model result returns several results then it will be wrapped in a collection instance which you can use to iterate over:
 
@@ -154,7 +163,7 @@ user_emails = User.where('active', 1).get().pluck('email') #== Collection of ema
 
 If you would like to see more methods available like `pluck` be sure to read the [Collections](models.md) documentation.
 
-## Deleting
+### Deleting
 
 You may also quickly delete records:
 
@@ -174,7 +183,7 @@ from app.models import User
 user = User.where('active', 0).delete()
 ```
 
-## Sub-queries
+### Sub-queries
 
 You may also use sub-queries to do more advanced queries using lambda expressions:
 
@@ -185,7 +194,7 @@ users = User.where(lambda q: q.where('active', 1).where_null('deleted_at'))
 # == SELECT * FROM `users` WHERE (`active` = '1' AND `deleted_at` IS NULL)
 ```
 
-# Selecting
+## Selecting
 
 By default, Masonite ORM performs `SELECT *` queries. You can change this behavior in a few ways.
 
@@ -217,11 +226,11 @@ store.where("active", 1).get(["username", "administrator as is_admin"])
 #== SELECT `username`, `administrator` as is_admin FROM `users` WHERE `active` = 1
 ```
 
-# Relationships
+## Relationships
 
 Another great feature, when using models, is to be able to relate several models together \(like how tables can relate to each other\).
 
-## Belongs To (One to One)
+### Belongs To \(One to One\)
 
 A belongs to relationship is a one-to-one relationship between 2 table records.
 
@@ -249,9 +258,9 @@ class User:
     return Company
 ```
 
-The first argument is *always* the column name on the current model's table and the second argument is the related field on the other table.
+The first argument is _always_ the column name on the current model's table and the second argument is the related field on the other table.
 
-## Has One (One to One)
+### Has One \(One to One\)
 
 In addition to belongs to, you can define the inverse of a belongs to:
 
@@ -277,7 +286,7 @@ class User:
     return Company
 ```
 
-## Has Many (One to Many)
+### Has Many \(One to Many\)
 
 Another relationship is a one-to-many relationship where a record relates to many records, in another table:
 
@@ -291,9 +300,9 @@ class User:
     return Post
 ```
 
-The first argument is *always* the column name on the current model's table and the second argument is the related field on the other table.
+The first argument is _always_ the column name on the current model's table and the second argument is the related field on the other table.
 
-## Has Many (Many To Many)
+### Has Many \(Many To Many\)
 
 When working with many to many relationships, there is a pivot table in between that we must account for. Masonite ORM will handle this pivot table for you entirely under the hood.
 
@@ -303,7 +312,7 @@ Stores can have many products and also products can be in many stores. For examp
 
 In the database this may look something like this:
 
-```
+```text
 stores
 -------
 id
@@ -351,6 +360,17 @@ class Store(Model):
 
 The first 2 keys are the foreign keys relating from stores to products through the pivot table and the last 2 keys are the foreign keys on the stores and products table.
 
+If there are additional fields on your pivot table you need to fetch you can add the extra fields to the pivot record like so:
+
+```python
+@belongs_to_many("store_id", "product_id", "id", "id", extra_fields=['is_active'])
+  def products(self):
+    from app.models import Product
+    return Product
+```
+
+This will fetch the additional fields on the pivot table which we have access to.
+
 Once we create this relationship we can start querying from `stores` directly to `products`:
 
 ```python
@@ -359,7 +379,7 @@ for product in store.products:
     product.name #== Red Shirt
 ```
 
-On each fetched record you can also get the pivot table and perform queries on it. This pivot record is the joining record inside the pivot table (`product_store`) where the store id and the product ID match. By default this attribute is `pivot`.
+On each fetched record you can also get the pivot table and perform queries on it. This pivot record is the joining record inside the pivot table \(`product_store`\) where the store id and the product ID match. By default this attribute is `pivot`.
 
 ```python
 store = Store.find(1)
@@ -368,7 +388,7 @@ for product in store.products:
     product.pivot.update({"updated_at": "2021-01-02"})
 ```
 
-### Changing Options
+#### Changing Options
 
 There are quite a few defaults that are created but there are ways to override them.
 
@@ -390,7 +410,7 @@ The next default is the name of the pivot table. The name of the pivot table is 
 @belongs_to_many(pivot_table="home_ownership")
 ```
 
-The next default is that there are no timestamps (`updated_at` and `created_at`) on your pivot table. If you would like Masonite to manage timestamps you can:
+The next default is that there are no timestamps \(`updated_at` and `created_at`\) on your pivot table. If you would like Masonite to manage timestamps you can:
 
 ```python
 @belongs_to_many(with_timestamps=True)
@@ -413,7 +433,7 @@ for product in store.products:
 
 **If you have timestamps on your pivot table, they must be called `created_at` and `updated_at`.**
 
-## Using Relationships
+### Using Relationships
 
 You can easily use relationships to get those related records. Here is an example on how to get the company record:
 
@@ -426,7 +446,7 @@ for post in user.posts:
     post.title
 ```
 
-# Eager Loading
+## Eager Loading
 
 You can eager load any related records. Eager loading is when you preload model results instead of calling the database each time.
 
@@ -466,7 +486,7 @@ SELECT * FROM phones where user_id IN (1, 2, 3, 4)
 
 This resulted in only 2 queries. Any subsquent calls will pull in the result from the eager loaded result set.
 
-## Nested Eager Loading
+### Nested Eager Loading
 
 You may also eager load multiple relationships. Let's take another more advanced example...
 
@@ -515,7 +535,7 @@ SELECT * from contacts where phone_id IN (30, 31, 32, 33)
 
 You can see how this would result in 3 queries no matter how many users you had.
 
-# Joining
+## Joining
 
 If you have relationships on your models you can easily join them:
 
@@ -539,7 +559,7 @@ User.joins('posts')
 
 This will build out the `join` method.
 
-You can also specify the clause of the join (inner, left, right). The default is an inner join
+You can also specify the clause of the join \(inner, left, right\). The default is an inner join
 
 ```python
 User.joins('posts', clause="right")
@@ -553,7 +573,7 @@ User.join_on('posts', lambda q: (
 ))
 ```
 
-# Scopes
+## Scopes
 
 Scopes are a way to take common queries you may be doing and condense them into a method where you can then chain onto them. Let's say you are doing a query like getting the active user frequently:
 
@@ -596,7 +616,7 @@ user = User.active(1).get()
 user = User.active(0).get()
 ```
 
-# Soft Deleting
+## Soft Deleting
 
 Masonite ORM also comes with a global scope to enable soft deleting for your models.
 
@@ -668,7 +688,47 @@ class User(Model, SoftDeletesMixin):
   __deleted_at__ = "when_deleted"
 ```
 
-# Updating
+## Truncating
+
+You can [truncate the table](query-builder.md#truncating) used by the model directly on the model:
+
+```python
+User.truncate()
+```
+
+## Updating
+
+You can update records:
+
+```python
+User.find(1).update({"username": "Joe"}, {'active': 1})
+```
+
+When updating a record, only attributes which have changes are applied.
+If there are no changes, update won't be triggered.
+
+You can override this behaviour in different ways:
+
+- you can pass `force=True` to `update()` method
+
+```python
+User.find(1).update({"username": "Joe"}, force=True)
+```
+
+- you can define `__force_update__` attribute on the model class
+
+```python
+class User(Model):
+    __force_update__ = True
+
+User.find(1).update({"username": "Joe"})
+```
+
+- you can use `force_update()` method on model:
+
+```python
+User.find(1).force_update({"username": "Joe"})
+```
 
 You can also update or create records as well:
 
@@ -688,7 +748,7 @@ When updating records the `updated_at` column will be automatically updated. You
 User.activate_timestamps(False).update({"username": "Sam"})  # updated_at won't be modified during this update
 ```
 
-# Creating
+## Creating
 
 You can easily create records by passing in a dictionary:
 
@@ -698,7 +758,7 @@ User.create({"username": "Joe"})
 
 This will insert the record into the table, create and return the new model instance.
 
-> Note that this will only create a new model instance but will not contain any additional fields on the table. It will only have whichever fields you pass to it. 
+> Note that this will only create a new model instance but will not contain any additional fields on the table. It will only have whichever fields you pass to it.
 
 You can "refetch" the model after creating to get the rest of the record. This will use the `find` method to get the full record. Let's say you have a scenario in which the `active` flag defaults to 1 from the database level. If we create the record, the `active` attribute will not fetched since Masonite ORM doesn't know about this attribute.
 
@@ -710,9 +770,9 @@ user = User.create({"username": "Joe"}).fresh()
 user.active #== 1
 ```
 
-# Bulk Creating
+## Bulk Creating
 
-You can also bulk create using the query builder's bulk_create method:
+You can also bulk create using the query builder's bulk\_create method:
 
 ```python
 User.bulk_create([
@@ -736,7 +796,7 @@ User.builder.new().bulk_create([
 ])
 ```
 
-## Serializing
+### Serializing
 
 You can serialize a model very quickly:
 
@@ -747,9 +807,9 @@ User.serialize()
 
 This will return a dict of all the model fields. Some important things to note:
 
-- Date fields will be serialized with ISO format
-- Relationships will be serialized
-- Attributes defined in `__appends__` will be added
+* Date fields will be serialized with ISO format
+* Relationships will be serialized
+* Attributes defined in `__appends__` will be added
 
 If you want to hide model fields you can use `__hidden__` attribute on your model:
 
@@ -775,7 +835,7 @@ You cannot use both `__hidden__` and `__visible__` on the model.
 
 If you need more advanced serialization or building a complex API you should use [masonite-api](https://docs.masoniteproject.com/official-packages/masonite-api) package.
 
-# Changing Primary Key to use UUID
+## Changing Primary Key to use UUID
 
 Masonite ORM also comes with another global scope to enable using UUID as primary keys for your models.
 
@@ -811,7 +871,7 @@ class User(Model, UUIDPrimaryKeyMixin):
   __uuid_name__ = "domain.com
 ```
 
-# Casting
+## Casting
 
 Not all data may be in the format you need it. If you find yourself casting attributes to different values, like casting active to an `int` then you can set it to the right type in the model:
 
@@ -824,11 +884,11 @@ Now whenever you get the active attribute on the model it will be an `int`.
 
 Other valid values are:
 
-- `int`
-- `bool`
-- `json`
+* `int`
+* `bool`
+* `json`
 
-# Dates
+## Dates
 
 Masonite uses `pendulum` for dates. Whenever dates are used it will return an instance of pendulum.
 
@@ -840,7 +900,7 @@ class User(Model):
     __dates__ = ["verified_at"]
 ```
 
-## Overriding Dates
+### Overriding Dates
 
 If you would like to change this behavior you can override 2 methods: `get_new_date()` and `get_new_datetime_string()`:
 
@@ -864,7 +924,7 @@ class User(Model):
         return self.get_new_date(datetime).to_datetime_string()
 ```
 
-# Accessors and Mutators (Getter and Setter)
+## Accessors and Mutators \(Getter and Setter\)
 
 Accessors and mutators are a great way to fine tune what happens when you get and set attributes on your models.
 
@@ -895,24 +955,24 @@ user.name = "joe mancuso"
 user.name #== "JOE MANCUSO"
 ```
 
-# Events
+## Events
 
 Models emit various events in different stages of its life cycle. Available events are:
 
-- booting
-- booted
-- creating
-- created
-- deleting
-- deleted
-- hydrating
-- hydrated
-- saving
-- saved
-- updating
-- updated
+* booting
+* booted
+* creating
+* created
+* deleting
+* deleted
+* hydrating
+* hydrated
+* saving
+* saved
+* updating
+* updated
 
-# Observers
+## Observers
 
 You can listen to various events through observers. Observers are simple classes that contain methods equal to the event you would like to listen to.
 
@@ -955,7 +1015,7 @@ class ModelProvider(Provider):
         #..
 ```
 
-# Related Records
+## Related Records
 
 There are many times you need to take several related records and assign them all to the same attribute based on another record.
 
@@ -970,7 +1030,7 @@ articles = Articles.where('user_id', 2).get()
 user.save_many('articles', articles)
 ```
 
-This will take all articles where user_id is 2 and assign them the related record between users and article \(user_id\).
+This will take all articles where user\_id is 2 and assign them the related record between users and article \(user\_id\).
 
 You may do the same for a one-to-one relationship:
 
@@ -981,11 +1041,11 @@ phone = Phone.find(30)
 user.attach('phone', phone)
 ```
 
-# Attributes
+## Attributes
 
 There are a few attributes that are used for handling model data.
 
-## Dirty Attributes
+### Dirty Attributes
 
 When you set an attribute on a model, the model becomes "dirty". Meaning the model now has attributes changed on it. You can easily check if the model is dirty:
 
@@ -1007,7 +1067,7 @@ user.get_dirty("name") #== Joe
 
 This will get the value of the dirty attribute and not the attribute that was set on the model.
 
-## Original
+### Original
 
 This keeps track of the original data that was first set on the model. This data does not change throughout the life of the model:
 
@@ -1017,3 +1077,4 @@ user.name #== Bill
 user.name = "Joe"
 user.get_original("name") #== Bill
 ```
+
