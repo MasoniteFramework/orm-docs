@@ -299,17 +299,46 @@ You may also specify the same query but where the sum of the salary is greater t
 builder.table('users').sum('salary').group_by('salary').having('salary', 50000).get()
 ```
 
-## Inner Joining
 
-Joining is a way to take data from related tables and return it in 1 result set as well as filter anything out that doesn't have a relationship on the joining tables.
+## Joining
+
+Creating join queries is very simple. 
 
 ```python
-builder.table('users').join('table1', 'table2.id', '=', 'table1.table_id')
+builder.join('other_table', 'column1', '=', 'column2')
 ```
 
-This join will create an inner join.
+This will build a `JoinClause` behind the scenes for you.
+## Advanced Joins
 
-You can also choose a left join:
+Advanced joins are for use cases where you need to compile a join clause that is more than just joining on 2 distant columns. Advanced joins are where you need additional `on` or `where statements`.There are currently 2 ways to perform an advanced where clause. 
+
+The first way is that you may create your own `JoinClause` from scratch and build up your own clause:
+
+```python
+from masoniteorm.expressions import JoinClause
+
+clause = (
+    JoinClause('other_table as ot')
+    .on('column1', '=', 'column2')
+    .on('column3', '=', 'column4')
+    .where('column3', '>', 4)
+)
+
+builder.join(clause)
+```
+
+The second way is passing a "lambda" to the join method directly which will return you a `JoinClause` class you can build up. This way is a bit more cleaner:
+
+```python
+builder.join('other_table as ot', lambda join: (
+    (
+        join.on('column1', '=', 'column2')
+        .on('column3', '=', 'column4')
+        .where('column3', '>', 4)
+    )
+))
+```
 
 ## Left Join
 
@@ -519,46 +548,6 @@ If you need to loop over a lot of results then consider chunking. A chunk will o
 for users in builder.table('users').chunk(100):
     for user in users:
         user #== <User object>
-```
-
-# Joining
-
-Creating join queries is very simple. 
-
-```python
-builder.join('other_table', 'column1', '=', 'column2')
-```
-
-This will build a `JoinClause` behind the scenes for you.
-# Advanced Joins
-
-Advanced joins are for use cases where you need to compile a join clause that is more than just joining on 2 distant columns. Advanced joins are where you need additional `on` or `where statements`.There are currently 2 ways to perform an advanced where clause. 
-
-The first way is that you may create your own `JoinClause` from scratch and build up your own clause:
-
-```python
-from masoniteorm.expressions import JoinClause
-
-clause = (
-    JoinClause('other_table as ot')
-    .on('column1', '=', 'column2')
-    .on('column3', '=', 'column4')
-    .where('column3', '>', 4)
-)
-
-builder.join(clause)
-```
-
-The second way is passing a "lambda" to the join method directly which will return you a `JoinClause` class you can build up. This way is a bit more cleaner:
-
-```python
-builder.join('other_table as ot', lambda join: (
-    (
-        join.on('column1', '=', 'column2')
-        .on('column3', '=', 'column4')
-        .where('column3', '>', 4)
-    )
-))
 ```
 
 # Getting SQL
