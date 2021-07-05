@@ -200,6 +200,12 @@ You can use these options:
 | .on_delete\('set null'\) | Sets the ON DELETE SET NULL property on the constraint. |
 | .on_delete\('cascade'\)  | Sets the ON DELETE CASCADE property on the constraint.  |
 
+Available options for `on_update` or `on_delete` are:
+* cascade
+* set null
+* restrict
+* no action
+* default
 
 You can also pass a `name` parameter to change the name of the constraint:
 
