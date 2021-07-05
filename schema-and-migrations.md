@@ -200,7 +200,7 @@ You can use these options:
 | .on_delete\('set null'\) | Sets the ON DELETE SET NULL property on the constraint. |
 | .on_delete\('cascade'\)  | Sets the ON DELETE CASCADE property on the constraint.  |
 
-Available options for `on_update` or `on_delete` are:
+Available options for `on_update` and `on_delete` are:
 * cascade
 * set null
 * restrict
