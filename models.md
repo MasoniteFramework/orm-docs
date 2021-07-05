@@ -486,6 +486,21 @@ SELECT * FROM phones where user_id IN (1, 2, 3, 4)
 
 This resulted in only 2 queries. Any subsquent calls will pull in the result from the eager loaded result set.
 
+You can also default all model calls with eager loading by using the `__with__` attribute on the model:
+
+```python
+from masoniteorm.models import Model
+from masoniteorm.relationships import belongs_to_many
+class Store(Model):
+
+  __with__ = ['products']
+
+  @belongs_to_many
+  def products(self):
+    from app.models import Product
+    return Product
+```
+
 ### Nested Eager Loading
 
 You may also eager load multiple relationships. Let's take another more advanced example...
