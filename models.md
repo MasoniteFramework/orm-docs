@@ -1016,7 +1016,9 @@ class UserObserver:
 
 The model object receieved in each event method will be the model at that point in time.
 
-You may then set the observer to a specific model. This could be done in a service provider:
+You may then set the observer to a specific model. 
+
+If you are using Masonite, this could be done in a service provider:
 
 ```python
 from app.models import User
@@ -1028,6 +1030,18 @@ class ModelProvider(Provider):
     def boot(self):
         User.observe(UserObserver())
         #..
+```
+
+If you are using Masonite ORM outside of Masonite you can simply do this at the bottom of the model definition:
+
+```python
+from masoniteorm.models import Model
+from some.place.UserObserver import UserObserver
+
+class User(Model):
+    #..
+    
+User.observe(UserObserver())
 ```
 
 ## Related Records
