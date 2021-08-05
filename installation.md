@@ -31,7 +31,6 @@ DATABASES = {
     "user": "root",
     "password": "",
     "port": 3306,
-    "prefix": "",
     "logging_queries": False,
     "options": {
       #  
@@ -44,7 +43,6 @@ DATABASES = {
     "user": "root",
     "password": "",
     "port": 5432,
-    "prefix": "",
     "logging_queries": False,
     "options": {
       #  
@@ -71,6 +69,31 @@ DB = ConnectionResolver().set_connection_details(DATABASES)
 ```
 
 After this you have successfully setup Masonite ORM in your project!
+
+## MSSQL
+
+Masonite ORM supports Microsoft SQL Server and several options to modify the connection string. All available options are:
+
+```python
+"mssql": {
+    "host": "127.0.0.1",
+    "driver": "mssql",
+    "database": "masonite",
+    "user": "root",
+    "password": "",
+    "port": 1433,
+    "logging_queries": False,
+    "options": {
+      "trusted_connection": "Yes",
+      "integrated_security": "sspi",
+      "instance": "SQLExpress",
+      "authentication": "ActiveDirectoryPassword",
+      "driver": "ODBC Driver 17 for SQL Server",
+      "connection_timeout": 15,
+    }
+  },
+
+```
 
 ## Transactions
 
