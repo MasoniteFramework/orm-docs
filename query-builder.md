@@ -644,6 +644,22 @@ builder.truncate('users', foreign_keys=True)
 | .where_null('column1') | Peforms a WHERE NULL clause.  |
 | .where_not_null('column1') | Peforms a WHERE NOT NULL clause. |
 
+# Pessimistic Locking
+
+The query builder includes a few functions to help you do “pessimistic locking” on your SELECT statements.
+
+To run the SELECT statement with a “shared lock”, you may use the shared_lock method on a query:
+
+```python
+builder.where('votes', '>', 100).shared_lock().get()
+```
+
+To “lock for update” on a SELECT statement, you may use the lock_for_update method on a query:
+
+```python
+builder.where('votes', '>', 100).lock_for_update().get()
+```
+
 # Raw Queries
 
 | Method | Description  |
