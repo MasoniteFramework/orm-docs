@@ -1107,3 +1107,13 @@ user.name = "Joe"
 user.get_original("name") #== Bill
 ```
 
+### Saving
+
+Once you have set attributes on a model, you can persist them up to the table by using the save method:
+
+```python
+user = User.find(1)
+user.name #== Bill
+user.name = "Joe"
+user.save()
+```
