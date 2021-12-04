@@ -709,7 +709,7 @@ builder.where('votes', '>', 100).lock_for_update().get()
 | Method | Description |
 | :---------------- | :------------------------------------------------------------------------------------------------------------- |
 | .to_sql() | Returns a string of the fully compiled SQL to be generated.  |
-| .to_qmark('') | Returns a string of the  SQL to generated but with `?` values where the sql bindings are placed. |
+| .to_qmark('') | Returns a string of the  SQL to generated but with `?` values where the sql bindings are placed. Also resets the query builder instance. |
 
 # Low Level Methods
 
