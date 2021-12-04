@@ -31,7 +31,7 @@ DATABASES = {
     "user": "root",
     "password": "",
     "port": 3306,
-    "logging_queries": False,
+    "log_queries": False,
     "options": {
       #  
     }
@@ -43,7 +43,7 @@ DATABASES = {
     "user": "root",
     "password": "",
     "port": 5432,
-    "logging_queries": False,
+    "log_queries": False,
     "options": {
       #  
     }
@@ -82,7 +82,7 @@ Masonite ORM supports Microsoft SQL Server and several options to modify the con
     "user": "root",
     "password": "",
     "port": 1433,
-    "logging_queries": False,
+    "log_queries": False,
     "options": {
       "trusted_connection": "Yes",
       "integrated_security": "sspi",
@@ -133,7 +133,7 @@ If there are any exceptions in inside the context then the transaction will be r
 ## Logging
 
 If you would like, you can log any queries Masonite ORM generates to any supported Python logging handler. First you need to enable logging
-in `config/database.py` file through the `logging_queries` boolean parameter.
+in `config/database.py` file through the `log_queries` boolean parameter.
 
 Inside your `config/database.py` file you can put on the bottom here. The StreamHandler will output the queries to the terminal.
 

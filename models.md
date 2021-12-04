@@ -114,7 +114,7 @@ Almost all of a model's querying methods are passed off to the query builder. If
 A query result will either have 1 or more records. If your model result has a single record then the result will be the model instance. You can then access attributes on that model instance. Here's an example:
 
 ```python
-from app.models import User
+from app.models.User import User
 
 user = User.first()
 user.name #== 'Joe'
@@ -124,7 +124,7 @@ user.email #== 'joe@masoniteproject.com'
 You can also get a record by its primary key:
 
 ```python
-from app.models import User
+from app.models.User import User
 
 user = User.find(1)
 user.name #== 'Joe'
@@ -136,7 +136,7 @@ user.email #== 'joe@masoniteproject.com'
 If your model result returns several results then it will be wrapped in a collection instance which you can use to iterate over:
 
 ```python
-from app.models import User
+from app.models.User import User
 
 users = User.where('active', 1).get()
 for user in users:
@@ -168,7 +168,7 @@ If you would like to see more methods available like `pluck` be sure to read the
 You may also quickly delete records:
 
 ```python
-from app.models import User
+from app.models.User import User
 
 user = User.delete(1)
 ```
@@ -178,7 +178,7 @@ This will delete the record based on the primary key value of 1.
 You can also delete based on a query:
 
 ```python
-from app.models import User
+from app.models.User import User
 
 user = User.where('active', 0).delete()
 ```
@@ -188,7 +188,7 @@ user = User.where('active', 0).delete()
 You may also use sub-queries to do more advanced queries using lambda expressions:
 
 ```python
-from app.models import User
+from app.models.User import User
 
 users = User.where(lambda q: q.where('active', 1).where_null('deleted_at'))
 # == SELECT * FROM `users` WHERE (`active` = '1' AND `deleted_at` IS NULL)
@@ -242,7 +242,7 @@ class User:
 
   @belongs_to
   def company(self):
-    from app.models import Company
+    from app.models.Company import Company
     return Company
 ```
 
@@ -254,7 +254,7 @@ class User:
 
   @belongs_to('primary_key_id', 'user_id')
   def company(self):
-    from app.models import Company
+    from app.models.Company import Company
     return Company
 ```
 
@@ -270,7 +270,7 @@ class User:
 
   @has_one
   def company(self):
-    from app.models import Company
+    from app.models.Company import Company
     return Company
 ```
 
@@ -282,7 +282,7 @@ class User:
 
   @has_one('other_key', 'local_key')
   def company(self):
-    from app.models import Company
+    from app.models.Company import Company
     return Company
 ```
 
@@ -296,7 +296,7 @@ class User:
 
   @has_many('company_id', 'id')
   def posts(self):
-    from app.models import Post
+    from app.models.Post import Post
     return Post
 ```
 
@@ -341,7 +341,7 @@ class Store(Model):
 
   @belongs_to_many
   def products(self):
-    from app.models import Product
+    from app.models.Product import Product
     return Product
 ```
 
@@ -354,7 +354,7 @@ class Store(Model):
 
   @belongs_to_many("store_id", "product_id", "id", "id")
   def products(self):
-    from app.models import Product
+    from app.models.Product import Product
     return Product
 ```
 
@@ -365,7 +365,7 @@ If there are additional fields on your pivot table you need to fetch you can add
 ```python
 @belongs_to_many("store_id", "product_id", "id", "id", extra_fields=['is_active'])
   def products(self):
-    from app.models import Product
+    from app.models.Product import Product
     return Product
 ```
 
@@ -532,7 +532,7 @@ class Store(Model):
 
   @belongs_to_many
   def products(self):
-    from app.models import Product
+    from app.models.Product import Product
     return Product
 ```
 
@@ -597,7 +597,7 @@ class User:
 
   @has_many('company_id', 'id')
   def posts(self):
-    from app.models import Post
+    from app.models.Post import Post
     return Post
 ```
 
@@ -1056,7 +1056,7 @@ You may then set the observer to a specific model.
 If you are using Masonite, this could be done in a service provider:
 
 ```python
-from app.models import User
+from app.models.User import User
 from app.observers.UserObserver import UserObserver
 from masonite.providers import Provider
 
