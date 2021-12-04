@@ -446,6 +446,41 @@ for post in user.posts:
     post.title
 ```
 
+
+### With Count
+
+The `with_count` method can be used to get the number of records in a relationship.
+
+If you want to fetch the number of permissions a role has for example:
+
+```python
+Role.with_count('permissions').get()
+```
+
+This will return a collection on each record with the `{relationship}_count` attribute. You can get this attribute like this:
+
+```python
+roles = Role.with_count('permissions').get()
+for role in roles:
+  role.permissions_count #== 7
+```
+
+The method also works for single records
+
+```python
+roles = Role.with_count('permissions').find(1).permissions_count #== 7
+```
+
+You may also **optionally** pass in a lambda function as a callable to pass in an additional query filter against the relationship
+
+```python
+Role.with_count(
+    'permissions',
+    lambda q: (
+        q.where_like("name", "%Creates%")
+     )
+```
+
 ## Eager Loading
 
 You can eager load any related records. Eager loading is when you preload model results instead of calling the database each time.
