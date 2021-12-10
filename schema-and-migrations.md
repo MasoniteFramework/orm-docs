@@ -91,6 +91,7 @@ class MigrationForUsersTable(Migration):
 | `table.point()` | POINT equivalent column. |
 | `table.uuid()` | A CHAR column used to store UUIDs `table.uuid('id')`. Default length is 36. |
 | `table.soft_deletes()` | A nullable DATETIME column named `deleted_at`. This is used by the [SoftDeletes](models.md#soft-deleting) scope. |
+| `table.table_comment("The users table")` | Adds a comment to the table. |
 
 
 ## Changes & Rolling Back Migrations
@@ -163,6 +164,7 @@ In addition to the available columns you can use, you can also specify some modi
 | .use_current\(\)  | Makes the column use the `CURRENT_TIMESTAMP` modifer.                                                          |
 | .default\(value\) | Specify a default value for the column. Can be used like table.boolean("is_admin").default(False)              |
 | .primary\() | Specify that the column should be used for the primary key constraint. Used like `table.string('role_id').primary()`              |
+| .comment\() | Adds a comment to the column. Used like `table.string('name').comment("A users name")`              |
 
 ## Indexes
 
