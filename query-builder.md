@@ -638,6 +638,7 @@ builder.truncate('users', foreign_keys=True)
 | .where_like('column', 'value') | Peforms a WHERE LIKE clause. |
 | .where_not_like('column', 'value') | Peforms a WHERE NOT LIKE clause. |
 | .where_exists(lambda q: q.where(..)) | Peforms an EXISTS clause. Takes a lambda expression to indicate which subquery should generate. |
+| .where_not_exists(lambda q: q.where(..)) | Peforms a NOT EXISTS clause. Takes a lambda expression to indicate which subquery should generate. |
 | .where_column('column1', 'column2') | Peforms a comparison between 2 columns. Logical operators available include: `<`, `>`, `>=`, `<=`, `!=`, `=` |
 | .where_in('column1', [1,2,3]) | Peforms a WHERE IN clause. Second parameter needs to be a list or collection of values. |
 | .where_not_in('column1', [1,2,3]) | Peforms a WHERE NOT IN clause. Second parameter needs to be a list or collection of values. |
