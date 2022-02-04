@@ -246,13 +246,13 @@ class User:
     return Company
 ```
 
-It will be assumed here that the primary key of the relationship here between users and companies is `id -> {method_name}_id`. You can change the relating columns if that is not the case:
+It will be assumed here that the primary key of the relationship here between users and companies is `{method_name}_id -> id`. You can change the relating columns if that is not the case:
 
 ```python
 from masoniteorm.relationships import belongs_to
 class User:
 
-  @belongs_to('primary_key_id', 'user_id')
+  @belongs_to('company_id', 'primary_key_id')
   def company(self):
     from app.models.Company import Company
     return Company
