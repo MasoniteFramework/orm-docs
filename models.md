@@ -1105,6 +1105,28 @@ phone = Phone.find(30)
 user.attach('phone', phone)
 ```
 
+## Unrelating Records
+
+Just like relating records with the `attach` method, you can unrelate records using the `detach` and `detach_many` records.
+
+You can detach a single record:
+
+```python
+role = Role.find(1)
+permissions = Permission.find(1)
+
+role.detach('permissions', permission)
+```
+
+You can also detach many records:
+
+```python
+role = Role.find(1)
+permissions = Permission.where('section', "dashboard").get()
+
+role.detach_many('permissions', permissions)
+```
+
 ## Attributes
 
 There are a few attributes that are used for handling model data.
