@@ -682,7 +682,7 @@ class User(Model, SoftDeletesMixin):
 Now whenever you delete a record, instead of deleting it it will update the `deleted_at` record from the table to the current timestamp:
 
 ```python
-User.delete(1)
+User.where("id", 1).delete()
 # == UPDATE `users` SET `deleted_at` = '2020-01-01 10:00:00' WHERE `id` = 1
 ```
 
