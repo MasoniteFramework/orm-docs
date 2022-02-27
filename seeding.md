@@ -15,7 +15,7 @@ $ masonite-orm seed User
 This will create some boiler plate for your seeds that look like this:
 
 ```python
-from masonite.orm.seeds import Seeder
+from masoniteorm.seeds import Seeder
 
 class UserTableSeeder(Seeder):
 
@@ -31,7 +31,7 @@ From here you can start building your seed.
 A simple seed might be creating a specific user that you use during testing.
 
 ```python
-from masonite.orm.seeds import Seeder
+from masoniteorm.seeds import Seeder
 from models import User
 
 class UserTableSeeder(Seeder):
@@ -82,7 +82,7 @@ Once created you can register the method with the `Factory` class:
 
 ```python
 # config/factories.py
-from masonite.orm import Factory
+from masoniteorm import Factory
 from models import User
 
 def user_factory(faker):
@@ -101,7 +101,7 @@ If you need to you can also name your factories so you can use different factori
 
 ```python
 # config/factories.py
-from masonite.orm import Factory
+from masoniteorm import Factory
 from models import User
 
 def user_factory(faker):
@@ -131,7 +131,7 @@ To use the factories you can import the `Factory` class from where you built you
 from config.factories import Factory
 from models import User
 
-users = Factory(User, 50).create() #== <masonite.orm.collections.Collection object>
+users = Factory(User, 50).create() #== <masoniteorm.collections.Collection object>
 user = Factory(User).create() #== <models.User object>
 ```
 
@@ -141,7 +141,7 @@ This will persist these users to the database. If you want to simply make the mo
 from config.factories import Factory
 from models import User
 
-users = Factory(User, 50).make() #== <masonite.orm.collections.Collection object>
+users = Factory(User, 50).make() #== <masoniteorm.collections.Collection object>
 user = Factory(User).make() #== <models.User object>
 ```
 
@@ -155,7 +155,7 @@ By default, Masonite will use the factory you created without a name. If you nam
 from config.factories import Factory
 from models import User
 
-users = Factory(User, 50).create(name="admin_users") #== <masonite.orm.collections.Collection object>
+users = Factory(User, 50).create(name="admin_users") #== <masoniteorm.collections.Collection object>
 ```
 
 ### After Creating
@@ -164,7 +164,7 @@ You can also specify a second factory method that will run after a model is crea
 
 ```python
 # config/factories.py
-from masonite.orm import Factory
+from masoniteorm import Factory
 from models import User
 
 def user_factory(faker):
@@ -196,7 +196,7 @@ If you want to modify any values you previously set in the factory you created, 
 from config.factories import Factory
 from models import User
 
-users = Factory(User, 50).create({'email': 'john@masoniteproject.com'}) #== <masonite.orm.collections.Collection object>
+users = Factory(User, 50).create({'email': 'john@masoniteproject.com'}) #== <masoniteorm.collections.Collection object>
 ```
 
 This is a great way to make constant values when testing that you can later assert to.

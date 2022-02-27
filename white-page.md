@@ -45,7 +45,7 @@ SELECT `id` FROM `users` WHERE `id` = '1' AND `active` = 1
 If it needs to build a Qmark query \(a query with question marks which will be replaced with query bindings to prevent SQL injection\) then it will look like this:
 
 ```text
-SELECT `id` FROM `users` WHERE `id` = '?' AND `active` = ?
+SELECT `id` FROM `users` WHERE `id` = '?' AND `active` = '?'
 ```
 
 and have 2 query bindings:
