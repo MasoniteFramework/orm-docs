@@ -302,7 +302,7 @@ class User:
 
 The first argument is _always_ the column name on the current model's table and the second argument is the related field on the other table.
 
-### Has Many \(Many To Many\)
+### Belongs to Many \(Many To Many\)
 
 When working with many to many relationships, there is a pivot table in between that we must account for. Masonite ORM will handle this pivot table for you entirely under the hood.
 
@@ -432,6 +432,58 @@ for product in store.products:
 ```
 
 **If you have timestamps on your pivot table, they must be called `created_at` and `updated_at`.**
+
+### Has One Through (One to One)
+
+The `HasManyThrough` relationship defines a relationship between 2 tables through an intermediate table. For example, you might have a `Shipment` that departs from a port and that `Port` is located in a specific `Country`.
+
+So therefore, a `Shipment` could be related to a specific `Country` through a `Port`.
+
+The schema would look something like this:
+
+```
+shipments
+  shipment_id - integer - PK
+  from_port_id - integer
+
+ports
+    port_id - integer - PK
+    country_id - integer
+    name - string
+
+countries
+    country_id - integer - PK
+    name - string
+```
+
+To create this type of relationship you simply need to import the relationship class and return a list with 2 models. The first model is the distant table you want to join. In this case we are joining a shipment to countries so we put the `Country` as the first list element. The second element is the intermediate table that we need to get from `Shipment` to `Country`. In this case that is the `Port` model so we put that as the second element in the list.
+
+```python
+from masoniteorm.relationships import has_one_through
+
+class Shipment(Model):
+
+    @has_one_through(
+      "port_id", # The foreign key on the ports table
+      "country_id", # The foreign key on the countries table
+      "from_port_id", # The local key on the shipments table
+      "country_id" # The local key on the ports table
+    )
+    def from_country(self):
+        from app.models.Country import Country
+        from app.models.Port import Port
+
+        return [Country, Port]
+```
+
+You can then use this relationship like any other relationship:
+
+```python
+shipment = Shipment.find(1)
+shipment.from_country.name #== China
+shipment.with_("from_country").first() #== eager load
+shipment.has("from_country").first() #== existance check
+```
 
 ### Using Relationships
 
