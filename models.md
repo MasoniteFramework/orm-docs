@@ -360,10 +360,12 @@ class Store(Model):
 
 The first 2 keys are the foreign keys relating from stores to products through the pivot table and the last 2 keys are the foreign keys on the stores and products table.
 
+#### Extra Fields On Pivot Table
+
 If there are additional fields on your pivot table you need to fetch you can add the extra fields to the pivot record like so:
 
 ```python
-@belongs_to_many("store_id", "product_id", "id", "id", extra_fields=['is_active'])
+@belongs_to_many("store_id", "product_id", "id", "id", with_fields=['is_active'])
   def products(self):
     from app.models.Product import Product
     return Product
