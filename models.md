@@ -486,9 +486,9 @@ shipment.has("from_country").first() #== existance check
 ```
 ### Has Many Through (One to Many)
 
-The `HasManyThrough` relationship defines a relationship between 2 tables through an intermediate table. For example, you might have a `User` that "likes" many comments.
+The `HasManyThrough` relationship defines a relationship between 2 tables through an intermediate table. For example, you might have a "user" that "likes" many "comments".
 
-So therefore, a `User` could be related to a specific `Comment` through a `Like`.
+So in model terms, a `User` could be related to multiple `Comment` through a `Like`.
 
 The schema would look something like this:
 
