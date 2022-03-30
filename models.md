@@ -435,7 +435,7 @@ for product in store.products:
 
 ### Has One Through (One to One)
 
-The `HasManyThrough` relationship defines a relationship between 2 tables through an intermediate table. For example, you might have a `Shipment` that departs from a port and that `Port` is located in a specific `Country`.
+The `HasOneThrough` relationship defines a relationship between 2 tables through an intermediate table. For example, you might have a `Shipment` that departs from a port and that `Port` is located in a specific `Country`.
 
 So therefore, a `Shipment` could be related to a specific `Country` through a `Port`.
 
@@ -483,6 +483,58 @@ shipment = Shipment.find(1)
 shipment.from_country.name #== China
 shipment.with_("from_country").first() #== eager load
 shipment.has("from_country").first() #== existance check
+```
+### Has Many Through (One to Many)
+
+The `HasManyThrough` relationship defines a relationship between 2 tables through an intermediate table. For example, you might have a `User` that "likes" many comments.
+
+So therefore, a `User` could be related to a specific `Comment` through a `Like`.
+
+The schema would look something like this:
+
+```
+users
+  user_id - integer - PK
+  name - varchar
+
+likes
+    like_id - integer - PK
+    user_id - integer - FK
+    comment_id - comment_id
+
+comments
+    comment_id - integer - PK
+    body - text
+```
+
+To create this type of relationship you simply need to import the relationship class and return a list with 2 models. The first model is the distant table you want to join. In this case we are joining a user to comments so we put the `Comment` as the first list element. The second element is the intermediate table that we need to get from `User` to `Comment`. In this case that is the `Like` model so we put that as the second element in the list.
+
+```python
+from masoniteorm.relationships import has_many_through
+
+class User(Model):
+
+    @has_many_through(
+      "like_id", # The foreign key on the intermediate (likes) table
+      "comment_id", # The foreign key on the distant (comments) table
+      "user_id", # The local key on the local (users) table
+      "user_id" # The local key on the intermediate (likes) table
+    )
+    def liked_comments(self):
+        from app.models.Comment import Comment
+        from app.models.Like import Like
+
+        return [Comment, Like]
+```
+
+You can then use this relationship like any other relationship:
+
+```python
+user = User.find(1)
+for comment in user.liked_comments:
+  comment.body
+user.with_("liked_comments").first() #== eager load comments
+user.has("liked_comments").first() #== all users who have liked comments
 ```
 
 ### Using Relationships
