@@ -174,7 +174,7 @@ builder.table('users').where_like('name', "Jo%").get()
 builder.table('users').where_not_like('name', "Jo%").get()
 ```
 
-## Subqueries
+## Where Subqueries
 
 You can make subqueries easily by passing a callable into the where method:
 
