@@ -127,7 +127,7 @@ You can also use a dictionary to build the where method:
 builder.table('users').where({"username": "Joe", "age": 18}).get()
 ```
 
-You can also specify a different comparison operators:
+You can also specify different comparison operators:
 
 ```python
 builder.table('users').where('age', '=', 18).get()
