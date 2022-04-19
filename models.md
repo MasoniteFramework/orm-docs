@@ -587,7 +587,141 @@ Role.with_count(
      )
 ```
 
-## Eager Loading
+
+
+# Polymorphic Relationships
+
+Polymorphic relationships are when a single row can have a relationship to any other table. 
+For example, a `Like` could be associated to a `Comment` or an `Article`.
+
+## Setup
+On a polymorphic table, we typically have a record_type that repesents a table (or a model) and a record_id which represents the primary key value of the related table. Masonite ORM needs to know which record_type maps to which model.
+
+We will create this map on our connection resolver. This is typically the `DB` variable in your database config file:
+
+```python
+DB = ConnectionResolver().set_connection_details(DATABASES)
+# ...
+DB.morph_map({
+    "Article": Article,
+    "Comment": Comment,
+})
+```
+
+## One-to-One (Polymorphic)
+
+When setting up a polymorphic relation it is very similiar to a normal relationship. The major difference is that you will have multiple models pointing to a single polymorphic table. In a polymorphic one-to-one relationship setup you would have a table setup like this:
+
+```
+comments
+  - comment_id - PK
+  - description - Varchar
+
+article:
+  - article_id - PK
+  - title - Varchar
+
+images
+  - id - PK
+  - record_type - Varchar
+  - record_id - Unsigned Int
+```
+
+Notice the `images` table has `record_type` and `record_id` fields. These could be named anything but it should contain a varchar type column that will be used to map to a model as well as a column to put the foreign tables primary key value.
+
+The models setup would look like this:
+
+```python
+from masoniteorm.relatinships import morph_to, morph_many
+
+class Image(Model):
+
+  @morph_to
+  def record(self):
+    return
+
+class Article(Model):
+  
+  @morph_one("record_type", "record_id")
+  def image(self):
+    return Like
+
+class Comment(Model):
+
+  @morph_one("record_type", "record_id")
+  def image(self):
+    return Like
+```
+
+## One-to-Many (Polymorphic)
+
+When setting up a polymorphic relation it is very similiar to a normal relationship. The major difference is that you will have multiple models pointing to a single polymorphic table. In a polymorphic one-to-many relationship setup you would have a table setup like this:
+
+```
+comments
+  - comment_id - PK
+  - description - Varchar
+
+articles:
+  - article_id - PK
+  - title - Varchar
+
+likes
+  - id - PK
+  - record_type - Varchar
+  - record_id - Unsigned Int
+```
+
+Notice the `likes` table has `record_type` and `record_id` fields. These could be named anything but it should contain a varchar type column that will be used to map to a model as well as a column to put the foreign tables primary key value.
+
+In this case the `likes` table still has `one` relationship to multiple models but the relating tables ("articles" and "comments" has `many` records to the `likes` table).
+
+The models setup would look like this:
+
+```python
+from masoniteorm.relatinships import morph_to, morph_many
+
+class Likes(Model):
+
+  @morph_to
+  def record(self):
+    return
+
+class Article(Model):
+  
+  @morph_many("record_type", "record_id")
+  def likes(self):
+    return Like
+
+class Comment(Model):
+
+  @morph_many("record_type", "record_id")
+  def likes(self):
+    return Like
+```
+
+## Morph To and Morph To Many
+
+Masonite ORM has `morph_to` and a `morph_to_many` relationships. This is used to relate multiple records to the polymorphic table. These relationships are used on the polymorphic model to relate to the related models. The `morph_to` will return 1 result from the related model and the `morph_to_many` would return multiple.
+
+The model example would look like this:
+
+```python
+from masoniteorm.relatinships import morph_to, morph_many
+
+class Likes(Model):
+
+  @morph_to
+  def record(self):
+    return
+
+class User(Model):
+
+  @morph_to_many
+  def record(self):
+    return
+```
+# Eager Loading
 
 You can eager load any related records. Eager loading is when you preload model results instead of calling the database each time.
 
