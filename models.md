@@ -825,7 +825,7 @@ SELECT * from contacts where phone_id IN (30, 31, 32, 33)
 
 You can see how this would result in 3 queries no matter how many users you had.
 
-## Joining
+# Joining
 
 If you have relationships on your models you can easily join them:
 
@@ -863,7 +863,7 @@ User.join_on('posts', lambda q: (
 ))
 ```
 
-## Scopes
+# Scopes
 
 Scopes are a way to take common queries you may be doing and condense them into a method where you can then chain onto them. Let's say you are doing a query like getting the active user frequently:
 
@@ -906,7 +906,7 @@ user = User.active(1).get()
 user = User.active(0).get()
 ```
 
-## Soft Deleting
+# Soft Deleting
 
 Masonite ORM also comes with a global scope to enable soft deleting for your models.
 
@@ -978,7 +978,7 @@ class User(Model, SoftDeletesMixin):
   __deleted_at__ = "when_deleted"
 ```
 
-## Truncating
+# Truncating
 
 You can [truncate the table](query-builder.md#truncating) used by the model directly on the model:
 
@@ -986,7 +986,7 @@ You can [truncate the table](query-builder.md#truncating) used by the model dire
 User.truncate()
 ```
 
-## Updating
+# Updating
 
 You can update records:
 
@@ -1038,7 +1038,7 @@ When updating records the `updated_at` column will be automatically updated. You
 User.activate_timestamps(False).update({"username": "Sam"})  # updated_at won't be modified during this update
 ```
 
-## Creating
+# Creating
 
 You can easily create records by passing in a dictionary:
 
@@ -1060,7 +1060,7 @@ user = User.create({"username": "Joe"}).fresh()
 user.active #== 1
 ```
 
-## Bulk Creating
+# Bulk Creating
 
 You can also bulk create using the query builder's bulk\_create method:
 
@@ -1086,7 +1086,7 @@ User.builder.new().bulk_create([
 ])
 ```
 
-### Serializing
+# Serializing
 
 You can serialize a model very quickly:
 
@@ -1125,7 +1125,7 @@ You cannot use both `__hidden__` and `__visible__` on the model.
 
 If you need more advanced serialization or building a complex API you should use [masonite-api](https://docs.masoniteproject.com/official-packages/masonite-api) package.
 
-## Changing Primary Key to use UUID
+# Changing Primary Key to use UUID
 
 Masonite ORM also comes with another global scope to enable using UUID as primary keys for your models.
 
@@ -1170,7 +1170,7 @@ class User(Model, UUIDPrimaryKeyMixin):
   __uuid_bytes__ = True
 ```
 
-## Casting
+# Casting
 
 Not all data may be in the format you need it. If you find yourself casting attributes to different values, like casting active to an `int` then you can set it to the right type in the model:
 
@@ -1223,7 +1223,7 @@ class User(Model):
         return self.get_new_date(datetime).to_datetime_string()
 ```
 
-## Accessors and Mutators \(Getter and Setter\)
+# Accessors and Mutators \(Getter and Setter\)
 
 Accessors and mutators are a great way to fine tune what happens when you get and set attributes on your models.
 
@@ -1254,7 +1254,7 @@ user.name = "joe mancuso"
 user.name #== "JOE MANCUSO"
 ```
 
-## Events
+# Events
 
 Models emit various events in different stages of its life cycle. Available events are:
 
@@ -1328,7 +1328,7 @@ class User(Model):
 User.observe(UserObserver())
 ```
 
-## Related Records
+# Related Records
 
 There are many times you need to take several related records and assign them all to the same attribute based on another record.
 
@@ -1376,11 +1376,11 @@ permissions = Permission.where('section', "dashboard").get()
 role.detach_many('permissions', permissions)
 ```
 
-## Attributes
+# Attributes
 
 There are a few attributes that are used for handling model data.
 
-### Dirty Attributes
+## Dirty Attributes
 
 When you set an attribute on a model, the model becomes "dirty". Meaning the model now has attributes changed on it. You can easily check if the model is dirty:
 
@@ -1402,7 +1402,7 @@ user.get_dirty("name") #== Joe
 
 This will get the value of the dirty attribute and not the attribute that was set on the model.
 
-### Original
+## Original
 
 This keeps track of the original data that was first set on the model. This data does not change throughout the life of the model:
 
@@ -1413,7 +1413,7 @@ user.name = "Joe"
 user.get_original("name") #== Bill
 ```
 
-### Saving
+## Saving
 
 Once you have set attributes on a model, you can persist them up to the table by using the save method:
 
