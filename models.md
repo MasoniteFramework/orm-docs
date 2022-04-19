@@ -1161,6 +1161,15 @@ class User(Model, UUIDPrimaryKeyMixin):
   __uuid_name__ = "domain.com
 ```
 
+And even force UUID generation to return bytes instead of strings:
+
+```python
+from masoniteorm.scopes import UUIDPrimaryKeyMixin
+
+class User(Model, UUIDPrimaryKeyMixin):
+  __uuid_bytes__ = True
+```
+
 ## Casting
 
 Not all data may be in the format you need it. If you find yourself casting attributes to different values, like casting active to an `int` then you can set it to the right type in the model:
