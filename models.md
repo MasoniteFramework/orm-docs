@@ -1310,8 +1310,9 @@ from app.observers.UserObserver import UserObserver
 from masonite.providers import Provider
 
 class ModelProvider(Provider):
-
-    def boot(self):
+    #..
+    
+    def register(self):
         User.observe(UserObserver())
         #..
 ```
