@@ -142,7 +142,7 @@ You can even use it with SQLite:
 
 ```python
 db_url("sqlite://")
-db_url("sqlite://masonite")
+db_url("sqlite://masonite.sqlite3")
 ```
 
 
