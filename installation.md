@@ -127,7 +127,7 @@ DATABASES = {
 }
 ```
 
-If you need to specify other options for the connection that does not appear in the url you can pass those options are keyword parameters to `db_url`:
+If you need to specify other options for the connection that do not appear in the url you can pass those options are keyword parameters to `db_url`:
 
 ```python
 from masoniteorm.config import db_url
@@ -168,6 +168,7 @@ Masonite ORM supports Microsoft SQL Server and several options to modify the con
       "connection_timeout": 15,
     }
   },
+```
 
 ## Transactions
 
