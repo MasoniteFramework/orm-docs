@@ -91,6 +91,7 @@ class MigrationForUsersTable(Migration):
 | `table.point()` | POINT equivalent column. |
 | `table.uuid()` | A CHAR column used to store UUIDs `table.uuid('id')`. Default length is 36. |
 | `table.soft_deletes()` | A nullable DATETIME column named `deleted_at`. This is used by the [SoftDeletes](models.md#soft-deleting) scope. |
+| `table.table_comment("The users table")` | Adds a comment to the table. |
 
 
 ## Changes & Rolling Back Migrations
@@ -134,6 +135,22 @@ You can refresh by running the command:
 $ masonite-orm migrate:refresh
 ```
 
+You can also seed your database after refreshing your migrations. Which will rebuild you database to some desire state.
+
+You can run all seeders located in `Database Seeder` class by:
+
+```text
+$ masonite-orm migrate:refresh --seed
+```
+
+Or simply run a specific seeder:
+
+```text
+$ masonite-orm migrate:refresh --seed CustomTable
+```
+
+> **CustomTable** is the name of the seeder without "Seeder" suffix. Internally we will run the desired CustomTableSeeder.
+
 ## Modifiers
 
 In addition to the available columns you can use, you can also specify some modifers which will change the behavior of the column:
@@ -147,6 +164,7 @@ In addition to the available columns you can use, you can also specify some modi
 | .use_current\(\)  | Makes the column use the `CURRENT_TIMESTAMP` modifer.                                                          |
 | .default\(value\) | Specify a default value for the column. Can be used like table.boolean("is_admin").default(False)              |
 | .primary\() | Specify that the column should be used for the primary key constraint. Used like `table.string('role_id').primary()`              |
+| .comment\() | Adds a comment to the column. Used like `table.string('name').comment("A users name")`              |
 
 ## Indexes
 
@@ -184,6 +202,12 @@ You can use these options:
 | .on_delete\('set null'\) | Sets the ON DELETE SET NULL property on the constraint. |
 | .on_delete\('cascade'\)  | Sets the ON DELETE CASCADE property on the constraint.  |
 
+Available options for `on_update` and `on_delete` are:
+* cascade
+* set null
+* restrict
+* no action
+* default
 
 You can also pass a `name` parameter to change the name of the constraint:
 

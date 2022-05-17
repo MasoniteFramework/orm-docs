@@ -66,7 +66,7 @@ Factory methods are simple methods that take a single `Faker` instance.
 ```python
 # config/factories.py
 
-def user_factory(self, faker):
+def user_factory(faker):
     return {
         'name': faker.name(),
         'email': faker.email(),
@@ -85,7 +85,7 @@ Once created you can register the method with the `Factory` class:
 from masoniteorm import Factory
 from models import User
 
-def user_factory(self, faker):
+def user_factory(faker):
     return {
         'name': faker.name(),
         'email': faker.email(),
@@ -104,14 +104,14 @@ If you need to you can also name your factories so you can use different factori
 from masoniteorm import Factory
 from models import User
 
-def user_factory(self, faker):
+def user_factory(faker):
     return {
         'name': faker.name(),
         'email': faker.email(),
         'password': 'secret'
     }
 
-def admin_user_factory(self, faker):
+def admin_user_factory(faker):
     return {
         'name': faker.name(),
         'email': faker.email(),
@@ -167,14 +167,14 @@ You can also specify a second factory method that will run after a model is crea
 from masoniteorm import Factory
 from models import User
 
-def user_factory(self, faker):
+def user_factory(faker):
     return {
         'name': faker.name(),
         'email': faker.email(),
         'password': 'secret'
     }
 
-def after_users(self, model, faker):
+def after_users(model, faker):
     model.verified = True
 
 Factory.register(User, user_factory)

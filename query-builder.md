@@ -1,12 +1,10 @@
-# Query builder
-
-## Preface
+# Preface
 
 The query builder is a class which is used to build up a query for execution later. For example if you need multiple wheres for a query you can chain them together on this `QueryBuilder` class. The class is then modified until you want to execute the query. Models use the query builder under the hood to make all of those calls. Many model methods actually return an instance of `QueryBuilder` so you can continue to chain complex queries together.
 
 Using the query builder class directly allows you to make database calls without needing to use a model.
 
-## Getting the QueryBuilder class
+# Getting the QueryBuilder class
 
 To get the query builder class you can simply import the query builder. Once imported you will need to pass the `connection_details` dictionary you store in your `config.database` file:
 
@@ -28,7 +26,7 @@ builder = QueryBuilder().on('staging').table("users")
 
 You can then start making any number of database calls.
 
-## Models
+# Models
 
 If you would like to use models you should reference the [Models](models.md) documentation. This is an example of using models directly with the query builder.
 
@@ -49,9 +47,9 @@ user = QueryBuilder(model=User).table("users").first()
 # == <app.models.User>
 ```
 
-## Fetching Records
+# Fetching Records
 
-### Select
+## Select
 
 ```python
 builder.table('users').select('username').get()
@@ -79,7 +77,7 @@ builder.table('users').select('profiles.username as name').get()
 # SELECT `profiles`.`username` AS name FROM `users`
 ```
 
-### First
+## First
 
 You can easily get the first record:
 
@@ -88,7 +86,7 @@ builder.table('users').first()
 # SELECT * from `users` LIMIT 1
 ```
 
-### All Records
+## All Records
 
 You can also simply fetch all records from a table:
 
@@ -97,7 +95,7 @@ builder.table('users').all()
 # SELECT * from `users`
 ```
 
-### The Get Method
+## The Get Method
 
 Once you start chaining methods you should call the `get()` method instead of the `all()` method to execute the query.
 
@@ -113,7 +111,7 @@ And this is wrong:
 builder.table('users').select('username').all()
 ```
 
-### Wheres
+## Wheres
 
 You may also specify any one of these where statements:
 
@@ -129,7 +127,7 @@ You can also use a dictionary to build the where method:
 builder.table('users').where({"username": "Joe", "age": 18}).get()
 ```
 
-You can also specify comparison operators:
+You can also specify different comparison operators:
 
 ```python
 builder.table('users').where('age', '=', 18).get()
@@ -137,9 +135,11 @@ builder.table('users').where('age', '>', 18).get()
 builder.table('users').where('age', '<', 18).get()
 builder.table('users').where('age', '>=', 18).get()
 builder.table('users').where('age', '<=', 18).get()
+builder.table('users').where('age', 'regexp', r"[0-9]").get()
+builder.table('users').where('age', 'not regexp', r"[0-9]").get()
 ```
 
-### Where Null
+## Where Null
 
 Another common where clause is checking where a value is `NULL`:
 
@@ -157,7 +157,7 @@ builder.table('users').where_not_null('admin').get()
 
 This selects all columns where admin is `NOT NULL`.
 
-### Where In
+## Where In
 
 In order to fetch all records within a certain list we can pass in a list:
 
@@ -167,7 +167,7 @@ builder.table('users').where_in('age', [18,21,25]).get()
 
 This will fetch all records where the age is either `18`, `21` or `25`.
 
-### Where Like
+## Where Like
 
 You can do a WHERE LIKE or WHERE NOT LIKE query:
 
@@ -176,7 +176,7 @@ builder.table('users').where_like('name', "Jo%").get()
 builder.table('users').where_not_like('name', "Jo%").get()
 ```
 
-### Subqueries
+## Where Subqueries
 
 You can make subqueries easily by passing a callable into the where method:
 
@@ -192,7 +192,7 @@ builder.table("users").where_in("id", lambda q: q.select("profile_id").table("pr
 # SELECT * FROM "users" WHERE "id" IN (SELECT "profiles"."profile_id" FROM "profiles")
 ```
 
-### Select Subqueries
+## Select Subqueries
 
 You can make a subquery in the select clause. This takes 2 parameters. The first is the alias for the subquery and the second is a callable that takes a query builder.
 
@@ -212,7 +212,7 @@ builder.table("stores").add_select("sales", lambda query: (
 )).where("sales", ">", "1000")
 ```
 
-### Conditional Queries
+## Conditional Queries
 
 Sometimes you need to specify conditional statements and run queries based on the conditional values.
 
@@ -236,7 +236,7 @@ def show(self, request: Request):
 
 If the conditional passed in the first parameter is not truthy then the second parameter will be ignored.
 
-### Limits / Offsets
+## Limits / Offsets
 
 It's also very simple to use both limit and/or offset a query.
 
@@ -258,7 +258,7 @@ Or here is an example of using both:
 builder.table('users').limit(10).offset(10).get()
 ```
 
-### Between
+## Between
 
 You may need to get all records where column values are between 2 values:
 
@@ -266,7 +266,7 @@ You may need to get all records where column values are between 2 values:
 builder.table('users').where_between('age', 18, 21).get()
 ```
 
-### Group By
+## Group By
 
 You may want to group by a specific column:
 
@@ -279,7 +279,7 @@ You can also specify a multiple column group by:
 ```python
 builder.table('users').group_by('active, name, is_admin').get()
 ```
-### Group By Raw
+## Group By Raw
 
 You can also group by raw:
 
@@ -287,7 +287,7 @@ You can also group by raw:
 builder.table('users').group_by_raw('COUNT(*)').get()
 ```
 
-### Having
+## Having
 
 Having clauses are typically used during a group by. For example, returning all users grouped by salary where the salary is greater than 0:
 
@@ -301,19 +301,48 @@ You may also specify the same query but where the sum of the salary is greater t
 builder.table('users').sum('salary').group_by('salary').having('salary', 50000).get()
 ```
 
-### Inner Joining
 
-Joining is a way to take data from related tables and return it in 1 result set as well as filter anything out that doesn't have a relationship on the joining tables.
+## Joining
+
+Creating join queries is very simple. 
 
 ```python
-builder.table('users').join('table1', 'table2.id', '=', 'table1.table_id')
+builder.join('other_table', 'column1', '=', 'column2')
 ```
 
-This join will create an inner join.
+This will build a `JoinClause` behind the scenes for you.
+## Advanced Joins
 
-You can also choose a left join:
+Advanced joins are for use cases where you need to compile a join clause that is more than just joining on 2 distant columns. Advanced joins are where you need additional `on` or `where statements`.There are currently 2 ways to perform an advanced where clause. 
 
-### Left Join
+The first way is that you may create your own `JoinClause` from scratch and build up your own clause:
+
+```python
+from masoniteorm.expressions import JoinClause
+
+clause = (
+    JoinClause('other_table as ot')
+    .on('column1', '=', 'column2')
+    .on('column3', '=', 'column4')
+    .where('column3', '>', 4)
+)
+
+builder.join(clause)
+```
+
+The second way is passing a "lambda" to the join method directly which will return you a `JoinClause` class you can build up. This way is a bit more cleaner:
+
+```python
+builder.join('other_table as ot', lambda join: (
+    (
+        join.on('column1', '=', 'column2')
+        .on('column3', '=', 'column4')
+        .where('column3', '>', 4)
+    )
+))
+```
+
+## Left Join
 
 ```python
 builder.table('users').left_join('table1', 'table2.id', '=', 'table1.table_id')
@@ -321,13 +350,13 @@ builder.table('users').left_join('table1', 'table2.id', '=', 'table1.table_id')
 
 and a right join:
 
-### Right Join
+## Right Join
 
 ```python
 builder.table('users').right_join('table1', 'table2.id', '=', 'table1.table_id')
 ```
 
-### Increment
+## Increment
 
 There are times where you really just need to increment a column and don't need to pull any additional information. A lot of the incrementing logic is hidden away:
 
@@ -337,7 +366,7 @@ builder.table('users').increment('status')
 
 Decrementing is also similiar:
 
-### Decrement
+## Decrement
 
 ```python
 builder.table('users').decrement('status')
@@ -350,7 +379,7 @@ builder.table('users').increment('status', 10)
 builder.table('users').decrement('status', 10)
 ```
 
-## Pagination
+# Pagination
 
 Sometimes you'll want to paginate through a result set. There are 2 ways to pagainate records.
 
@@ -366,11 +395,11 @@ You may also do "simple pagination". This will not give you back a query total a
 builder.table("users").where("active", 1).simple_paginate(number_of_results, page)
 ```
 
-## Aggregates
+# Aggregates
 
 There are several aggregating methods you can use to aggregate columns:
 
-### Sum
+## Sum
 
 ```python
 salary = builder.table('users').sum('salary').first().salary
@@ -378,7 +407,7 @@ salary = builder.table('users').sum('salary').first().salary
 
 Notice the alias for the aggregate is the name of the column.
 
-### Average
+## Average
 
 ```python
 salary = builder.table('users').avg('salary').first().salary
@@ -386,7 +415,7 @@ salary = builder.table('users').avg('salary').first().salary
 
 Notice the alias for the aggregate is the name of the column.
 
-### Count
+## Count
 
 ```python
 salary = builder.table('users').count('salary').first().salary
@@ -398,19 +427,19 @@ You can also count all:
 salary = builder.table('users').count('salary').first().salary
 ```
 
-### Max
+## Max
 
 ```python
 salary = builder.table('users').max('salary').first().salary
 ```
 
-### Min
+## Min
 
 ```python
 salary = builder.table('users').min('salary').first().salary
 ```
 
-### Aliases
+## Aliases
 
 You may also specify an alias for your aggregate expressions. You can do this by adding "as {alias}" to your aggregate expression:
 
@@ -419,7 +448,7 @@ builder.table('users').sum('salary as payments').get()
 #== SELECT SUM(`users`.`salary`) as payments FROM `users`
 ```
 
-## Order By
+# Order By
 
 You can easily order by:
 
@@ -454,7 +483,7 @@ builder.order_by("name, active").order_by("name", "desc")
 builder.order_by("name, email desc, active")
 ```
 
-## Order By Raw
+# Order By Raw
 
 You can also order by raw. This will pass your raw query directly to the query:
 
@@ -462,7 +491,7 @@ You can also order by raw. This will pass your raw query directly to the query:
 builder.order_by_raw("name asc")
 ```
 
-## Creating Records
+# Creating Records
 
 You can create records by passing a dictionary to the `create` method. This will perform an INSERT query:
 
@@ -470,7 +499,7 @@ You can create records by passing a dictionary to the `create` method. This will
 builder.create({"name": "Joe", "active": 1})
 ```
 
-## Bulk Creating
+# Bulk Creating
 
 You can also bulk create records by passing a list of dictionaries:
 
@@ -482,7 +511,7 @@ builder.bulk_create([
 ])
 ```
 
-## Raw Queries
+# Raw Queries
 
 If some queries would be easier written raw you can easily do so for both selects and wheres:
 
@@ -513,7 +542,7 @@ builder.update({
 # == UPDATE "users" SET "name" = "alias"
 ```
 
-## Chunking
+# Chunking
 
 If you need to loop over a lot of results then consider chunking. A chunk will only pull in the specified number of records into a generator:
 
@@ -523,7 +552,7 @@ for users in builder.table('users').chunk(100):
         user #== <User object>
 ```
 
-## Getting SQL
+# Getting SQL
 
 If you want to find out the SQL that will run when the command is executed. You can use `to_sql()`. This method returns the full query without bindings. The actual query sent to the database is a "qmark query" (see below). This `to_sql()` method is mainly for debugging purposes and should not be sent directly to a database as the result with have no query bindings and will be subject to SQL injection attacks. **Use this method for debugging purposes only.**
 
@@ -532,7 +561,7 @@ builder.table('users').count('salary').where('age', 18).to_sql()
 #== SELECT COUNT(`users`.`salary`) AS salary FROM `users` WHERE `users`.`age` = '18'
 ```
 
-## Getting Qmark
+# Getting Qmark
 
 Qmark is essentially just a normal SQL statement except that the query is replaced with quoted question marks (`'?'`). The values that should have been in the position of the question marks are stored in a tuple and sent along with the qmark query to help in sql injection. The qmark query is the actual query sent using the connection class.
 
@@ -543,9 +572,9 @@ builder.table('users').count('salary').where('age', 18).to_qmark()
 
 > Note: qmark queries will reset the query builder and remove things like aggregates and wheres from the builder class. Because of this, writing `get()` after `to_qmark` will result in incorrect queries (because things like wheres and aggregates will be missing from the final query). If you need to debug a query, please use the `to_sql()` method which does not have this kind of resetting behavior.
 
-## Updates
+# Updates
 
-### Updating Records
+## Updating Records
 
 You can update many records.
 
@@ -556,9 +585,9 @@ builder.where('active', 0).update({
 # UPDATE `users` SET `users`.`active` = 1 where `users`.`active` = 0
 ```
 
-## Deletes
+# Deletes
 
-### Deleting Records
+## Deleting Records
 
 You can delete many records as well. For example, deleting all records where active is set to 0.
 
@@ -566,7 +595,7 @@ You can delete many records as well. For example, deleting all records where act
 builder.where('active', 0).delete()
 ```
 
-## Truncating
+# Truncating
 
 You can also truncate directly from the query builder:
 
@@ -582,7 +611,7 @@ builder.truncate('users', foreign_keys=True)
 
 # Available Methods
 
-## Aggregates
+# Aggregates
 
 | Method | Description |
 | :---------------- | :------------------------------------------------------------------------------------------------------------- |
@@ -592,7 +621,7 @@ builder.truncate('users', foreign_keys=True)
 | .max\('column') | Gets the max value of a column. Can also use an `as` modifier to alias the `.max('column as alias')`. |
 | .min\('column') | Gets the min value of a column. Can also use an `as` modifier to alias the `.min('column as alias')`. |
 
-## Joins
+# Joins
 
 | Method | Description |
 | :---------------- | :------------------------------------------------------------------------------------------------------------- |
@@ -600,7 +629,7 @@ builder.truncate('users', foreign_keys=True)
 | .left_join('table1', 'table2.id', '=', 'table1.table_id') | Joins 2 tables together. This will do an LEFT join. |
 | .right_join\('table1', 'table2.id', '=', 'table1.table_id') | Joins 2 tables together. This will do an RIGHT join. |
 
-## Where Clauses
+# Where Clauses
 
 | Method | Description |
 | :---------------- | :------------------------------------------------------------------------------------------------------------- |
@@ -610,14 +639,31 @@ builder.truncate('users', foreign_keys=True)
 | .or_where('column', 'value') | Peforms a OR WHERE clause. Can optionally choose a logical operator to use `.where('column', '=', 'value')`. Logical operators available include: `<`, `>`, `>=`, `<=`, `!=`, `=`, `like`, `not like` |
 | .where_like('column', 'value') | Peforms a WHERE LIKE clause. |
 | .where_not_like('column', 'value') | Peforms a WHERE NOT LIKE clause. |
-| .where_exists('column', lambda q: q.where(..)) | Peforms an EXISTS clause. Takes a lambda expression as the second parameter to indicate which subquery should generate. |
+| .where_exists(lambda q: q.where(..)) | Peforms an EXISTS clause. Takes a lambda expression to indicate which subquery should generate. |
+| .where_not_exists(lambda q: q.where(..)) | Peforms a NOT EXISTS clause. Takes a lambda expression to indicate which subquery should generate. |
 | .where_column('column1', 'column2') | Peforms a comparison between 2 columns. Logical operators available include: `<`, `>`, `>=`, `<=`, `!=`, `=` |
 | .where_in('column1', [1,2,3]) | Peforms a WHERE IN clause. Second parameter needs to be a list or collection of values. |
 | .where_not_in('column1', [1,2,3]) | Peforms a WHERE NOT IN clause. Second parameter needs to be a list or collection of values. |
 | .where_null('column1') | Peforms a WHERE NULL clause.  |
 | .where_not_null('column1') | Peforms a WHERE NOT NULL clause. |
 
-## Raw Queries
+# Pessimistic Locking
+
+The query builder includes a few functions to help you do “pessimistic locking” on your SELECT statements.
+
+To run the SELECT statement with a “shared lock”, you may use the shared_lock method on a query:
+
+```python
+builder.where('votes', '>', 100).shared_lock().get()
+```
+
+To “lock for update” on a SELECT statement, you may use the lock_for_update method on a query:
+
+```python
+builder.where('votes', '>', 100).lock_for_update().get()
+```
+
+# Raw Queries
 
 | Method | Description  |
 | :---------------- | :------------------------------------------------------------------------------------------------------------- |
@@ -626,7 +672,7 @@ builder.truncate('users', foreign_keys=True)
 | .order_by_raw('column1, column2') | specifies a raw string where the ORDER BY expression would go. |
 | .group_by_raw('column1, column2') | specifies a raw string where the GROUP BY expression would go. |
 
-## Modifiers
+# Modifiers
 
 | Method | Description  |
 | :---------------- | :------------------------------------------------------------------------------------------------------------- |
@@ -640,7 +686,7 @@ builder.truncate('users', foreign_keys=True)
 | .decrement('column') | Decrements the column by 1. Can pass in a second parameter for the number to increment by. `.decrement('column', 100)`. |
 
 
-## DML
+# DML
 
 | Method | Description |
 | :---------------- | :------------------------------------------------------------------------------------------------------------- |
@@ -661,14 +707,14 @@ builder.truncate('users', foreign_keys=True)
 | .truncate('table') | Truncates a table. Can pass a second parameter to disable and enable foreign key constraints. `truncate('table', foreign_keys=True)` |
 | .update({}) | dictionary values to update the record with.  |
 
-## Testing
+# Testing
 
 | Method | Description |
 | :---------------- | :------------------------------------------------------------------------------------------------------------- |
-| .to_sql() | Returns a string of the fully compiled SQL to be generated. |
-| .to_qmark('') | Returns a string of the  SQL to generated but with `?` values where the sql bindings are placed. |
+| .to_sql() | Returns a string of the fully compiled SQL to be generated.  |
+| .to_qmark('') | Returns a string of the  SQL to generated but with `?` values where the sql bindings are placed. Also resets the query builder instance. |
 
-## Low Level Methods
+# Low Level Methods
 
 These are lower level methods that may be useful:
 

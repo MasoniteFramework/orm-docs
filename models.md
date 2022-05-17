@@ -1,8 +1,10 @@
 # Models
 
+## Models
+
 Models are the easiest way to interact with your tables. A model is a way for you to interact with a Python class in a simple and elegant way and have all the hard overhead stuff handled for you under the hood. A model can be used to query the data in the table or even create new records, fetch related records between tables and many other features.
 
-# Creating A Model
+## Creating A Model
 
 The first step in using models is actually creating them. You can scaffold out a model by using the command:
 
@@ -34,13 +36,13 @@ active_users = User.where('active', 1).first()
 
 We'll talk more about setting up your model below
 
-# Conventions And Configuration
+## Conventions And Configuration
 
 Masonite ORM makes a few assumptions in order to have the easiest interface for your models.
 
 The first is table names. Table names are assumed to be the plural of your model name. If you have a User model then the `users` table is assumed and if you have a model like `Company` then the `companies` table is assumed. You can realize that Masonite ORM is smart enough to know that the plural of `Company` is not `Companys` so don't worry about Masonite not being able to pick up your table name.
 
-## Table Name
+### Table Name
 
 If your table name is something other than the plural of your models you can change it using the `__table__` attribute:
 
@@ -49,7 +51,7 @@ class Clients:
   __table__ = "users"
 ```
 
-## Primary Keys
+### Primary Keys
 
 The next thing Masonite assumes is the primary key. Masonite ORM assumes that the primary key name is `id`. You can change the primary key name easily:
 
@@ -58,7 +60,7 @@ class Clients:
   __primary_key__ = "user_id"
 ```
 
-## Connections
+### Connections
 
 The next thing Masonite assumes is that you are using the `default` connection you setup in your configuration settings. You can also change this on the model:
 
@@ -67,7 +69,7 @@ class Clients:
   __connection__ = "staging"
 ```
 
-## Mass Assignment
+### Mass Assignment
 
 By default, Masonite ORM protects against mass assignment to help prevent users from changing values on your tables you didn't want.
 
@@ -75,10 +77,17 @@ This is used in the create and update methods. You can set the columns you want 
 
 ```python
 class Clients:
-  __fillable__ = ['email', "active", "password"]
+  __fillable__ = ["email", "active", "password"]
 ```
 
-## Timestamps
+Guarded attributes can be used to specify those columns which are not mass assignable. You can prevent some of the fields from being mass-assigned:
+
+```python
+class Clients:
+  __guarded__ = ["password"]
+```
+
+### Timestamps
 
 Masonite also assumes you have `created_at` and `updated_at` columns on your table. You can easily disable this behavior:
 
@@ -87,7 +96,7 @@ class Clients:
   __timestamps__ = False
 ```
 
-## Timezones
+### Timezones
 
 Models use `UTC` as the default timezone. You can change the timezones on your models using the `__timezone__` attribute:
 
@@ -96,18 +105,16 @@ class User(Model):
     __timezone__ = "Europe/Paris"
 ```
 
-# Querying
+## Querying
 
 Almost all of a model's querying methods are passed off to the query builder. If you would like to see all the methods available for the query builder, see the [QueryBuilder](models.md) documentation here.
-
-- sub queries
 
 ## Single results
 
 A query result will either have 1 or more records. If your model result has a single record then the result will be the model instance. You can then access attributes on that model instance. Here's an example:
 
 ```python
-from app.models import User
+from app.models.User import User
 
 user = User.first()
 user.name #== 'Joe'
@@ -117,19 +124,19 @@ user.email #== 'joe@masoniteproject.com'
 You can also get a record by its primary key:
 
 ```python
-from app.models import User
+from app.models.User import User
 
 user = User.find(1)
 user.name #== 'Joe'
 user.email #== 'joe@masoniteproject.com'
 ```
 
-## Collections
+### Collections
 
 If your model result returns several results then it will be wrapped in a collection instance which you can use to iterate over:
 
 ```python
-from app.models import User
+from app.models.User import User
 
 users = User.where('active', 1).get()
 for user in users:
@@ -156,12 +163,12 @@ user_emails = User.where('active', 1).get().pluck('email') #== Collection of ema
 
 If you would like to see more methods available like `pluck` be sure to read the [Collections](models.md) documentation.
 
-## Deleting
+### Deleting
 
 You may also quickly delete records:
 
 ```python
-from app.models import User
+from app.models.User import User
 
 user = User.delete(1)
 ```
@@ -171,23 +178,23 @@ This will delete the record based on the primary key value of 1.
 You can also delete based on a query:
 
 ```python
-from app.models import User
+from app.models.User import User
 
 user = User.where('active', 0).delete()
 ```
 
-## Sub-queries
+### Sub-queries
 
 You may also use sub-queries to do more advanced queries using lambda expressions:
 
 ```python
-from app.models import User
+from app.models.User import User
 
 users = User.where(lambda q: q.where('active', 1).where_null('deleted_at'))
 # == SELECT * FROM `users` WHERE (`active` = '1' AND `deleted_at` IS NULL)
 ```
 
-# Selecting
+## Selecting
 
 By default, Masonite ORM performs `SELECT *` queries. You can change this behavior in a few ways.
 
@@ -219,11 +226,11 @@ store.where("active", 1).get(["username", "administrator as is_admin"])
 #== SELECT `username`, `administrator` as is_admin FROM `users` WHERE `active` = 1
 ```
 
-# Relationships
+## Relationships
 
 Another great feature, when using models, is to be able to relate several models together \(like how tables can relate to each other\).
 
-## Belongs To (One to One)
+### Belongs To \(One to One\)
 
 A belongs to relationship is a one-to-one relationship between 2 table records.
 
@@ -235,25 +242,25 @@ class User:
 
   @belongs_to
   def company(self):
-    from app.models import Company
+    from app.models.Company import Company
     return Company
 ```
 
-It will be assumed here that the primary key of the relationship here between users and companies is `id -> id`. You can change the relating columns if that is not the case:
+It will be assumed here that the primary key of the relationship here between users and companies is `{method_name}_id -> id`. You can change the relating columns if that is not the case:
 
 ```python
 from masoniteorm.relationships import belongs_to
 class User:
 
-  @belongs_to('primary_key_id', 'user_id')
+  @belongs_to('company_id', 'primary_key_id')
   def company(self):
-    from app.models import Company
+    from app.models.Company import Company
     return Company
 ```
 
-The first argument is *always* the column name on the current model's table and the second argument is the related field on the other table.
+The first argument is _always_ the column name on the current model's table and the second argument is the related field on the other table.
 
-## Has One (One to One)
+### Has One \(One to One\)
 
 In addition to belongs to, you can define the inverse of a belongs to:
 
@@ -263,7 +270,7 @@ class User:
 
   @has_one
   def company(self):
-    from app.models import Company
+    from app.models.Company import Company
     return Company
 ```
 
@@ -275,11 +282,11 @@ class User:
 
   @has_one('other_key', 'local_key')
   def company(self):
-    from app.models import Company
+    from app.models.Company import Company
     return Company
 ```
 
-## Has Many (One to Many)
+### Has Many \(One to Many\)
 
 Another relationship is a one-to-many relationship where a record relates to many records, in another table:
 
@@ -289,13 +296,13 @@ class User:
 
   @has_many('company_id', 'id')
   def posts(self):
-    from app.models import Post
+    from app.models.Post import Post
     return Post
 ```
 
-The first argument is *always* the column name on the current model's table and the second argument is the related field on the other table.
+The first argument is _always_ the column name on the current model's table and the second argument is the related field on the other table.
 
-## Has Many (Many To Many)
+### Belongs to Many \(Many To Many\)
 
 When working with many to many relationships, there is a pivot table in between that we must account for. Masonite ORM will handle this pivot table for you entirely under the hood.
 
@@ -305,7 +312,7 @@ Stores can have many products and also products can be in many stores. For examp
 
 In the database this may look something like this:
 
-```
+```text
 stores
 -------
 id
@@ -334,7 +341,7 @@ class Store(Model):
 
   @belongs_to_many
   def products(self):
-    from app.models import Product
+    from app.models.Product import Product
     return Product
 ```
 
@@ -347,11 +354,24 @@ class Store(Model):
 
   @belongs_to_many("store_id", "product_id", "id", "id")
   def products(self):
-    from app.models import Product
+    from app.models.Product import Product
     return Product
 ```
 
 The first 2 keys are the foreign keys relating from stores to products through the pivot table and the last 2 keys are the foreign keys on the stores and products table.
+
+#### Extra Fields On Pivot Table
+
+If there are additional fields on your pivot table you need to fetch you can add the extra fields to the pivot record like so:
+
+```python
+@belongs_to_many("store_id", "product_id", "id", "id", with_fields=['is_active'])
+  def products(self):
+    from app.models.Product import Product
+    return Product
+```
+
+This will fetch the additional fields on the pivot table which we have access to.
 
 Once we create this relationship we can start querying from `stores` directly to `products`:
 
@@ -361,7 +381,7 @@ for product in store.products:
     product.name #== Red Shirt
 ```
 
-On each fetched record you can also get the pivot table and perform queries on it. This pivot record is the joining record inside the pivot table (`product_store`) where the store id and the product ID match. By default this attribute is `pivot`.
+On each fetched record you can also get the pivot table and perform queries on it. This pivot record is the joining record inside the pivot table \(`product_store`\) where the store id and the product ID match. By default this attribute is `pivot`.
 
 ```python
 store = Store.find(1)
@@ -370,7 +390,7 @@ for product in store.products:
     product.pivot.update({"updated_at": "2021-01-02"})
 ```
 
-### Changing Options
+#### Changing Options
 
 There are quite a few defaults that are created but there are ways to override them.
 
@@ -389,10 +409,10 @@ You can also change the ID to something other than `id`:
 The next default is the name of the pivot table. The name of the pivot table is the singular form of both table names in alphabetical order. For example, if you are pivoting a `persons` table and a `houses` table then the table name is assumed to be `house_person`. You can change this naming:
 
 ```python
-@belongs_to_many(pivot_table="home_ownership")
+@belongs_to_many(table="home_ownership")
 ```
 
-The next default is that there are no timestamps (`updated_at` and `created_at`) on your pivot table. If you would like Masonite to manage timestamps you can:
+The next default is that there are no timestamps \(`updated_at` and `created_at`\) on your pivot table. If you would like Masonite to manage timestamps you can:
 
 ```python
 @belongs_to_many(with_timestamps=True)
@@ -415,7 +435,111 @@ for product in store.products:
 
 **If you have timestamps on your pivot table, they must be called `created_at` and `updated_at`.**
 
-## Using Relationships
+### Has One Through (One to One)
+
+The `HasOneThrough` relationship defines a relationship between 2 tables through an intermediate table. For example, you might have a `Shipment` that departs from a port and that `Port` is located in a specific `Country`.
+
+So therefore, a `Shipment` could be related to a specific `Country` through a `Port`.
+
+The schema would look something like this:
+
+```
+shipments
+  shipment_id - integer - PK
+  from_port_id - integer
+
+ports
+    port_id - integer - PK
+    country_id - integer
+    name - string
+
+countries
+    country_id - integer - PK
+    name - string
+```
+
+To create this type of relationship you simply need to import the relationship class and return a list with 2 models. The first model is the distant table you want to join. In this case we are joining a shipment to countries so we put the `Country` as the first list element. The second element is the intermediate table that we need to get from `Shipment` to `Country`. In this case that is the `Port` model so we put that as the second element in the list.
+
+```python
+from masoniteorm.relationships import has_one_through
+
+class Shipment(Model):
+
+    @has_one_through(
+      "port_id", # The foreign key on the ports table
+      "country_id", # The foreign key on the countries table
+      "from_port_id", # The local key on the shipments table
+      "country_id" # The local key on the ports table
+    )
+    def from_country(self):
+        from app.models.Country import Country
+        from app.models.Port import Port
+
+        return [Country, Port]
+```
+
+You can then use this relationship like any other relationship:
+
+```python
+shipment = Shipment.find(1)
+shipment.from_country.name #== China
+shipment.with_("from_country").first() #== eager load
+shipment.has("from_country").first() #== existance check
+```
+### Has Many Through (One to Many)
+
+The `HasManyThrough` relationship defines a relationship between 2 tables through an intermediate table. For example, you might have a "user" that "likes" many "comments".
+
+So in model terms, a `User` could be related to multiple `Comment` through a `Like`.
+
+The schema would look something like this:
+
+```
+users
+  user_id - integer - PK
+  name - varchar
+
+likes
+    like_id - integer - PK
+    user_id - integer - FK
+    comment_id - comment_id
+
+comments
+    comment_id - integer - PK
+    body - text
+```
+
+To create this type of relationship you simply need to import the relationship class and return a list with 2 models. The first model is the distant table you want to join. In this case we are joining a user to comments so we put the `Comment` as the first list element. The second element is the intermediate table that we need to get from `User` to `Comment`. In this case that is the `Like` model so we put that as the second element in the list.
+
+```python
+from masoniteorm.relationships import has_many_through
+
+class User(Model):
+
+    @has_many_through(
+      "like_id", # The foreign key on the intermediate (likes) table
+      "comment_id", # The foreign key on the distant (comments) table
+      "user_id", # The local key on the local (users) table
+      "user_id" # The local key on the intermediate (likes) table
+    )
+    def liked_comments(self):
+        from app.models.Comment import Comment
+        from app.models.Like import Like
+
+        return [Comment, Like]
+```
+
+You can then use this relationship like any other relationship:
+
+```python
+user = User.find(1)
+for comment in user.liked_comments:
+  comment.body
+user.with_("liked_comments").first() #== eager load comments
+user.has("liked_comments").first() #== all users who have liked comments
+```
+
+### Using Relationships
 
 You can easily use relationships to get those related records. Here is an example on how to get the company record:
 
@@ -428,6 +552,175 @@ for post in user.posts:
     post.title
 ```
 
+
+### With Count
+
+The `with_count` method can be used to get the number of records in a relationship.
+
+If you want to fetch the number of permissions a role has for example:
+
+```python
+Role.with_count('permissions').get()
+```
+
+This will return a collection on each record with the `{relationship}_count` attribute. You can get this attribute like this:
+
+```python
+roles = Role.with_count('permissions').get()
+for role in roles:
+  role.permissions_count #== 7
+```
+
+The method also works for single records
+
+```python
+roles = Role.with_count('permissions').find(1).permissions_count #== 7
+```
+
+You may also **optionally** pass in a lambda function as a callable to pass in an additional query filter against the relationship
+
+```python
+Role.with_count(
+    'permissions',
+    lambda q: (
+        q.where_like("name", "%Creates%")
+     )
+```
+
+
+
+# Polymorphic Relationships
+
+Polymorphic relationships are when a single row can have a relationship to any other table. 
+For example, a `Like` could be associated to a `Comment` or an `Article`.
+
+## Setup
+On a polymorphic table, we typically have a record_type that repesents a table (or a model) and a record_id which represents the primary key value of the related table. Masonite ORM needs to know which record_type maps to which model.
+
+We will create this map on our connection resolver. This is typically the `DB` variable in your database config file:
+
+```python
+DB = ConnectionResolver().set_connection_details(DATABASES)
+# ...
+DB.morph_map({
+    "Article": Article,
+    "Comment": Comment,
+})
+```
+
+## One-to-One (Polymorphic)
+
+When setting up a polymorphic relation it is very similiar to a normal relationship. The major difference is that you will have multiple models pointing to a single polymorphic table. In a polymorphic one-to-one relationship setup you would have a table setup like this:
+
+```
+comments
+  - comment_id - PK
+  - description - Varchar
+
+article:
+  - article_id - PK
+  - title - Varchar
+
+images
+  - id - PK
+  - record_type - Varchar
+  - record_id - Unsigned Int
+```
+
+Notice the `images` table has `record_type` and `record_id` fields. These could be named anything but it should contain a varchar type column that will be used to map to a model as well as a column to put the foreign tables primary key value.
+
+The models setup would look like this:
+
+```python
+from masoniteorm.relatinships import morph_to, morph_many
+
+class Image(Model):
+
+  @morph_to
+  def record(self):
+    return
+
+class Article(Model):
+  
+  @morph_one("record_type", "record_id")
+  def image(self):
+    return Like
+
+class Comment(Model):
+
+  @morph_one("record_type", "record_id")
+  def image(self):
+    return Like
+```
+
+## One-to-Many (Polymorphic)
+
+When setting up a polymorphic relation it is very similiar to a normal relationship. The major difference is that you will have multiple models pointing to a single polymorphic table. In a polymorphic one-to-many relationship setup you would have a table setup like this:
+
+```
+comments
+  - comment_id - PK
+  - description - Varchar
+
+articles:
+  - article_id - PK
+  - title - Varchar
+
+likes
+  - id - PK
+  - record_type - Varchar
+  - record_id - Unsigned Int
+```
+
+Notice the `likes` table has `record_type` and `record_id` fields. These could be named anything but it should contain a varchar type column that will be used to map to a model as well as a column to put the foreign tables primary key value.
+
+In this case the `likes` table still has `one` relationship to multiple models but the relating tables ("articles" and "comments" has `many` records to the `likes` table).
+
+The models setup would look like this:
+
+```python
+from masoniteorm.relatinships import morph_to, morph_many
+
+class Likes(Model):
+
+  @morph_to
+  def record(self):
+    return
+
+class Article(Model):
+  
+  @morph_many("record_type", "record_id")
+  def likes(self):
+    return Like
+
+class Comment(Model):
+
+  @morph_many("record_type", "record_id")
+  def likes(self):
+    return Like
+```
+
+## Morph To and Morph To Many
+
+Masonite ORM has `morph_to` and a `morph_to_many` relationships. This is used to relate multiple records to the polymorphic table. These relationships are used on the polymorphic model to relate to the related models. The `morph_to` will return 1 result from the related model and the `morph_to_many` would return multiple.
+
+The model example would look like this:
+
+```python
+from masoniteorm.relatinships import morph_to, morph_many
+
+class Likes(Model):
+
+  @morph_to
+  def record(self):
+    return
+
+class User(Model):
+
+  @morph_to_many
+  def record(self):
+    return
+```
 # Eager Loading
 
 You can eager load any related records. Eager loading is when you preload model results instead of calling the database each time.
@@ -468,7 +761,22 @@ SELECT * FROM phones where user_id IN (1, 2, 3, 4)
 
 This resulted in only 2 queries. Any subsquent calls will pull in the result from the eager loaded result set.
 
-## Nested Eager Loading
+You can also default all model calls with eager loading by using the `__with__` attribute on the model:
+
+```python
+from masoniteorm.models import Model
+from masoniteorm.relationships import belongs_to_many
+class Store(Model):
+
+  __with__ = ['products']
+
+  @belongs_to_many
+  def products(self):
+    from app.models.Product import Product
+    return Product
+```
+
+### Nested Eager Loading
 
 You may also eager load multiple relationships. Let's take another more advanced example...
 
@@ -529,7 +837,7 @@ class User:
 
   @has_many('company_id', 'id')
   def posts(self):
-    from app.models import Post
+    from app.models.Post import Post
     return Post
 ```
 
@@ -541,7 +849,7 @@ User.joins('posts')
 
 This will build out the `join` method.
 
-You can also specify the clause of the join (inner, left, right). The default is an inner join
+You can also specify the clause of the join \(inner, left, right\). The default is an inner join
 
 ```python
 User.joins('posts', clause="right")
@@ -614,7 +922,7 @@ class User(Model, SoftDeletesMixin):
 Now whenever you delete a record, instead of deleting it it will update the `deleted_at` record from the table to the current timestamp:
 
 ```python
-User.delete(1)
+User.where("id", 1).delete()
 # == UPDATE `users` SET `deleted_at` = '2020-01-01 10:00:00' WHERE `id` = 1
 ```
 
@@ -670,6 +978,14 @@ class User(Model, SoftDeletesMixin):
   __deleted_at__ = "when_deleted"
 ```
 
+# Truncating
+
+You can [truncate the table](query-builder.md#truncating) used by the model directly on the model:
+
+```python
+User.truncate()
+```
+
 # Updating
 
 You can update records:
@@ -684,17 +1000,22 @@ If there are no changes, update won't be triggered.
 You can override this behaviour in different ways:
 
 - you can pass `force=True` to `update()` method
+
 ```python
 User.find(1).update({"username": "Joe"}, force=True)
 ```
+
 - you can define `__force_update__` attribute on the model class
+
 ```python
 class User(Model):
     __force_update__ = True
 
 User.find(1).update({"username": "Joe"})
 ```
+
 - you can use `force_update()` method on model:
+
 ```python
 User.find(1).force_update({"username": "Joe"})
 ```
@@ -727,7 +1048,7 @@ User.create({"username": "Joe"})
 
 This will insert the record into the table, create and return the new model instance.
 
-> Note that this will only create a new model instance but will not contain any additional fields on the table. It will only have whichever fields you pass to it. 
+> Note that this will only create a new model instance but will not contain any additional fields on the table. It will only have whichever fields you pass to it.
 
 You can "refetch" the model after creating to get the rest of the record. This will use the `find` method to get the full record. Let's say you have a scenario in which the `active` flag defaults to 1 from the database level. If we create the record, the `active` attribute will not fetched since Masonite ORM doesn't know about this attribute.
 
@@ -741,7 +1062,7 @@ user.active #== 1
 
 # Bulk Creating
 
-You can also bulk create using the query builder's bulk_create method:
+You can also bulk create using the query builder's bulk\_create method:
 
 ```python
 User.bulk_create([
@@ -765,7 +1086,7 @@ User.builder.new().bulk_create([
 ])
 ```
 
-## Serializing
+# Serializing
 
 You can serialize a model very quickly:
 
@@ -776,9 +1097,9 @@ User.serialize()
 
 This will return a dict of all the model fields. Some important things to note:
 
-- Date fields will be serialized with ISO format
-- Relationships will be serialized
-- Attributes defined in `__appends__` will be added
+* Date fields will be serialized with ISO format
+* Eager loaded relationships will be serialized
+* Attributes defined in `__appends__` will be added
 
 If you want to hide model fields you can use `__hidden__` attribute on your model:
 
@@ -840,6 +1161,15 @@ class User(Model, UUIDPrimaryKeyMixin):
   __uuid_name__ = "domain.com
 ```
 
+And even force UUID generation to return bytes instead of strings:
+
+```python
+from masoniteorm.scopes import UUIDPrimaryKeyMixin
+
+class User(Model, UUIDPrimaryKeyMixin):
+  __uuid_bytes__ = True
+```
+
 # Casting
 
 Not all data may be in the format you need it. If you find yourself casting attributes to different values, like casting active to an `int` then you can set it to the right type in the model:
@@ -853,11 +1183,11 @@ Now whenever you get the active attribute on the model it will be an `int`.
 
 Other valid values are:
 
-- `int`
-- `bool`
-- `json`
+* `int`
+* `bool`
+* `json`
 
-# Dates
+## Dates
 
 Masonite uses `pendulum` for dates. Whenever dates are used it will return an instance of pendulum.
 
@@ -869,7 +1199,7 @@ class User(Model):
     __dates__ = ["verified_at"]
 ```
 
-## Overriding Dates
+### Overriding Dates
 
 If you would like to change this behavior you can override 2 methods: `get_new_date()` and `get_new_datetime_string()`:
 
@@ -893,7 +1223,7 @@ class User(Model):
         return self.get_new_date(datetime).to_datetime_string()
 ```
 
-# Accessors and Mutators (Getter and Setter)
+# Accessors and Mutators \(Getter and Setter\)
 
 Accessors and mutators are a great way to fine tune what happens when you get and set attributes on your models.
 
@@ -928,20 +1258,20 @@ user.name #== "JOE MANCUSO"
 
 Models emit various events in different stages of its life cycle. Available events are:
 
-- booting
-- booted
-- creating
-- created
-- deleting
-- deleted
-- hydrating
-- hydrated
-- saving
-- saved
-- updating
-- updated
+* booting
+* booted
+* creating
+* created
+* deleting
+* deleted
+* hydrating
+* hydrated
+* saving
+* saved
+* updating
+* updated
 
-# Observers
+## Observers
 
 You can listen to various events through observers. Observers are simple classes that contain methods equal to the event you would like to listen to.
 
@@ -970,18 +1300,33 @@ class UserObserver:
 
 The model object receieved in each event method will be the model at that point in time.
 
-You may then set the observer to a specific model. This could be done in a service provider:
+You may then set the observer to a specific model. 
+
+If you are using Masonite, this could be done in a service provider:
 
 ```python
-from app.models import User
+from app.models.User import User
 from app.observers.UserObserver import UserObserver
 from masonite.providers import Provider
 
 class ModelProvider(Provider):
-
-    def boot(self):
+    #..
+    
+    def register(self):
         User.observe(UserObserver())
         #..
+```
+
+If you are using Masonite ORM outside of Masonite you can simply do this at the bottom of the model definition:
+
+```python
+from masoniteorm.models import Model
+from some.place.UserObserver import UserObserver
+
+class User(Model):
+    #..
+    
+User.observe(UserObserver())
 ```
 
 # Related Records
@@ -999,7 +1344,7 @@ articles = Articles.where('user_id', 2).get()
 user.save_many('articles', articles)
 ```
 
-This will take all articles where user_id is 2 and assign them the related record between users and article \(user_id\).
+This will take all articles where user\_id is 2 and assign them the related record between users and article \(user\_id\).
 
 You may do the same for a one-to-one relationship:
 
@@ -1008,6 +1353,28 @@ user = User.find(1)
 phone = Phone.find(30)
 
 user.attach('phone', phone)
+```
+
+## Unrelating Records
+
+Just like relating records with the `attach` method, you can unrelate records using the `detach` and `detach_many` records.
+
+You can detach a single record:
+
+```python
+role = Role.find(1)
+permissions = Permission.find(1)
+
+role.detach('permissions', permission)
+```
+
+You can also detach many records:
+
+```python
+role = Role.find(1)
+permissions = Permission.where('section', "dashboard").get()
+
+role.detach_many('permissions', permissions)
 ```
 
 # Attributes
@@ -1045,4 +1412,15 @@ user = User.find(1)
 user.name #== Bill
 user.name = "Joe"
 user.get_original("name") #== Bill
+```
+
+## Saving
+
+Once you have set attributes on a model, you can persist them up to the table by using the save method:
+
+```python
+user = User.find(1)
+user.name #== Bill
+user.name = "Joe"
+user.save()
 ```
