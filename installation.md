@@ -104,8 +104,7 @@ DATABASES = {
 }
 ```
 
-This will use the value defined in `DATABASE_URL` environment variable by default. If you want to use an other environment variable
-you just have to do:
+This will use the value defined in `DATABASE_URL` environment variable by default. If you want to use an other environment variable you just have to do:
 
 ```python
 import os
