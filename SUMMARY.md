@@ -6,6 +6,7 @@
 * [White Page](white-page.md)
 * [Query builder](query-builder.md)
 * [Models](models.md)
+* [Commands](commands.md)
 * [Collections](collections.md)
 * [Schema & Migrations](schema-and-migrations.md)
 * [Seeding](seeding.md)
