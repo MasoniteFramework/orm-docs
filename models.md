@@ -552,7 +552,6 @@ for post in user.posts:
     post.title
 ```
 
-
 ### With Count
 
 The `with_count` method can be used to get the number of records in a relationship.
@@ -587,6 +586,48 @@ Role.with_count(
      )
 ```
 
+
+
+## Existence of a Relationship
+
+Sometimes you'll need to get all records where a record **has** (or **doesnt_have**) a related record.
+
+For example, you may want to get all users that have addresses:
+
+```python
+users = User.has("addresses").get()
+```
+
+Or you may want to get all users that don't have addresses:
+
+```python
+users = User.doesnt_have("addresses").get()
+```
+
+You can also perform another query on the relationship. For example, you may want all users that have addresses in the state of NY:
+
+```python
+users = User.where_has("addresses", lambda query: (
+  query.where("state", "NY")
+)).get()
+```
+
+You may do this also with `where_doesnt_have` to get all users where they don't have addresses in the state of NY:
+
+```python
+users = User.where_doesnt_have("addresses", lambda query: (
+  query.where("state", "NY")
+)).get()
+```
+
+### Existence Conditionals
+
+You also have the full support of doing OR conditionals by prefixing any of the methods with `or_`:
+
+* `or_has`
+* `or_where_has`
+* `or_doesnt_have`
+* `or_where_doesnt_have`
 
 
 # Polymorphic Relationships

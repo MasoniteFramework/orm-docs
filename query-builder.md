@@ -634,6 +634,7 @@ builder.truncate('users', foreign_keys=True)
 | Method | Description |
 | :---------------- | :------------------------------------------------------------------------------------------------------------- |
 | .between('column', 'value') | Peforms a BETWEEN clause. |
+| .between('column', 'value') | Peforms a BETWEEN clause. |
 | .not_between('column', 'value') | Peforms a NOT BETWEEN clause. |
 | .where('column', 'value') | Peforms a WHERE clause. Can optionally choose a logical operator to use `.where('column', '=', 'value')`. Logical operators available include: `<`, `>`, `>=`, `<=`, `!=`, `=`, `like`, `not like` |
 | .or_where('column', 'value') | Peforms a OR WHERE clause. Can optionally choose a logical operator to use `.where('column', '=', 'value')`. Logical operators available include: `<`, `>`, `>=`, `<=`, `!=`, `=`, `like`, `not like` |
