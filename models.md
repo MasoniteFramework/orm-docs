@@ -226,11 +226,11 @@ store.where("active", 1).get(["username", "administrator as is_admin"])
 #== SELECT `username`, `administrator` as is_admin FROM `users` WHERE `active` = 1
 ```
 
-## Relationships
+# Relationships
 
 Another great feature, when using models, is to be able to relate several models together \(like how tables can relate to each other\).
 
-### Belongs To \(One to One\)
+## Belongs To \(One to One\)
 
 A belongs to relationship is a one-to-one relationship between 2 table records.
 
@@ -260,7 +260,7 @@ class User:
 
 The first argument is _always_ the column name on the current model's table and the second argument is the related field on the other table.
 
-### Has One \(One to One\)
+## Has One \(One to One\)
 
 In addition to belongs to, you can define the inverse of a belongs to:
 
@@ -286,7 +286,7 @@ class User:
     return Company
 ```
 
-### Has Many \(One to Many\)
+## Has Many \(One to Many\)
 
 Another relationship is a one-to-many relationship where a record relates to many records, in another table:
 
@@ -302,7 +302,7 @@ class User:
 
 The first argument is _always_ the column name on the current model's table and the second argument is the related field on the other table.
 
-### Belongs to Many \(Many To Many\)
+## Belongs to Many \(Many To Many\)
 
 When working with many to many relationships, there is a pivot table in between that we must account for. Masonite ORM will handle this pivot table for you entirely under the hood.
 
@@ -360,7 +360,7 @@ class Store(Model):
 
 The first 2 keys are the foreign keys relating from stores to products through the pivot table and the last 2 keys are the foreign keys on the stores and products table.
 
-#### Extra Fields On Pivot Table
+### Extra Fields On Pivot Table
 
 If there are additional fields on your pivot table you need to fetch you can add the extra fields to the pivot record like so:
 
@@ -390,7 +390,7 @@ for product in store.products:
     product.pivot.update({"updated_at": "2021-01-02"})
 ```
 
-#### Changing Options
+### Changing Options
 
 There are quite a few defaults that are created but there are ways to override them.
 
@@ -435,7 +435,7 @@ for product in store.products:
 
 **If you have timestamps on your pivot table, they must be called `created_at` and `updated_at`.**
 
-### Has One Through (One to One)
+## Has One Through (One to One)
 
 The `HasOneThrough` relationship defines a relationship between 2 tables through an intermediate table. For example, you might have a `Shipment` that departs from a port and that `Port` is located in a specific `Country`.
 
@@ -486,7 +486,7 @@ shipment.from_country.name #== China
 shipment.with_("from_country").first() #== eager load
 shipment.has("from_country").first() #== existance check
 ```
-### Has Many Through (One to Many)
+## Has Many Through (One to Many)
 
 The `HasManyThrough` relationship defines a relationship between 2 tables through an intermediate table. For example, you might have a "user" that "likes" many "comments".
 
@@ -539,7 +539,7 @@ user.with_("liked_comments").first() #== eager load comments
 user.has("liked_comments").first() #== all users who have liked comments
 ```
 
-### Using Relationships
+## Using Relationships
 
 You can easily use relationships to get those related records. Here is an example on how to get the company record:
 
@@ -552,7 +552,7 @@ for post in user.posts:
     post.title
 ```
 
-### With Count
+## With Count
 
 The `with_count` method can be used to get the number of records in a relationship.
 
