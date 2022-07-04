@@ -11,3 +11,6 @@
 * [Schema & Migrations](schema-and-migrations.md)
 * [Seeding](seeding.md)
 
+## Other Features
+* [Postgres Schemas](postgres-schema.md)
+
