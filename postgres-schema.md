@@ -12,7 +12,7 @@ User.set_schema("schema2").where(..).get()
 
 # Migrations
 
-The migration command will take a `--schema` option to change the schema to run the migrations for:
+The migration command will take a `--schema` option to change the schema to run the migrations for. This option is available on all the migration commands.
 
 > If using Masonite you will use the `python craft` command instead of the `masonite-orm` command.
 
