@@ -1234,6 +1234,9 @@ Other valid values are:
 * `int`
 * `bool`
 * `json`
+* `decimal`
+* `float`
+* `date`
 
 ## Dates
 
