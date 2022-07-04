@@ -617,6 +617,16 @@ users = User.where_doesnt_have("addresses", lambda query: (
 )).get()
 ```
 
+You may also perform nested existence checks such as:
+
+```python
+articles = Article.has("author.addresses", lambda query: (
+  query.where("state", "NY")
+)).get()
+```
+
+This would be how you would get all articles where the authors have addresses in NY.
+
 ### Existence Conditionals
 
 You also have the full support of doing OR conditionals by prefixing any of the methods with `or_`:
