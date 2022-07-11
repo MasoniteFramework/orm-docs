@@ -824,6 +824,30 @@ class Store(Model):
     return Product
 ```
 
+### Dynamic Relationships
+
+You can change the relationship query that is ran on the fly using a dictionary and a lambda expression:
+
+For example if you wanted to eager only the users phones that are activated:
+
+```python
+users = User.with_({
+  'phone': lambda q: q.where("activated", 1)
+}).get()
+for user in users:
+    user.phone
+```
+
+You can use the with_ method in addition to other eager loads:
+
+```python
+users = User.with_("friends", "cars", {
+  'phone': lambda q: q.where("activated", 1)
+}).get()
+for user in users:
+    user.phone
+```
+
 ### Nested Eager Loading
 
 You may also eager load multiple relationships. Let's take another more advanced example...
