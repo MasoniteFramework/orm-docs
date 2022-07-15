@@ -549,6 +549,31 @@ for post in user.posts:
     post.title
 ```
 
+## Getting The Relationship
+
+Sometimes you want to be able to get the related query and append on to it on the fly.
+
+For example, you may have a `User` and `Phone` relationship that looks like this:
+
+```python
+class User(Model):
+
+  @has_many
+  def phones(self):
+    return Phone
+```
+
+On the fly you may want to only get the active phones. You can do this by using the `related()` method on a model instance.
+
+```python
+user = User.find(1)
+
+# All users phones
+phones = user.phones 
+# All active users phones
+active_phones = user.related("phones").where("active", 1).get()
+```
+
 ## With Count
 
 The `with_count` method can be used to get the number of records in a relationship.
