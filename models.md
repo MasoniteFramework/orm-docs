@@ -705,7 +705,7 @@ Notice the `images` table has `record_type` and `record_id` fields. These could 
 The models setup would look like this:
 
 ```python
-from masoniteorm.relatinships import morph_to, morph_many
+from masoniteorm.relationships import morph_to, morph_many
 
 class Image(Model):
 
@@ -752,7 +752,7 @@ In this case the `likes` table still has `one` relationship to multiple models b
 The models setup would look like this:
 
 ```python
-from masoniteorm.relatinships import morph_to, morph_many
+from masoniteorm.relationships import morph_to, morph_many
 
 class Likes(Model):
 
@@ -780,7 +780,7 @@ Masonite ORM has `morph_to` and a `morph_to_many` relationships. This is used to
 The model example would look like this:
 
 ```python
-from masoniteorm.relatinships import morph_to, morph_many
+from masoniteorm.relationships import morph_to, morph_many
 
 class Likes(Model):
 
