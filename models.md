@@ -1287,6 +1287,31 @@ Other valid values are:
 * `float`
 * `date`
 
+## Custom Cast Classes
+
+You can register your own custom classes if you need. To do this you will need to create a simple class with 2 methods: a `get` method and a `set` method:
+
+```python
+class CustomCaster:
+
+  def get(self, value):
+    pass
+
+  def set(self, value):
+    pass    
+```
+
+The get method will get called when the field is accessed and the set method will get called when the field is set.
+
+You will then register is to the cast map on the model:
+
+```python
+from some.place.CustomCaster import CustomCaster
+
+class User(Model):
+
+  __cast_map__ = {"custom_key": CustomCaster}
+```
 ## Dates
 
 Masonite uses `pendulum` for dates. Whenever dates are used it will return an instance of pendulum.
