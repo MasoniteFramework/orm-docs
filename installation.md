@@ -2,7 +2,7 @@
 
 Setting up Masonite is extremely simple.
 
-If you are using the Masonite web framework than all the installation is setup for you. If you are using anything other than Masonite or building your own Python application then be sure to follow the install steps below:
+If you are using the Masonite web framework then all the installation is setup for you. If you are using anything other than Masonite or building your own Python application then be sure to follow the install steps below:
 
 ## Pip install
 
