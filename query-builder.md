@@ -542,6 +542,12 @@ builder.update({
 # == UPDATE "users" SET "name" = "alias"
 ```
 
+You can also query using having raw. This will pass your raw query directly to the query:
+
+```python
+builder.having_raw("age > 18")
+```
+
 # Chunking
 
 If you need to loop over a lot of results then consider chunking. A chunk will only pull in the specified number of records into a generator:
@@ -670,6 +676,7 @@ builder.where('votes', '>', 100).lock_for_update().get()
 | :---------------- | :------------------------------------------------------------------------------------------------------------- |
 | .select_raw('SUM("column")') | specifies a raw string where the select expression would go. |
 | .where_raw('SUM("column")') | specifies a raw string where the WHERE expression would go. |
+| .having_raw('SUM("column") > 10') | specifies a raw string where the HAVING expression would go. |
 | .order_by_raw('column1, column2') | specifies a raw string where the ORDER BY expression would go. |
 | .group_by_raw('column1, column2') | specifies a raw string where the GROUP BY expression would go. |
 
