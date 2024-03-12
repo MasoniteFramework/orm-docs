@@ -82,7 +82,7 @@ builder.table('users').select('profiles.username as name').get()
 You can also select distinct records by simple adding a `distinct()` method onto the query builder.
 
 ```python
-builder.table('users').select('.name').distinct().get()
+builder.table('users').select('name').distinct().get()
 ```
 
 ## First
