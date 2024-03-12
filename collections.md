@@ -15,23 +15,25 @@ for user in users:
 
 ## Available Methods
 
-|                          |                        |                        |
-| :----------------------- | :--------------------- | :--------------------- |
-| [all](#all)             | [avg](#avg)           | [chunk](#chunk)       |
-| [collapse](#collapse)   | [contains](#contains) | [count](#count)       |
-| [diff](#diff)           | [each](#each)         | [every](#every)       |
-| [filter](#filter)       | [first](#first)       | [flatten](#flatten)   |
-| [for_page](#for_page)   | [forget](#forget)     | [get](#get)           |
-| [group_by](#group_by)   | [implode](#implode)   | [is_empty](#is_empty) |
-| [last](#last)           | [map_into](#map_into) | [map](#map)           |
-| [max](#max)             | [merge](#merge)       | [pluck](#pluck)       |
-| [pop](#pop)             | [prepend](#prepend)   | [pull](#pull)         |
-| [push](#push)           | [put](#put)           | [random](#random)     |
-| [reduce](#reduce)       | [reject](#reject)     | [reverse](#reverse)   |
-| [serialize](#serialize) | [shift](#shift)       | [sort](#sort)         |
-| [sum](#sum)             | [take](#take)         | [to_json](#to_json)   |
-| [transform](#transform) | [unique](#unique)     | [where](#where)       |
-| [zip](#zip)             |
+Here is the updated list with `min` added after `merge`:
+
+|                         |                         |                        |
+| :---------------------- | :---------------------- | :--------------------- |
+| [all](#all)             | [avg](#avg)             | [chunk](#chunk)        |
+| [collapse](#collapse)   | [contains](#contains)   | [count](#count)        |
+| [diff](#diff)           | [each](#each)           | [every](#every)        |
+| [filter](#filter)       | [first](#first)         | [flatten](#flatten)    |
+| [for_page](#for_page)   | [forget](#forget)       | [get](#get)            |
+| [group_by](#group_by)   | [implode](#implode)     | [is_empty](#is_empty)  |
+| [last](#last)           | [map_into](#map_into)   | [map](#map)            |
+| [max](#max)             | [merge](#merge)         | [min](#min)            |
+| [pluck](#pluck)         | [pop](#pop)             | [prepend](#prepend)    |
+| [pull](#pull)           | [push](#push)           | [put](#put)            |
+| [random](#random)       | [reduce](#reduce)       | [reject](#reject)      |
+| [reverse](#reverse)     | [serialize](#serialize) | [shift](#shift)        |
+| [sort](#sort)           | [sum](#sum)             | [take](#take)          |
+| [to_json](#to_json)     | [transform](#transform) | [unique](#unique)      |
+| [where](#where)         | [zip](#zip)             |
 
 ## all
 
@@ -312,6 +314,26 @@ collection.all() #== ['Desk', 'Chair', 'Bookcase', 'Door']
 ```
 
 Unlike most other collection methods, `merge` does not return a new modified collection; it modifies the collection it is called on.
+
+## min
+
+Retrieves min value of the collection:
+
+```python
+collection = Collection([1,2,3])
+collection.min() #== 1
+```
+
+If the collection contains dictionaries or objects, you must pass the key on which to compute min value:
+
+```python
+collection = Collection([
+    {'product_id': 1, 'product': 'Desk'},
+    {'product_id': 2, 'product': 'Chair'}
+    {'product_id': 3, 'product': 'Table'}
+])
+collection.max("product_id") #== 1
+```
 
 ## pluck
 
