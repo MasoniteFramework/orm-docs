@@ -77,6 +77,14 @@ builder.table('users').select('profiles.username as name').get()
 # SELECT `profiles`.`username` AS name FROM `users`
 ```
 
+## Select Distinct
+
+You can also select distinct records by simple adding a `distinct()` method onto the query builder.
+
+```python
+builder.table('users').select('.name').distinct().get()
+```
+
 ## First
 
 You can easily get the first record:
@@ -620,6 +628,7 @@ builder.truncate('users', foreign_keys=True)
 | .count\('column') | Gets the count of a column. Can also use an `as` modifier to alias the `.count('column as alias')`. |
 | .max\('column') | Gets the max value of a column. Can also use an `as` modifier to alias the `.max('column as alias')`. |
 | .min\('column') | Gets the min value of a column. Can also use an `as` modifier to alias the `.min('column as alias')`. |
+| .distinct\() | Makes the query a SELECT DISTINCT query. |
 
 # Joins
 
