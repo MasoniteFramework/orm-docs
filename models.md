@@ -447,7 +447,7 @@ shipments
 
 ports
     port_id - integer - PK
-    country_id - integer
+    port_country_id - integer
     name - string
 
 countries
@@ -461,12 +461,11 @@ To create this type of relationship you simply need to import the relationship c
 from masoniteorm.relationships import has_one_through
 
 class Shipment(Model):
-
     @has_one_through(
-      "port_id", # The foreign key on the ports table
-      "country_id", # The foreign key on the countries table
-      "from_port_id", # The local key on the shipments table
-      "country_id" # The local key on the ports table
+      "from_port_id", # The foreign key on this (shipments) table
+      "port_country_id", # The distant table foreign key on the intermediate (ports) table
+      "port_id", # The local key on intermediate (ports) table (primary key in this example)
+      "country_id" # The local key on the distant (countries) table (primary key in this example)
     )
     def from_country(self):
         from app.models.Country import Country
