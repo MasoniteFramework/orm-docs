@@ -207,10 +207,6 @@ If there are any exceptions in inside the context then the transaction will be r
 
 ## Connection Pooling
 
-Yoy may optionally setup connection pooling. Connection pooling is a technique used to manage database connections efficiently. Only MySQL and Postgres support connection pooling. To setup connection pooling you can add 3 options:
-
-## Connection Pooling
-
 You may optionally set up connection pooling. Connection pooling is a technique used to manage database connections efficiently. Only MySQL and Postgres support connection pooling. To set up connection pooling, you can add the following options. You may experience considerable speed improvements by enabling these settings. There are 3 options:
 
 | Option                        | Description                                                                 |
