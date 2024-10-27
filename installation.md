@@ -211,8 +211,8 @@ You may optionally set up connection pooling. Connection pooling is a technique 
 
 | Option                        | Description                                                                 |
 |-------------------------------|-----------------------------------------------------------------------------|
-| `connection_pooling_enabled`  | Boolean value to enable or disable connection `True` or `False` pooling.                      |
-| `connection_pooling_max_size` | `integer value` The maximum number of connections in the pool.                              |
+| `connection_pooling_enabled`  | Boolean value to enable or disable connection. Value may be `True` or `False`                       |
+| `connection_pooling_max_size` | `integer value` like `1000` The maximum number of connections allowed in the pool.                              |
 | `connection_pooling_min_size` | `integer value` The minimum number of connections to maintain in the pool. upon first initialization of the connection class all minimum connections will be created and stored in the connection pool. setting this number to a low value like 2-10 may see noticible speed improvements. May be set to `None` to disable this option                   |
 
 ### Example Configuration
