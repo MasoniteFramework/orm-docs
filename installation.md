@@ -205,6 +205,34 @@ with DB.transaction():
 
 If there are any exceptions in inside the context then the transaction will be rolled back. Else it will commit the transaction.
 
+## Connection Pooling
+
+You may optionally set up connection pooling. Connection pooling is a technique used to manage database connections efficiently. Only MySQL and Postgres support connection pooling. To set up connection pooling, you can add the following options. You may experience considerable speed improvements by enabling these settings. There are 3 options:
+
+| Option                        | Description                                                                 |
+|-------------------------------|-----------------------------------------------------------------------------|
+| `connection_pooling_enabled`  | Boolean value to enable or disable connection. Value may be `True` or `False`                       |
+| `connection_pooling_max_size` | `integer value` like `1000` The maximum number of connections allowed in the pool.                              |
+| `connection_pooling_min_size` | `integer value` The minimum number of connections to maintain in the pool. upon first initialization of the connection class all minimum connections will be created and stored in the connection pool. setting this number to a low value like 2-10 may see noticible speed improvements. May be set to `None` to disable this option                   |
+
+### Example Configuration
+
+```python
+"mysql": {
+    "host": "127.0.0.1",
+    "driver": "mysql",
+    "database": "masonite",
+    "user": "root",
+    "password": "",
+    "port": 1433,
+    "log_queries": False,
+    "connection_pooling_enabled": True,
+    "connection_pooling_max_size": 100,
+    "connection_pooling_min_size": 2,
+  },
+```
+
+
 ## Logging
 
 If you would like, you can log any queries Masonite ORM generates to any supported Python logging handler. First you need to enable logging
