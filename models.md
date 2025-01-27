@@ -498,7 +498,7 @@ users
 likes
     like_id - integer - PK
     user_id - integer - FK
-    comment_id - comment_id
+    comment_id - integer - FK
 
 comments
     comment_id - integer - PK
@@ -513,10 +513,10 @@ from masoniteorm.relationships import has_many_through
 class User(Model):
 
     @has_many_through(
-      "like_id", # The foreign key on the intermediate (likes) table
-      "comment_id", # The foreign key on the distant (comments) table
-      "user_id", # The local key on the local (users) table
-      "user_id" # The local key on the intermediate (likes) table
+      "user_id", # The foreign key on the intermediate table (likes) pointing to this table (users)
+      "comment_id", # The foreign key on the intermediate table (likes) pointing to the distant table (comments)
+      "user_id", # The local key on this (users) table (primary key in this example)
+      "comment_id" # The local key on the distant (comments) table (primary key in this example)
     )
     def liked_comments(self):
         from app.models.Comment import Comment
@@ -531,8 +531,8 @@ You can then use this relationship like any other relationship:
 user = User.find(1)
 for comment in user.liked_comments:
   comment.body
-user.with_("liked_comments").first() #== eager load comments
-user.has("liked_comments").first() #== all users who have liked comments
+user.with_("liked_comments").first() #== eager load user and all comments
+user.has("liked_comments").first() #== all users who have comments on their likes
 ```
 
 ## Using Relationships
