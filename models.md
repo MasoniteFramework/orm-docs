@@ -1001,6 +1001,7 @@ then pass an argument to it:
 user = User.active(1).get()
 user = User.active(0).get()
 ```
+**Creating advanced** [Dynamic Scopes](tips-and-tricks.md#dynamic-scope-using-enums)
 
 # Soft Deleting
 
