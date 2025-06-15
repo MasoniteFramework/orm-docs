@@ -21,7 +21,8 @@ class Post(Model):
     pass
 ```
 
-From here you can do as basic or advanced queries as you want. You may need to configure your model based on your needs, though.
+At this stage your Model is fully functional.
+You can add any number of customizations that you may need to configure your model based on your needs, though.
 
 From here you can start querying your records:
 
@@ -32,6 +33,31 @@ active_users = User.where('active', 1).first()
 ```
 
 We'll talk more about setting up your model below
+
+## Design Considerations
+
+When creating your models you may find it useful to use a `BaseModel` that extends the root `Model` class.
+This will provide an easy way to add global functionality and a basic standard configuration to all your models.
+
+example:
+```python
+from masoniteorm.models import Model
+from masoniteorm.scopes import UUIDPrimaryKeyMixin
+
+class BaseModel(Model, UUIDPrimaryKeyMixin):
+    """BaseModel Model"""
+    def get_selects(self):
+        return [f"{self.get_table_name()}.*"]
+
+class User(BaseModel):
+    """User Model"""
+    pass
+
+class Post(BaseModel):
+    """Post Model"""
+    pass
+```
+Useful method overrides for the `BaseModel` are described in the relevant sections
 
 ## Conventions And Configuration
 
@@ -46,6 +72,26 @@ If your table name is something other than the plural of your models you can cha
 ```python
 class Clients:
   __table__ = "users"
+```
+
+### Default columns used to hydrate a model from a SELECT query
+
+By default Masonite ORM assumes that *ALL* columns returned from Models QueryBuilder result are to be used to hydrate the model itself.
+The default criteria for column selection is`SELECT *`.
+
+This can cause the Model to be hydrated with incorrect data when multiple columns with the 
+sane name (eg 'id') are returned from a complex query. In this case the last column with the name that matches the one in the Model will be used, which may not be related to the model at all. 
+
+This is hilighted especially when using `JOIN` clauses as selection criteria to populate a model.
+
+The simple way to address this is to override the `get_selects` method in your `Model` or `BaseModel` classes
+to return only the required columns for the Model itself.
+
+Like so:
+```python
+class BaseModel(Model):
+    def get_selects(self):
+        return [f"{self.get_table_name()}.*"]
 ```
 
 ### Primary Keys
