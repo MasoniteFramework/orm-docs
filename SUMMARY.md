@@ -10,7 +10,7 @@
 * [Collections](collections.md)
 * [Schema & Migrations](schema-and-migrations.md)
 * [Seeding](seeding.md)
+* [Tips & Tricks](tips-and-tricks.md)
 
 ## Other Features
 * [Postgres Schemas](postgres-schema.md)
-
